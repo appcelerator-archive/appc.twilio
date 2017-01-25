@@ -87,8 +87,9 @@ module.exports = {
 	// your connector configuration goes here
 	connectors: {
 		'appc.twilio': {
-			sid: "ACef0b57d41aae77d8b1dd5592b172b780",
-			auth_token: "ff8db352ee37b5fd3990389148fe65eb",
+			sid: "AC87eb3a123eb2b04f0d0d0a4ed18654f9",
+			auth_token: "b1b356f7b604967e939b37bff07d79a0",
+			twilio_number: "",
 			modelAutogen: true
 		}
 	}
