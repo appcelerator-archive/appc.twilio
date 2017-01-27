@@ -1,16 +1,16 @@
 var Arrow = require('arrow');
 
-module.exports = Arrow.createModel('queues', {
+module.exports = Arrow.createModel('transcription', {
     fields: {
         first_page_uri: { type: String },
         end: { type: Number },
         previous_page_uri: { type: String },
-        queues: { type: Array },
         uri: { type: String },
         page_size: { type: Number },
-        start: { type: Number },
+        page: { type: Number },
+        transcriptions: { type: Array },
         next_page_uri: { type: String },
-        page: { type: Number }
+        start: { type: Number }
     },
     connector: "appc.twilio"
 });

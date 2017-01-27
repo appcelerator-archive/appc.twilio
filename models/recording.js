@@ -1,6 +1,6 @@
 var Arrow = require('arrow');
 
-module.exports = Arrow.createModel('recordings', {
+module.exports = Arrow.createModel('recording', {
     fields: {
         "first_page_uri": { type: String },
         "end": { type: Number },

@@ -1,6 +1,6 @@
 var Arrow = require('arrow');
 
-module.exports = Arrow.createModel('outgoing_caller_ids', {
+module.exports = Arrow.createModel('outgoingCallerId', {
     fields: {
         "first_page_uri": { type: String },
         "end": { type: Number },

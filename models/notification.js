@@ -1,6 +1,6 @@
 var Arrow = require('arrow');
 
-module.exports = Arrow.createModel('notifications', {
+module.exports = Arrow.createModel('notification', {
     fields: {
         "first_page_uri": { type: String },
         "end": { type: Number },
