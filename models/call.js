@@ -1,6 +1,5 @@
 var Arrow = require('arrow');
 
-// TODO: Rename "yourModel" (and this file) to whatever you want.
 module.exports = Arrow.Model.extend('call', {
 	fields: {
 		sid: { type: String },
