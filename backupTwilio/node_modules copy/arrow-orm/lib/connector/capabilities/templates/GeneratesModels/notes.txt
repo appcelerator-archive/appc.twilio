@@ -1,0 +1,6 @@
+Add the following to `conf/example.config.js` and `conf/local.js`:
+
+```
+	generateModelsFromSchema: true,
+	modelAutogen: true
+```

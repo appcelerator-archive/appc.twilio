@@ -1,0 +1,10 @@
+<html>
+<body>
+<% if(user) {%>
+	<div>Welcome, <%= user.name %>!    <a href="/logout">logout</a></div>
+	<a href="/chatroom">get into the chat room</a>
+<% } else {%>
+	<%- include login %>
+<% } %>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "type": "authenticator",
+  "group": "arrow",
+  "access": "private",
+  "owners": [
+    "mvasilev@axway.com"
+  ],
+  "assets": {
+    "small_logo":"docs/registry-arrowdb.png"
+  }
+}

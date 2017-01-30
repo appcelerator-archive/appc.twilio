@@ -22,5 +22,6 @@ module.exports = Arrow.createModel('outgoingCallerId', {
         "next_page_uri": { type: String },
         "page": { type: Number }
     },
-    connector: "appc.twilio"
+    connector: "appc.twilio",
+    actions: ["read"]
 });

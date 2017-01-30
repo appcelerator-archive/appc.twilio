@@ -1,0 +1,5 @@
+If you want to require authentication for all requests through this connector, please add the following to `conf/example.config.js` and `conf/local.js`:
+
+```
+	requireSessionLogin: true
+```

@@ -1,0 +1,14 @@
+<% 	var message; 
+	if(message) { %>
+	<%= message %>
+<% } %>
+
+<form action="signup" method="post">
+<div><input name="email" placeholder="email" title="email" required/></div>
+<div><input name="first_name" placeholder="first name" title="first name" required/></div>
+<div><input name="last_name" placeholder="last name" title="last name" required/></div>
+<div><input name="password" placeholder="password" type="password" title="password" required/></div>
+<div><input name="password_confirmation" placeholder="password confirmation" type="password" title="password confirmation" required/></div>
+<div><input type="submit" value="signup"/></div>
+</form>
+<div><a href="/login">login</div>

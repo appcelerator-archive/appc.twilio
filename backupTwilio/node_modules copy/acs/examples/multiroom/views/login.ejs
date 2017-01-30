@@ -1,0 +1,11 @@
+<% 	var message; 
+	if(message) { %>
+	<%= message %>
+<% } %>
+
+<form action="/login" method="post">
+<div><input name="username" placeholder="user name" title="username" required/></div>
+<div><input name="password" placeholder="password" type="password" title="password" required/></div>
+<div><input type="submit" value="login"/></div>
+</form>
+<div><a href="/signup">signup</div>

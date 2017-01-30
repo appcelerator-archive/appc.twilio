@@ -1,0 +1,1 @@
+(Hint: If you only want to support some of these methods, feel free to delete the others.)
