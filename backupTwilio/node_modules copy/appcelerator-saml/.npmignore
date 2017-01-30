@@ -1,7 +1,0 @@
-node_modules
-npm-debug.log
-logs
-coverage
-tsc
-tscconfig.json
-.git
