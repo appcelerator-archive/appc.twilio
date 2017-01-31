@@ -27,5 +27,6 @@ module.exports = Arrow.createModel('message', {
             media: { type: String }
         }
     },
-    connector: "appc.twilio"
+    connector: "appc.twilio",
+    actions: ["create", "read"]
 });

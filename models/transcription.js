@@ -12,5 +12,6 @@ module.exports = Arrow.createModel('transcription', {
         next_page_uri: { type: String },
         start: { type: Number }
     },
-    connector: "appc.twilio"
+    connector: "appc.twilio",
+    actions: ["read"]
 });

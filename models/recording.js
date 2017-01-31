@@ -12,5 +12,6 @@ module.exports = Arrow.createModel('recording', {
         "next_page_uri": { type: String },
         "page": { type: Number }
     },
-    connector: "appc.twilio"
+    connector: "appc.twilio",
+    actions: ["read"]
 });

@@ -12,5 +12,6 @@ module.exports = Arrow.createModel('notification', {
         "next_page_uri": { type: String },
         "start": { type: Number }
     },
-    connector: "appc.twilio"
+    connector: "appc.twilio",
+    actions: ["read"]
 });

@@ -9,5 +9,6 @@ module.exports = Arrow.createModel('sip', {
             credential_lists: { type: String }
         }
     },
-    connector: "appc.twilio"
+    connector: "appc.twilio",
+    actions: ["read"]
 });
