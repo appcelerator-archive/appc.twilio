@@ -5,7 +5,7 @@ module.exports = Arrow.Model.extend('call', {
 		sid: { type: String },
 		date_created: { type: String },
 		parent_call_sid: { type: String },
-		to: { type: String },
+		to: { type: String, required: true },
 		from: { type: String },
 		from_formatted: { type: String },
 		phone_number_sid: { type: String },
@@ -25,5 +25,6 @@ module.exports = Arrow.Model.extend('call', {
 		uri: { type: String },
 		subresource_uris: { type: Object }
 	},
-	connector: "appc.twilio"
+	connector: "appc.twilio",
+	actions: ['create', 'read']
 });
