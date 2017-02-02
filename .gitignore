@@ -41,3 +41,6 @@ jspm_packages
 
 # Default.js configuration
 conf/default.js
+
+coverage
+.nyc_output
