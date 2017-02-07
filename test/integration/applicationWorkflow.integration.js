@@ -40,7 +40,7 @@ test.cb('Should go through with auth alright', t => {
 
 	request(options, function (err, response, body) {
 		t.true(body.success, "Body success should be true");
-		t.deepEqual(response.statusCode, 200);
+		t.is(response.statusCode, 200);
 
 		t.end();
 	});
@@ -58,8 +58,8 @@ test.cb('Should fail with wrong auth params', t => {
 	}
 
 	request(options, function (err, response, body) {
-		t.deepEqual(response.statusCode, 401);
-		t.deepEqual(body.message, 'Unauthorized');
+		t.is(response.statusCode, 401);
+		t.is(body.message, 'Unauthorized');
 		t.false(body.success, 'With wrong auth body succes should be false');
 
 		t.end();
@@ -74,8 +74,8 @@ test.cb('Should make sure auth is required', t => {
 	}
 
 	request(options, function (err, response, body) {
-		t.deepEqual(response.statusCode, 401);
-		t.deepEqual(body.message, 'Unauthorized');
+		t.is(response.statusCode, 401);
+		t.is(body.message, 'Unauthorized');
 		t.false(body.success, 'With wrong auth body succes should be false');
 
 		t.end();
