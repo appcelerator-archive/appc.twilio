@@ -1,6 +1,6 @@
 var Arrow = require('arrow');
 
-module.exports = Arrow.Model.extend('call', {
+module.exports = Arrow.createModel('call', {
 	fields: {
 		sid: { type: String },
 		date_created: { type: String },
