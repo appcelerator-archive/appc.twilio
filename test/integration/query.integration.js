@@ -2,32 +2,33 @@ const test = require('ava').test;
 const Arrow = require('arrow');
 const request = require('request');
 const path = require('path');
-
-var connector;
-var auth;
-var urlToHit;
+const config = require( '../server/config.js' );
+const urlToHit = `http://localhost:${config.port}/api/`;
+const auth = {
+	user: config.apikey,
+	password: ''
+};
 var options;
-var server;
 
-test.cb.before(t => {
-	startServer();
+// test.cb.before(t => {
+// 	startServer();
 
-	server.on('started', function () {
-		auth = {
-			user: server.config.apikey,
-			password: ''
-		},
-			urlToHit = `http://localhost:${server.port}/api/`;
+// 	server.on('started', function () {
+// 		auth = {
+// 			user: server.config.apikey,
+// 			password: ''
+// 		},
+// 			urlToHit = `http://localhost:${server.port}/api/`;
 
-		t.end();
-	});
-});
+// 		t.end();
+// 	});
+// });
 
-test.cb.after(t => {
-	server.stop();
+// test.cb.after(t => {
+// 	server.stop();
 
-	t.end();
-});
+// 	t.end();
+// });
 
 test.cb('Should return proper status code when valid request is passed', (t, model = 'call', where = '{"status": "busy"}') => {
 	options = {
@@ -259,11 +260,11 @@ function getConfiguration() {
 	return require(def_conf);
 }
 
-function startServer(callback) {
-	var def_conf = getConfiguration();
-	def_conf.port = (Math.random() * 4000 + 1200) | 0;
-	server = new Arrow(def_conf);
-	connector = server.getConnector('appc.twilio');
+// function startServer(callback) {
+// 	var def_conf = getConfiguration();
+// 	def_conf.port = (Math.random() * 4000 + 1200) | 0;
+// 	server = new Arrow(def_conf);
+// 	connector = server.getConnector('appc.twilio');
 
-	server.start(callback);
-}
+// 	server.start(callback);
+// }
