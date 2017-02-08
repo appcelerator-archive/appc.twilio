@@ -47,7 +47,7 @@
     "start": "appc run",
     "start-server": "node test/server/demonize start",
     "stop-server": "node test/server/demonize stop",
-    "test": "node test/integration/testSuites",
+    "test": "node test/integration/testSuites | tap-spec",
     "coverage": "cross-env NODE_ENV=test nyc ava --verbose",
     "report": "nyc report --reporter=html"
   },

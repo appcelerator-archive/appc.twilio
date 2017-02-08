@@ -1,75 +1,67 @@
-const test = require('ava').test;
-const Arrow = require('arrow');
+const test = require('tape');
 const request = require('request');
 const path = require('path');
-const config = require( '../server/config.js' );
-const urlToHit = `http://localhost:${config.port}/api/`;
+const config = require('../server/config.js');
+const nock = require('nock');
+const tapSpec = require('tap-spec');
+const port = config.port || 8080;
+const baseUrl = `http://localhost:${port}`;
+const apiPrefix = '/api';
+const urlToHit = `${baseUrl}${apiPrefix}`;
 const auth = {
-	user: config.apikey,
+	user: config.apikey_development,
 	password: ''
 };
-var options;
 
-// test.cb.before(t => {
-// 	startServer();
-
-// 	server.on('started', function () {
-// 		auth = {
-// 			user: server.config.apikey,
-// 			password: ''
-// 		},
-// 			urlToHit = `http://localhost:${server.port}/api/`;
-
-// 		t.end();
-// 	});
-// });
-
-// test.cb.after(t => {
-// 	server.stop();
-
-// 	t.end();
-// });
-
-test.cb('Should return proper status code when valid request is passed', (t, model = 'message', id = 'SM998f7c270098420b82fd7c2c32fe2832') => {
-	options = {
-		uri: `${urlToHit}${model}/${id}`,
+test('Should return proper status code when valid request is passed', function (t) {
+	const id = 'SM998f7c270098420b82fd7c2c32fe2832';
+	const modelName = 'message';
+	const uri = `${urlToHit}/${modelName}`;
+	const options = {
+		uri: `${uri}/${id}`,
 		method: 'GET',
 		auth: auth,
 		json: true
 	}
 
 	request(options, function (err, response, body) {
-		t.falsy(err);
-		t.true(body.success);
-		t.is(response.statusCode, 200);
+		t.notOk(err);
+		t.ok(body.success);
+		t.equal(response.statusCode, 200, 'statusCode should be 200');
 
 		t.end();
 	});
 });
 
-test.cb('Should return proper status code when valid request is passed to call endpoint', (t, model = 'call', id = 'CA8a3f92d936e485725f08b67a37bbcf89') => {
-	options = {
-		uri: `${urlToHit}${model}/${id}`,
+test('Should return proper status code when valid request is passed to call endpoint', function (t) {
+	const modelName = 'call';
+	const uri = `${urlToHit}/${modelName}`;
+	const id = 'CA8a3f92d936e485725f08b67a37bbcf89';
+	const options = {
+		uri: `${uri}/${id}`,
 		method: 'GET',
 		auth: auth,
 		json: true
 	}
 
 	request(options, function (err, response, body) {
-		t.falsy(err);
-		t.true(body.success);
-		t.is(response.statusCode, 200);
-		t.is(body.call.status, 'busy');
-		t.is(body.call.price_unit, 'USD');
-		t.is(body.call.duration, '0');
+		t.notOk(err);
+		t.ok(body.success);
+		t.equal(response.statusCode, 200, 'status code should be 200');
+		t.equal(body.call.status, 'busy');
+		t.equal(body.call.price_unit, 'USD');
+		t.equal(body.call.duration, '0');
 
 		t.end();
 	});
 });
 
-test.cb('Should return proper response when correct ID is passed to message endpoint', (t, model = 'message', id = 'SM998f7c270098420b82fd7c2c32fe2832') => {
-	options = {
-		uri: `${urlToHit}${model}/${id}`,
+test('Should return proper response when correct ID is passed to message endpoint', function (t) {
+	const modelName = 'message';
+	const uri = `${urlToHit}/${modelName}`;
+	const id = 'SM998f7c270098420b82fd7c2c32fe2832';
+	const options = {
+		uri: `${uri}/${id}`,
 		method: 'GET',
 		auth: auth,
 		json: true
@@ -78,44 +70,31 @@ test.cb('Should return proper response when correct ID is passed to message endp
 	request(options, function (err, response, body) {
 		var message = body.message;
 
-		t.true(body.success, "Body success should be true");
-		t.is(response.statusCode, 200);
-		t.is(message.sid, id);
-		t.is(message.status, 'delivered');
+		t.ok(body.success, "Body success should be true");
+		t.equal(response.statusCode, 200, 'status code should be 200');
+		t.equal(message.sid, id);
+		t.equal(message.status, 'delivered');
 
 		t.end();
 	});
 });
 
-test.cb('Should return proper response when INVALID ID is passed', (t, model = 'message', id = '3') => {
-	options = {
-		uri: `${urlToHit}${model}/${id}`,
+test('Should return proper response when INVALID ID is passed', function (t) {
+	const modelName = 'message';
+	const uri = `${urlToHit}/${modelName}`;
+	const id = 3;
+	const options = {
+		uri: `${uri}/${id}`,
 		method: 'GET',
 		auth: auth,
 		json: true
 	}
 
 	request(options, function (err, response, body) {
-		t.false(body.success, "Body success should be false");
-		t.is(response.statusCode, 500);
-		t.is(body.message, `Could not find ${model} with ID: ${id}`);
+		t.notOk(body.success, "Body success should be false");
+		t.equal(response.statusCode, 500);
+		t.equal(body.message, `Could not find ${modelName} with ID: ${id}`);
 
 		t.end();
 	});
 });
-
-function getConfiguration() {
-	var files = path.join(process.cwd(), 'test/');
-	var def_conf = files + 'conf/default.js';
-
-	return require(def_conf);
-}
-
-// function startServer(callback) {
-// 	var def_conf = getConfiguration();
-// 	def_conf.port = (Math.random() * 4000 + 1200) | 0;
-// 	server = new Arrow(def_conf);
-// 	connector = server.getConnector('appc.twilio');
-
-// 	server.start(callback);
-// }
