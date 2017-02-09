@@ -1,6 +1,6 @@
 var Arrow = require('arrow');
 
-module.exports = Arrow.Model.extend('account', {
+module.exports = Arrow.createModel('account', {
 	fields: {
 		sid: { type: String, required: false },
 		owner_account_sid: { type: String, required: false },

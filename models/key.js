@@ -7,5 +7,5 @@ module.exports = Arrow.createModel('key', {
         friendly_name: { type: String },    
         sid: { type: String },  
     },
-    connector: "appc.twilio"
+    connector: 'appc.twilio'
 });

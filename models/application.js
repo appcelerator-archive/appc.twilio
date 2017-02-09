@@ -1,6 +1,6 @@
 var Arrow = require('arrow');
 
-module.exports = Arrow.Model.extend('application', {
+module.exports = Arrow.createModel('application', {
     fields: {
         sid: { type: String },
         date_created: { type: String },
@@ -22,5 +22,5 @@ module.exports = Arrow.Model.extend('application', {
         sms_status_callback: { type: String },
         uri: { type: String }
     },
-    connector: "appc.twilio"
+    connector: 'appc.twilio'
 });

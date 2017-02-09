@@ -1,270 +1,269 @@
-const test = require('ava').test;
-const Arrow = require('arrow');
+const test = require('tape');
 const request = require('request');
 const path = require('path');
-const config = require( '../server/config.js' );
-const urlToHit = `http://localhost:${config.port}/api/`;
+const config = require('../server/config.js');
+const nock = require('nock');
+const tapSpec = require('tap-spec');
+const port = config.port || 8080;
+const baseUrl = `http://localhost:${port}`;
+const apiPrefix = '/api';
+const urlToHit = `${baseUrl}${apiPrefix}`;
 const auth = {
-	user: config.apikey,
+	user: config.apikey_development,
 	password: ''
 };
-var options;
 
-// test.cb.before(t => {
-// 	startServer();
-
-// 	server.on('started', function () {
-// 		auth = {
-// 			user: server.config.apikey,
-// 			password: ''
-// 		},
-// 			urlToHit = `http://localhost:${server.port}/api/`;
-
-// 		t.end();
-// 	});
-// });
-
-// test.cb.after(t => {
-// 	server.stop();
-
-// 	t.end();
-// });
-
-test.cb('Should return proper status code when valid request is passed', (t, model = 'call', where = '{"status": "busy"}') => {
-	options = {
-		uri: `${urlToHit}${model}/query?where=${where}`,
+test('Should return proper status code when valid request is passed', t => {
+	const modelName = 'call';
+	const uri = `${urlToHit}/${modelName}`;
+	const where = '{"status": "busy"}';
+	const options = {
+		uri: `${uri}/query?where=${where}`,
 		method: 'GET',
 		auth: auth,
 		json: true
 	}
 
 	request(options, function (err, response, body) {
-		t.falsy(err);
-		t.true(body.success);
-		t.is(response.statusCode, 200);
+		t.notOk(err);
+		t.ok(body.success);
+		t.equal(response.statusCode, 200, 'status code should be 200');
 
 		t.end();
 	});
 });
 
-test.cb('Should return only calls with status busy', (t, model = 'call', where = '{"status": "busy"}') => {
-	options = {
-		uri: `${urlToHit}${model}/query?where=${where}`,
+test('Should return only calls with status busy', t => {
+	const modelName = 'call';
+	const uri = `${urlToHit}/${modelName}`;
+	const where = '{"status": "busy"}';
+	const options = {
+		uri: `${uri}/query?where=${where}`,
 		method: 'GET',
 		auth: auth,
 		json: true
 	}
 
 	request(options, function (err, response, body) {
-		t.falsy(err);
-		t.true(body.success);
-		t.is(response.statusCode, 200);
+		t.notOk(err);
+		t.ok(body.success);
+		t.equal(response.statusCode, 200, 'status code');
 
 		body.calls.map((call) => {
-			t.is(call.status, 'busy');
+			t.equal(call.status, 'busy', 'call status should be busy');
 		})
 
 		t.end();
 	});
 });
 
-test.cb('Should return proper response based on query parameters', (t, model = 'call', where = '{"status": "completed", "to": "+359899638562"}') => {
-	options = {
-		uri: `${urlToHit}${model}/query?where=${where}`,
+test('Should return proper response based on query parameters', t => {
+	const modelName = 'call';
+	const uri = `${urlToHit}/${modelName}`;
+	const where = '{"status": "completed", "to": "+359899638562"}';
+	const options = {
+		uri: `${uri}/query?where=${where}`,
 		method: 'GET',
 		auth: auth,
 		json: true
 	}
 
 	request(options, function (err, response, body) {
-		t.falsy(err);
-		t.true(body.success);
-		t.is(response.statusCode, 200);
+		t.notOk(err);
+		t.ok(body.success);
+		t.equal(response.statusCode, 200, 'call status should be 200');
 
 		body.calls.map((call) => {
-			t.is(call.status, 'completed');
-			t.is(call.to, '+359899638562');
+			t.equal(call.status, 'completed', 'call status should be completed');
+			t.equal(call.to, '+359899638562', 'incoming call number should be +359899638562');
 		});
 
 		t.end();
 	});
 });
 
-test.cb('Should return NO response if there is no call to a given number', (t, model = 'call', where = '{"to": "+359271825"}') => {
-	options = {
-		uri: `${urlToHit}${model}/query?where=${where}`,
+test('Should return NO response if there is no call to a given number', t => {
+	const modelName = 'call';
+	const uri = `${urlToHit}/${modelName}`;
+	const where = '{"to": "+359271825"}';
+	const options = {
+		uri: `${uri}/query?where=${where}`,
 		method: 'GET',
 		auth: auth,
 		json: true
 	}
 
 	request(options, function (err, response, body) {
-		t.falsy(err);
-		t.true(body.success);
-		t.is(response.statusCode, 200);
-		t.is(body.calls.length, 0);
+		t.notOk(err);
+		t.ok(body.success);
+		t.equal(response.statusCode, 200, 'status code should be 200');
+		t.equal(body.calls.length, 0), 'there should be no calls to this number';
 
 		t.end();
 	});
 });
 
-test.cb('Should return return all calls on the date passed in the query parameters', (t, model = 'call', where = '{"startTime": "2017-01-31"}') => {
-	options = {
-		uri: `${urlToHit}${model}/query?where=${where}`,
+test('Should return return all calls on the date passed in the query parameters', t => {
+	const modelName = 'call';
+	const uri = `${urlToHit}/${modelName}`;
+	const where = '{"startTime": "2017-01-31"}';
+	const expectedCallTime = '31 Jan 2017';
+	const options = {
+		uri: `${uri}/query?where=${where}`,
 		method: 'GET',
 		auth: auth,
 		json: true
 	}
-	var expectedCallTime = '31 Jan 2017';
 
 	request(options, function (err, response, body) {
-		t.falsy(err);
-		t.true(body.success);
-		t.is(response.statusCode, 200);
-		t.is(typeof body.calls, 'object');
+		t.notOk(err);
+		t.ok(body.success);
+		t.equal(response.statusCode, 200);
+		t.equal(typeof body.calls, 'object');
 
 		body.calls.map((call) => {
 			// If start time is correct should be true
-			t.true(call.start_time.indexOf(expectedCallTime) !== -1);
+			t.ok(call.start_time.indexOf(expectedCallTime) !== -1);
 		});
 
 		t.end();
 	});
 });
 
-test.cb('Should return return all messages to a given number', (t, model = 'message', where = '{"to": "+359899982932"}') => {
-	options = {
-		uri: `${urlToHit}${model}/query?where=${where}`,
+test('Should return return all messages to a given number', t => {
+	const modelName = 'message';
+	const uri = `${urlToHit}/${modelName}`;
+	const where = '{"to": "+359899982932"}';
+	const options = {
+		uri: `${uri}/query?where=${where}`,
 		method: 'GET',
 		auth: auth,
 		json: true
 	}
 
 	request(options, function (err, response, body) {
-		t.falsy(err);
-		t.true(body.success);
-		t.is(response.statusCode, 200);
-		t.is(typeof body.messages, 'object');
+		t.notOk(err);
+		t.ok(body.success);
+		t.equal(response.statusCode, 200, 'status code should be 200');
+		t.equal(typeof body.messages, 'object');
 
 		body.messages.map((message) => {
-			t.is(message.to, '+359899982932');
+			t.equal(message.to, '+359899982932');
 		});
 
 		t.end();
 	});
 });
 
-test.cb('Should return return all messages to a given number and date', (t, model = 'message', where = '{"to": "+359899982932", "DateSent": "Thu, 26 Jan 2017"}') => {
-	options = {
-		uri: `${urlToHit}${model}/query?where=${where}`,
+test('Should return return all messages to a given number and date', t => {
+	const modelName = 'message';
+	const uri = `${urlToHit}/${modelName}`;
+	const where = '{"to": "+359899982932", "DateSent": "Thu, 26 Jan 2017"}';
+	const expectedMessageDate = 'Thu, 26 Jan 2017';
+	const options = {
+		uri: `${uri}/query?where=${where}`,
 		method: 'GET',
 		auth: auth,
 		json: true
 	}
-	var expectedMessageDate = 'Thu, 26 Jan 2017';
 
 	request(options, function (err, response, body) {
-		t.falsy(err);
-		t.true(body.success);
-		t.is(response.statusCode, 200);
-		t.is(typeof body.messages, 'object');
+		t.notOk(err);
+		t.ok(body.success);
+		t.equal(response.statusCode, 200, 'status code should be 200');
+		t.equal(typeof body.messages, 'object');
 
 		body.messages.map((message) => {
-			t.is(message.to, '+359899982932');
-			t.true(message.date_sent.indexOf(expectedMessageDate) !== -1);
+			t.equal(message.to, '+359899982932', 'there nust be only messages to +359899982932');
+			t.ok(message.date_sent.indexOf(expectedMessageDate) !== -1, `Date sent should be ${expectedMessageDate}`);
 		});
 
 		t.end();
 	});
 });
 
-test.cb('Should return return all if no query parameters are passed', (t, model = 'call') => {
-	options = {
-		uri: `${urlToHit}${model}/query?`,
+test('Should return return all if no query parameters are passed', t => {
+	const modelName = 'call';
+	const uri = `${urlToHit}/${modelName}`;
+	const options = {
+		uri: `${uri}/query?`,
 		method: 'GET',
 		auth: auth,
 		json: true
 	}
 
 	request(options, function (err, response, body) {
-		t.falsy(err);
-		t.true(body.success);
-		t.is(response.statusCode, 200);
-		t.is(typeof body.calls, 'object');
+		t.notOk(err);
+		t.ok(body.success);
+		t.equal(response.statusCode, 200, 'status code should be 200');
+		t.equal(typeof body.calls, 'object');
 
 		t.end();
 	});
 });
 
-test.cb('Should return all addresses with friendly name "The Simpsons" ', (t, model = 'address', where = '{"friendlyName": "The Simpsons"}') => {
-	options = {
-		uri: `${urlToHit}${model}/query?where=${where}`,
+test('Should return all addresses with friendly name "The Simpsons" ', t => {
+	const modelName = 'address';
+	const uri = `${urlToHit}/${modelName}`;
+	const where = '{"friendlyName": "The Simpsons"}';
+	const options = {
+		uri: `${uri}/query?where=${where}`,
 		method: 'GET',
 		auth: auth,
 		json: true
 	}
 
 	request(options, function (err, response, body) {
-		t.falsy(err);
-		t.true(body.success);
-		t.is(response.statusCode, 200);
+		t.notOk(err);
+		t.ok(body.success);
+		t.equal(response.statusCode, 200, 'status code should be 200');
 
 		body.addresses.map((address) => {
-			t.is(address.friendlyName, 'The Simpsons');
+			t.equal(address.friendlyName, 'The Simpsons');
 		});
-		
+
 		t.end();
 	});
 });
 
-test.cb('Should return NO address when there is no such address based on the query parameters', (t, model = 'address', where = '{"friendlyName": "The Simpsons", "customerName": "Homer"}') => {
-	options = {
-		uri: `${urlToHit}${model}/query?where=${where}`,
+test('Should return NO address when there is no such address based on the query parameters', t => {
+	const modelName = 'address';
+	const uri = `${urlToHit}/${modelName}`;
+	const where = '{"friendlyName": "The Simpsons", "customerName": "Homer"}';
+	const options = {
+		uri: `${uri}/query?where=${where}`,
 		method: 'GET',
 		auth: auth,
 		json: true
 	}
 
 	request(options, function (err, response, body) {
-		t.falsy(err);
-		t.true(body.success);
-		t.is(response.statusCode, 200);
-		t.is(body.addresses.length, 0);
+		t.notOk(err);
+		t.ok(body.success);
+		t.equal(response.statusCode, 200);
+		t.equal(body.addresses.length, 0);
 
 		t.end();
 	});
 });
 
-test.cb('Should return return no results if there is no outgoing caller id with this phone number', (t, model = 'outgoingcallerid', where = '{"phoneNumber": "+16467625508"}') => {
-	options = {
-		uri: `${urlToHit}${model}/query?where=${where}`,
+test('Should return return no results if there is no outgoing caller id with this phone number', t => {
+	const modelName = 'outgoingCallerId';
+	const uri = `${urlToHit}/${modelName}`;
+	const where = '{"phoneNumber": "+16467625508"}';
+	const options = {
+		uri: `${uri}/query?where=${where}`,
 		method: 'GET',
 		auth: auth,
 		json: true
 	}
 
 	request(options, function (err, response, body) {
-		t.falsy(err);
-		t.true(body.success);
-		t.is(response.statusCode, 200);
-		t.is(body.outgoingcallerids.length, 0);
+		t.notOk(err);
+		t.ok(body.success);
+		t.equal(response.statusCode, 200);
+		t.equal(body.outgoingcallerids.length, 0);
 
 		t.end();
 	});
 });
-
-function getConfiguration() {
-	var files = path.join(process.cwd(), 'test/');
-	var def_conf = files + 'conf/default.js';
-
-	return require(def_conf);
-}
-
-// function startServer(callback) {
-// 	var def_conf = getConfiguration();
-// 	def_conf.port = (Math.random() * 4000 + 1200) | 0;
-// 	server = new Arrow(def_conf);
-// 	connector = server.getConnector('appc.twilio');
-
-// 	server.start(callback);
-// }

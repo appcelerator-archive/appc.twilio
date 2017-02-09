@@ -3,7 +3,6 @@ var Arrow = require('arrow');
 
 module.exports = Arrow.createModel('message', {
     fields: {
-        // TODO: Customize these fields.
         sid: { type: String },
         date_created: { type: String },
         date_updated: { type: String },
@@ -27,6 +26,6 @@ module.exports = Arrow.createModel('message', {
             media: { type: String }
         }
     },
-    connector: "appc.twilio",
-    actions: ["create", "read"]
+    connector: 'appc.twilio',
+    actions: ['create', 'read']
 });

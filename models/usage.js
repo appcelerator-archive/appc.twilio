@@ -7,6 +7,6 @@ module.exports = Arrow.createModel('usage', {
             triggers: { type: String }
         }
     },
-    connector: "appc.twilio",
-    actions: ["read"]
+    connector: 'appc.twilio',
+    actions: ['read']
 });

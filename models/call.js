@@ -1,6 +1,6 @@
 var Arrow = require('arrow');
 
-module.exports = Arrow.Model.extend('call', {
+module.exports = Arrow.createModel('call', {
 	fields: {
 		sid: { type: String },
 		date_created: { type: String },
@@ -25,6 +25,6 @@ module.exports = Arrow.Model.extend('call', {
 		uri: { type: String },
 		subresource_uris: { type: Object }
 	},
-	connector: "appc.twilio",
-	actions: ['create', 'read']
+	connector: 'appc.twilio',
+	actions: ['create', 'read', 'delete']
 });

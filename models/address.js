@@ -1,8 +1,8 @@
 var Arrow = require('arrow');
 
-module.exports = Arrow.Model.extend('address', {
+module.exports = Arrow.createModel('address', {
 	fields: {
-        sid: { type: String },
+		sid: { type: String },
 		friendlyName: { type: String },
 		customerName: { type: String },
 		street: { type: String },
@@ -11,5 +11,6 @@ module.exports = Arrow.Model.extend('address', {
 		postalCode: { type: String },
 		isoCountry: { type: String }
 	},
-    connector: "appc.twilio"
+	connector: 'appc.twilio',
+	actions: ['read', 'create', 'update', 'delete']
 });
