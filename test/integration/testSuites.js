@@ -10,4 +10,3 @@ function serverStartedCallback() {
 	require('./query.integration');
 	require('./applicationWorkflow.integration');
 }
-
