@@ -13,5 +13,5 @@ module.exports = Arrow.createModel('conference', {
         },
         uri: { type: String }
     },
-    connector: "appc.twilio"
+    connector: 'appc.twilio'
 });

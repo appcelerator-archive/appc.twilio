@@ -17,6 +17,6 @@ module.exports = Arrow.createModel('sandbox', {
         api_version: { type: String },
         uri: { type: String }
     },
-    connector: "appc.twilio",
-    actions: ["read"]
+    connector: 'appc.twilio',
+    actions: ['read']
 });

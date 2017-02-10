@@ -29,5 +29,5 @@ module.exports = Arrow.createModel('incomingPhoneNumber', {
         api_version: { type: String },
         uri: { type: String }
     },
-    connector: "appc.twilio"
+    connector: 'appc.twilio'
 });

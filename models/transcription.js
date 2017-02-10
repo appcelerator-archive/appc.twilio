@@ -1,17 +1,20 @@
 var Arrow = require('arrow');
 
 module.exports = Arrow.createModel('transcription', {
-    fields: {
-        first_page_uri: { type: String },
-        end: { type: Number },
-        previous_page_uri: { type: String },
-        uri: { type: String },
-        page_size: { type: Number },
-        page: { type: Number },
-        transcriptions: { type: Array },
-        next_page_uri: { type: String },
-        start: { type: Number }
-    },
-    connector: "appc.twilio",
-    actions: ["read"]
+	fields: {
+		account_sid: { type: String },
+		api_version: { type: String },
+		date_created: { type: String },
+		date_updated: { type: String },
+		duration: { type: String },
+		price: { type: String },
+		recording_sid: { type: String },
+		sid: { type: String },
+		status: { type: String },
+		transcription_text: { type: String },
+		type: { type: String },
+		url: { type: String }
+	},
+	connector: 'appc.twilio',
+	actions: ['read', 'delete']
 });

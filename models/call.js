@@ -25,6 +25,6 @@ module.exports = Arrow.createModel('call', {
 		uri: { type: String },
 		subresource_uris: { type: Object }
 	},
-	connector: "appc.twilio",
-	actions: ['create', 'read']
+	connector: 'appc.twilio',
+	actions: ['create', 'read', 'delete']
 });

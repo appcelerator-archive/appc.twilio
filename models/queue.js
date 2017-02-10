@@ -2,16 +2,15 @@ var Arrow = require('arrow');
 
 module.exports = Arrow.createModel('queue', {
     fields: {
-        first_page_uri: { type: String },
-        end: { type: Number },
-        previous_page_uri: { type: String },
-        queues: { type: Array },
-        uri: { type: String },
-        page_size: { type: Number },
-        start: { type: Number },
-        next_page_uri: { type: String },
-        page: { type: Number }
+        sid: { type: String },
+        friendly_name: { type: String },
+        current_size: { type: Number },
+        average_wait_time: { type: Number },
+        max_size: { type: Number },
+        date_created: { type: String },
+        date_updated: { type: String },
+        uri: { type: String }
     },
-    connector: "appc.twilio",
-    actions: ["read"]
+    connector: 'appc.twilio',
+    actions: ['read', 'create', 'update', 'delete']
 });
