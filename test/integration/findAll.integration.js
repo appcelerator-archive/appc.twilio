@@ -13,7 +13,7 @@ const auth = {
 	password: ''
 };
 
-test('Should return proper status code when valid request is made', function (t) {
+test('Should return proper status code when valid request is made', t => {
 	const modelName = '/message';
 
 	if (config.mockAPI) {
@@ -36,7 +36,7 @@ test('Should return proper status code when valid request is made', function (t)
 	});
 });
 
-test('Should return proper response when INVALID find all request is made', function (t) {
+test('Should return proper response when INVALID find all request is made', t => {
 	const modelName = '/invalid';
 	const uri = `${urlToHit}${modelName}`;
 	const options = {
@@ -55,7 +55,7 @@ test('Should return proper response when INVALID find all request is made', func
 	});
 });
 
-test('Should return proper response format when request is made to message endpoint', function (t) {
+test('Should return proper response format when request is made to message endpoint', t => {
 	const modelName = '/message';
 	const expectedProperties = ['id',
 		'sid',
@@ -98,7 +98,7 @@ test('Should return proper response format when request is made to message endpo
 	});
 });
 
-test('Should return proper response format when request is made to call endpoint', function (t) {
+test('Should return proper response format when request is made to call endpoint', t => {
 	const modelName = '/call';
 	const uri = `${urlToHit}${modelName}`;
 	const expectedProperties = ['id',
@@ -142,7 +142,7 @@ test('Should return proper response format when request is made to call endpoint
 	});
 });
 
-test('Should return proper response format when request is made to address endpoint', function (t) {
+test('Should return proper response format when request is made to address endpoint', t => {
 	const modelName = '/address';
 	const uri = `${urlToHit}${modelName}`;
 	const expectedProperties = ['id',
@@ -177,7 +177,7 @@ test('Should return proper response format when request is made to address endpo
 	});
 });
 
-test('Should return result in proper format', function (t) {
+test('Should return result in proper format', t => {
 	const modelName = '/recording';
 	const uri = `${urlToHit}${modelName}`;
 	const options = {
@@ -196,7 +196,7 @@ test('Should return result in proper format', function (t) {
 	});
 });
 
-test('Should return NON empty result', function (t) {
+test('Should return NON empty result', t => {
 	const modelName = '/call';
 	const uri = `${urlToHit}${modelName}`;
 	const options = {

@@ -8,12 +8,13 @@ const port = config.port || 8080;
 const baseUrl = `http://localhost:${port}`;
 const apiPrefix = '/api';
 const urlToHit = `${baseUrl}${apiPrefix}`;
+const isNock = false;
 const auth = {
 	user: config.apikey_development,
 	password: ''
 };
 
-test('Should return proper status code when valid request is passed', function (t) {
+test('Should return proper status code when valid request is passed', t => {
 	const id = 'SM998f7c270098420b82fd7c2c32fe2832';
 	const modelName = 'message';
 	const uri = `${urlToHit}/${modelName}`;
@@ -22,6 +23,12 @@ test('Should return proper status code when valid request is passed', function (
 		method: 'GET',
 		auth: auth,
 		json: true
+	}
+
+	if (isNock) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/${id}`)
+			.reply(200, { success: true })
 	}
 
 	request(options, function (err, response, body) {
@@ -33,7 +40,7 @@ test('Should return proper status code when valid request is passed', function (
 	});
 });
 
-test('Should return proper status code when valid request is passed to call endpoint', function (t) {
+test('Should return proper status code when valid request is passed to call endpoint', t => {
 	const modelName = 'call';
 	const uri = `${urlToHit}/${modelName}`;
 	const id = 'CA8a3f92d936e485725f08b67a37bbcf89';
@@ -42,6 +49,19 @@ test('Should return proper status code when valid request is passed to call endp
 		method: 'GET',
 		auth: auth,
 		json: true
+	}
+
+	if (isNock) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/${id}`)
+			.reply(200, {
+				success: true,
+				call: {
+					status: 'busy',
+					price_unit: 'USD',
+					duration: '0'
+				}
+			});
 	}
 
 	request(options, function (err, response, body) {
@@ -56,7 +76,7 @@ test('Should return proper status code when valid request is passed to call endp
 	});
 });
 
-test('Should return proper response when correct ID is passed to message endpoint', function (t) {
+test('Should return proper response when correct ID is passed to message endpoint', t => {
 	const modelName = 'message';
 	const uri = `${urlToHit}/${modelName}`;
 	const id = 'SM998f7c270098420b82fd7c2c32fe2832';
@@ -65,6 +85,18 @@ test('Should return proper response when correct ID is passed to message endpoin
 		method: 'GET',
 		auth: auth,
 		json: true
+	}
+
+	if (isNock) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/${id}`)
+			.reply(200, {
+				success: true,
+				message: {
+					sid: id,
+					status: 'delivered'
+				}
+			});
 	}
 
 	request(options, function (err, response, body) {
@@ -79,7 +111,7 @@ test('Should return proper response when correct ID is passed to message endpoin
 	});
 });
 
-test('Should return proper response when INVALID ID is passed', function (t) {
+test('Should return proper response when INVALID ID is passed', t => {
 	const modelName = 'message';
 	const uri = `${urlToHit}/${modelName}`;
 	const id = 3;
@@ -88,6 +120,15 @@ test('Should return proper response when INVALID ID is passed', function (t) {
 		method: 'GET',
 		auth: auth,
 		json: true
+	}
+
+	if (isNock) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/${id}`)
+			.reply(500, {
+				success: false,
+				message: `Could not find ${modelName} with ID: ${id}`
+			});
 	}
 
 	request(options, function (err, response, body) {

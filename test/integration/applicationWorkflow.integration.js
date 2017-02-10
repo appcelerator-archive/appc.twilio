@@ -13,7 +13,7 @@ const auth = {
 	password: ''
 };
 
-test('Should go through with auth alright', function (t) {
+test('Should go through with auth alright', t => {
 	const modelName = '/call';
 	const uri = `${urlToHit}${modelName}`;
 	const options = {
@@ -31,7 +31,7 @@ test('Should go through with auth alright', function (t) {
 	});
 });
 
-test('Should fail with wrong auth params', function (t) {
+test('Should fail with wrong auth params', t => {
 	const modelName = '/call';
 	const uri = `${urlToHit}${modelName}`;
 	const options = {
@@ -53,7 +53,7 @@ test('Should fail with wrong auth params', function (t) {
 	});
 });
 
-test('Should make sure auth is required', function (t) {
+test('Should make sure auth is required', t => {
 	const modelName = '/call';
 	const uri = `${urlToHit}${modelName}`;
 	const options = {

@@ -9,7 +9,7 @@ module.exports = Arrow.createModel('address', {
 		city: { type: String },
 		region: { type: String },
 		postalCode: { type: String },
-		isoCountry: { type: String }
+		isoCountry: { type: String, required: true }
 	},
 	connector: 'appc.twilio',
 	actions: ['read', 'create', 'update', 'delete']
