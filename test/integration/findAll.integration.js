@@ -46,6 +46,12 @@ test('Should return proper response when INVALID find all request is made', t =>
 		json: true
 	}
 
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}${modelName}`)
+			.reply(404, { success: false, error: 'Not found' });
+	}
+
 	request(options, function (err, response, body) {
 		t.notOk(body.success, "Body success should be false when invalid request is made");
 		t.equal(response.statusCode, 404, 'status code should be 404');
