@@ -49,6 +49,7 @@
     "start-server": "node test/server/demonize start",
     "stop-server": "node test/server/demonize stop",
     "test": "node test/integration/testSuites | tap-spec",
+	"test:unit": "node test/unit/unit.test | tap-spec",
     "coverage": "cross-env NODE_ENV=test nyc ava --verbose",
     "report": "nyc report --reporter=html"
   },
