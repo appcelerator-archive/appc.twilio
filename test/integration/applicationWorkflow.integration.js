@@ -23,6 +23,12 @@ test('Should go through with auth alright', t => {
 		json: true
 	}
 
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}${modelName}`)
+			.reply(200, { success: true });
+	}
+
 	request(options, function (err, response, body) {
 		t.ok(body.success, "Body success should be true");
 		t.equal(response.statusCode, 200, 'status code should be 200');
@@ -44,6 +50,13 @@ test('Should fail with wrong auth params', t => {
 		json: true
 	}
 
+
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}${modelName}`)
+			.reply(401, { success: false, message: 'Unauthorized' });
+	}
+
 	request(options, function (err, response, body) {
 		t.equal(response.statusCode, 401, 'status code should be 401');
 		t.equal(body.message, 'Unauthorized');
@@ -60,6 +73,12 @@ test('Should make sure auth is required', t => {
 		uri: uri,
 		method: 'GET',
 		json: true
+	}
+
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}${modelName}`)
+			.reply(401, { success: false, message: 'Unauthorized' });
 	}
 
 	request(options, function (err, response, body) {
