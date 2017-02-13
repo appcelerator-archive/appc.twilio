@@ -1,14 +1,11 @@
 const test = require('tape');
 const request = require('request');
-const path = require('path');
 const config = require('../server/config.js');
 const nock = require('nock');
-const tapSpec = require('tap-spec');
 const port = config.port || 8080;
 const baseUrl = `http://localhost:${port}`;
 const apiPrefix = '/api';
 const urlToHit = `${baseUrl}${apiPrefix}`;
-const isNock = false;
 const auth = {
 	user: config.apikey_development,
 	password: ''
@@ -25,7 +22,7 @@ test('Should return proper status code when valid request is passed', t => {
 		json: true
 	}
 
-	if (isNock) {
+	if (config.mockAPI) {
 		nock(baseUrl)
 			.get(`${apiPrefix}/${modelName}/${id}`)
 			.reply(200, { success: true })
@@ -51,7 +48,7 @@ test('Should return proper status code when valid request is passed to call endp
 		json: true
 	}
 
-	if (isNock) {
+	if (config.mockAPI) {
 		nock(baseUrl)
 			.get(`${apiPrefix}/${modelName}/${id}`)
 			.reply(200, {
@@ -87,7 +84,7 @@ test('Should return proper response when correct ID is passed to message endpoin
 		json: true
 	}
 
-	if (isNock) {
+	if (config.mockAPI) {
 		nock(baseUrl)
 			.get(`${apiPrefix}/${modelName}/${id}`)
 			.reply(200, {
@@ -122,7 +119,7 @@ test('Should return proper response when INVALID ID is passed', t => {
 		json: true
 	}
 
-	if (isNock) {
+	if (config.mockAPI) {
 		nock(baseUrl)
 			.get(`${apiPrefix}/${modelName}/${id}`)
 			.reply(500, {

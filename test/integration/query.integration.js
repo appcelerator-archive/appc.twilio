@@ -1,12 +1,11 @@
 const test = require('tape');
 const request = require('request');
-const path = require('path');
 const config = require('../server/config.js');
 const nock = require('nock');
-const tapSpec = require('tap-spec');
 const port = config.port || 8080;
 const baseUrl = `http://localhost:${port}`;
 const apiPrefix = '/api';
+const mocks = require('./mocks/mocks.js');
 const urlToHit = `${baseUrl}${apiPrefix}`;
 const auth = {
 	user: config.apikey_development,
@@ -24,11 +23,18 @@ test('Should return proper status code when valid request is passed', t => {
 		json: true
 	}
 
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/query?where=%7B%22status%22:%20%22busy%22%7D`)
+			.reply(200, { success: true });
+	}
+
 	request(options, function (err, response, body) {
 		t.notOk(err);
 		t.ok(body.success);
 		t.equal(response.statusCode, 200, 'status code should be 200');
 
+		nock.cleanAll();
 		t.end();
 	});
 });
@@ -44,6 +50,12 @@ test('Should return only calls with status busy', t => {
 		json: true
 	}
 
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/query?where=%7B%22status%22:%20%22busy%22%7D`)
+			.reply(200, mocks.busyCalls);
+	}
+
 	request(options, function (err, response, body) {
 		t.notOk(err);
 		t.ok(body.success);
@@ -53,6 +65,7 @@ test('Should return only calls with status busy', t => {
 			t.equal(call.status, 'busy', 'call status should be busy');
 		})
 
+		nock.cleanAll();
 		t.end();
 	});
 });
@@ -68,6 +81,12 @@ test('Should return proper response based on query parameters', t => {
 		json: true
 	}
 
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/query?where=%7B%22status%22:%20%22completed%22,%20%22to%22:%20%22+359899638562%22%7D`)
+			.reply(200, mocks.completedCalls);
+	}
+
 	request(options, function (err, response, body) {
 		t.notOk(err);
 		t.ok(body.success);
@@ -78,6 +97,7 @@ test('Should return proper response based on query parameters', t => {
 			t.equal(call.to, '+359899638562', 'incoming call number should be +359899638562');
 		});
 
+		nock.cleanAll();
 		t.end();
 	});
 });
@@ -93,12 +113,19 @@ test('Should return NO response if there is no call to a given number', t => {
 		json: true
 	}
 
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/query?where=%7B%22to%22:%20%22+359271825%22%7D`)
+			.reply(200, { success: true, calls: [] });
+	}
+
 	request(options, function (err, response, body) {
 		t.notOk(err);
 		t.ok(body.success);
 		t.equal(response.statusCode, 200, 'status code should be 200');
 		t.equal(body.calls.length, 0), 'there should be no calls to this number';
 
+		nock.cleanAll();
 		t.end();
 	});
 });
@@ -115,6 +142,12 @@ test('Should return return all calls on the date passed in the query parameters'
 		json: true
 	}
 
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/query?where=%7B%22startTime%22:%20%222017-01-31%22%7D`)
+			.reply(200, mocks.callOnExactDate);
+	}
+
 	request(options, function (err, response, body) {
 		t.notOk(err);
 		t.ok(body.success);
@@ -126,6 +159,7 @@ test('Should return return all calls on the date passed in the query parameters'
 			t.ok(call.start_time.indexOf(expectedCallTime) !== -1);
 		});
 
+		nock.cleanAll();
 		t.end();
 	});
 });
@@ -141,6 +175,12 @@ test('Should return return all messages to a given number', t => {
 		json: true
 	}
 
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/query?where=%7B%22to%22:%20%22+359899982932%22%7D`)
+			.reply(200, mocks.messageToNumber);
+	}
+
 	request(options, function (err, response, body) {
 		t.notOk(err);
 		t.ok(body.success);
@@ -151,6 +191,7 @@ test('Should return return all messages to a given number', t => {
 			t.equal(message.to, '+359899982932');
 		});
 
+		nock.cleanAll();
 		t.end();
 	});
 });
@@ -167,6 +208,12 @@ test('Should return return all messages to a given number and date', t => {
 		json: true
 	}
 
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/query?where=%7B%22to%22:%20%22+359899982932%22,%20%22DateSent%22:%20%22Thu,%2026%20Jan%202017%22%7D`)
+			.reply(200, mocks.messagesOnExactDate);
+	}
+
 	request(options, function (err, response, body) {
 		t.notOk(err);
 		t.ok(body.success);
@@ -178,6 +225,7 @@ test('Should return return all messages to a given number and date', t => {
 			t.ok(message.date_sent.indexOf(expectedMessageDate) !== -1, `Date sent should be ${expectedMessageDate}`);
 		});
 
+		nock.cleanAll();
 		t.end();
 	});
 });
@@ -192,12 +240,19 @@ test('Should return return all if no query parameters are passed', t => {
 		json: true
 	}
 
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/query?`)
+			.reply(200, mocks.call);
+	}
+
 	request(options, function (err, response, body) {
 		t.notOk(err);
 		t.ok(body.success);
 		t.equal(response.statusCode, 200, 'status code should be 200');
 		t.equal(typeof body.calls, 'object');
 
+		nock.cleanAll();
 		t.end();
 	});
 });
@@ -211,6 +266,12 @@ test('Should return all addresses with friendly name "The Simpsons" ', t => {
 		method: 'GET',
 		auth: auth,
 		json: true
+	}
+
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/query?where=%7B%22friendlyName%22:%20%22The%20Simpsons%22%7D`)
+			.reply(200, mocks.addressByName);
 	}
 
 	request(options, function (err, response, body) {
@@ -237,17 +298,24 @@ test('Should return NO address when there is no such address based on the query 
 		json: true
 	}
 
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/query?where=%7B%22friendlyName%22:%20%22The%20Simpsons%22,%20%22customerName%22:%20%22Homer%22%7D`)
+			.reply(200, { success: true, addresses: [] });
+	}
+
 	request(options, function (err, response, body) {
 		t.notOk(err);
 		t.ok(body.success);
-		t.equal(response.statusCode, 200);
-		t.equal(body.addresses.length, 0);
+		t.equal(response.statusCode, 200, 'status code should be 200');
+		t.equal(body.addresses.length, 0, 'body length should be 0');
 
+		nock.cleanAll();
 		t.end();
 	});
 });
 
-test('Should return return no results if there is no outgoing caller id with this phone number', t => {
+test('Should return return NO results if there is no outgoing caller id with this phone number', t => {
 	const modelName = 'outgoingCallerId';
 	const uri = `${urlToHit}/${modelName}`;
 	const where = '{"phoneNumber": "+16467625508"}';
@@ -258,12 +326,19 @@ test('Should return return no results if there is no outgoing caller id with thi
 		json: true
 	}
 
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}/${modelName}/query?where=%7B%22phoneNumber%22:%20%22+16467625508%22%7D`)
+			.reply(200, { success: true, outgoingcallerids: [] });
+	}
+
 	request(options, function (err, response, body) {
 		t.notOk(err);
 		t.ok(body.success);
-		t.equal(response.statusCode, 200);
+		t.equal(response.statusCode, 200, 'status code should be 200');
 		t.equal(body.outgoingcallerids.length, 0);
 
+		nock.cleanAll();
 		t.end();
 	});
 });

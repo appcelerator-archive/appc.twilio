@@ -1,9 +1,7 @@
 const test = require('tape');
 const request = require('request');
-const path = require('path');
 const config = require('../server/config.js');
 const nock = require('nock');
-const tapSpec = require('tap-spec');
 const port = config.port || 8080;
 const baseUrl = `http://localhost:${port}`;
 const apiPrefix = '/api';
@@ -16,13 +14,6 @@ const auth = {
 
 test('Should return proper status code when valid request is made', t => {
 	const modelName = '/message';
-
-	if (config.mockAPI) {
-		nock(baseUrl)
-			.get(`${apiPrefix}${modelName}`)
-			.reply(200, { success: true });
-	}
-
 	const uri = `${urlToHit}${modelName}`;
 	const options = {
 		uri: uri,
@@ -30,6 +21,13 @@ test('Should return proper status code when valid request is made', t => {
 		auth: auth,
 		json: true
 	}
+
+	if (config.mockAPI) {
+		nock(baseUrl)
+			.get(`${apiPrefix}${modelName}`)
+			.reply(200, { success: true });
+	}
+
 	request(options, function (err, response, body) {
 		t.ok(body.success, "Body success should be true");
 		t.equal(response.statusCode, 200, 'status code should be 200');

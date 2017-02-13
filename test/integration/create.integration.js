@@ -1,15 +1,11 @@
 const test = require('tape');
 const request = require('request');
-const path = require('path');
 const config = require('../server/config.js');
 const nock = require('nock');
-const tapSpec = require('tap-spec');
 const port = config.port || 8080;
 const baseUrl = `http://localhost:${port}`;
 const apiPrefix = '/api';
 const urlToHit = `${baseUrl}${apiPrefix}`;
-const isNock = true;
-const pluralize = require('pluralize');
 const auth = {
 	user: config.apikey_development,
 	password: ''
@@ -28,7 +24,7 @@ test('Should create a call if required parameters are passed', t => {
 		json: true
 	};
 
-	if (isNock) {
+	if (config.mockAPI) {
 		nock(baseUrl)
 			.post(`${apiPrefix}/${modelName}`, {
 				to: '+359899638562'
@@ -53,7 +49,7 @@ test('Should NOT create a call if required parameters are not passed', t => {
 		json: true
 	};
 
-	if (isNock) {
+	if (config.mockAPI) {
 		nock(baseUrl)
 			.post(`${apiPrefix}${modelName}`)
 			.reply(400, { success: false });
@@ -81,7 +77,7 @@ test('Should create a message if required parameters are passed', t => {
 		json: true
 	};
 
-	if (isNock) {
+	if (config.mockAPI) {
 		nock(baseUrl)
 			.post(`${apiPrefix}${modelName}`, {
 				to: '+359899638562',
@@ -120,7 +116,7 @@ test('Should create an address if required parameters are passed', t => {
 		json: true
 	};
 
-	if (isNock) {
+	if (config.mockAPI) {
 		nock(baseUrl)
 			.post(`${apiPrefix}${modelName}`, {
 				friendlyName: 'Test Address',
@@ -141,6 +137,7 @@ test('Should create an address if required parameters are passed', t => {
 		t.equal(reqBody.customerName, 'Test');
 		t.equal(reqBody.region, 'CA');
 
+		nock.cleanAll();
 		t.end();
 	});
 });

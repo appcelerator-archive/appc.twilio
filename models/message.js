@@ -27,5 +27,5 @@ module.exports = Arrow.createModel('message', {
         }
     },
     connector: 'appc.twilio',
-    actions: ['create', 'read']
+    actions: ['create', 'read', 'delete']
 });

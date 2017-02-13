@@ -191,7 +191,7 @@ test('### updateQueue ###', function (t) {
 
 });
 
-creating outgoingCallerId requires code validation
+//creating outgoingCallerId requires code validation
 
 test.skip('### createOutgoingCallerId ###', function (t) {
 

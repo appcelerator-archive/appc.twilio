@@ -33,6 +33,7 @@ test('Should go through with auth alright', t => {
 		t.ok(body.success, "Body success should be true");
 		t.equal(response.statusCode, 200, 'status code should be 200');
 
+		nock.cleanAll();
 		t.end();
 	});
 });
@@ -50,7 +51,6 @@ test('Should fail with wrong auth params', t => {
 		json: true
 	}
 
-
 	if (config.mockAPI) {
 		nock(baseUrl)
 			.get(`${apiPrefix}${modelName}`)
@@ -62,6 +62,7 @@ test('Should fail with wrong auth params', t => {
 		t.equal(body.message, 'Unauthorized');
 		t.notOk(body.success, 'With wrong auth body succes should be false');
 
+		nock.cleanAll();
 		t.end();
 	});
 });
