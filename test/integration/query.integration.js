@@ -1,5 +1,6 @@
 const test = require('tape');
 const request = require('request');
+const path = require('path');
 const config = require('../server/config.js');
 const nock = require('nock');
 const port = config.port || 8080;
