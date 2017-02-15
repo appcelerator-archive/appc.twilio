@@ -12,53 +12,40 @@
   "repository": {},
   "private": true,
   "dependencies": {
-    "async": "^1.5.0",
-    "lodash": "^3.10.1",
-    "pkginfo": "^0.3.1",
     "semver": "^5.0.3"
   },
   "devDependencies": {
     "arrow": "^*",
-    "ava": "^0.17.0",
-    "babel-core": "6.18.2",
-    "babel-plugin-istanbul": "3.0.0",
-    "babel-preset-es2015": "6.18.0",
-    "babel-preset-stage-0": "6.16.0",
-    "babel-register": "^6.18.0",
     "cross-env": "^3.1.4",
-    "daemonize2": "^0.4.2",
     "debug": "^2.6.0",
-    "grunt": "^0.4.5",
-    "grunt-appc-js": "^1.0.19",
-    "grunt-contrib-clean": "^0.7.0",
-    "grunt-mocha-istanbul": "^3.0.1",
-    "happiness": "^7.1.2",
+    "husky": "^0.13.1",
     "istanbul": "^0.4.1",
-    "mocha": "^2.3.4",
     "nock": "^9.0.4",
     "nyc": "^10.1.2",
     "pluralize": "^3.1.0",
     "request": "^2.79.0",
-    "should": "^8.0.2",
+    "snazzy": "^6.0.0",
+    "standard": "^8.6.0",
+    "tap": "^10.1.0",
+    "tap-diff": "^0.1.1",
     "tap-spec": "^4.1.1",
-    "tape": "^4.6.3",
     "twilio": "^2.11.1"
   },
   "scripts": {
     "start": "appc run",
-    "start-server": "node test/server/demonize start",
-    "stop-server": "node test/server/demonize stop",
-    "test": "node test/integration/testSuites | tap-spec",
-	"test:unit": "node test/unit/unit.test | tap-spec",
-    "coverage": "cross-env NODE_ENV=test nyc ava --verbose",
-    "report": "nyc report --reporter=html"
+    "test": "standard && npm run test:*",
+    "test:integration": "tap test/integration/*.js --color --bail --cov",
+    "test:unit": "tap test/unit/*.js --color --bail --cov",
+    "lint": "standard | snazzy",
+    "style-fix": "standard --fix | snazzy",
+    "precommit": "npm run style-fix"
   },
-  "nyc": {
-    "require": [
-      "babel-core/register"
-    ],
-    "all": false,
-    "sourceMap": false,
-    "instrument": false
+  "standard": {
+    "ignore": [
+      ".nyc_output",
+      ".vscode",
+      "coverage",
+      "node_modules"
+    ]
   }
 }
