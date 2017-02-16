@@ -1,6 +1,4 @@
-const tap = require('tap')
-const test = tap.test
-
+const test = require('tap').test
 const request = require('request')
 const config = require('../server/config.js')
 const nock = require('nock')
@@ -40,8 +38,8 @@ test('Should return proper status code when valid request is passed', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}/${modelName}/${id}`)
+    nock(urlToHit)
+      .get(`/${modelName}/${id}`)
       .reply(200, { success: true })
   }
 
@@ -53,7 +51,7 @@ test('Should return proper status code when valid request is passed', t => {
     t.notOk(err)
     t.ok(body.success)
     t.equal(response.statusCode, 200, 'statusCode should be 200')
-
+    nock.cleanAll()
     t.end()
   })
 })
@@ -70,8 +68,8 @@ test('Should return proper status code when valid request is passed to call endp
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}/${modelName}/${id}`)
+    nock(urlToHit)
+      .get(`/${modelName}/${id}`)
       .reply(200, {
         success: true,
         call: {
@@ -93,7 +91,7 @@ test('Should return proper status code when valid request is passed to call endp
     t.equal(body.call.status, 'busy')
     t.equal(body.call.price_unit, 'USD')
     t.equal(body.call.duration, '0')
-
+    nock.cleanAll()
     t.end()
   })
 })
@@ -110,8 +108,8 @@ test('Should return proper response when correct ID is passed to message endpoin
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}/${modelName}/${id}`)
+    nock(urlToHit)
+      .get(`/${modelName}/${id}`)
       .reply(200, {
         success: true,
         message: {
@@ -131,7 +129,7 @@ test('Should return proper response when correct ID is passed to message endpoin
     t.equal(response.statusCode, 200, 'status code should be 200')
     t.equal(message.sid, id)
     t.equal(message.status, 'delivered')
-
+    nock.cleanAll()
     t.end()
   })
 })
@@ -148,8 +146,8 @@ test('Should return proper response when INVALID ID is passed', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}/${modelName}/${id}`)
+    nock(urlToHit)
+      .get(`/${modelName}/${id}`)
       .reply(500, {
         success: false,
         message: `Could not find ${modelName} with ID: ${id}`
@@ -164,7 +162,7 @@ test('Should return proper response when INVALID ID is passed', t => {
     t.notOk(body.success, 'Body success should be false')
     t.equal(response.statusCode, 500)
     t.equal(body.message, `Could not find ${modelName} with ID: ${id}`)
-
+    nock.cleanAll()
     t.end()
   })
 })

@@ -1,6 +1,4 @@
-const tap = require('tap')
-const test = tap.test
-
+const test = require('tap').test
 const request = require('request')
 const config = require('../server/config.js')
 const nock = require('nock')
@@ -40,8 +38,8 @@ test('Should return proper status code when valid request is made', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}${modelName}`)
+    nock(urlToHit)
+      .get(`${modelName}`)
       .reply(200, { success: true })
   }
 
@@ -52,6 +50,7 @@ test('Should return proper status code when valid request is made', t => {
     }
     t.ok(body.success, 'Body success should be true')
     t.equal(response.statusCode, 200, 'status code should be 200')
+    nock.cleanAll()
     t.end()
   })
 })
@@ -67,8 +66,8 @@ test('Should return proper response when INVALID find all request is made', t =>
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}${modelName}`)
+    nock(urlToHit)
+      .get(`${modelName}`)
       .reply(404, { success: false, error: 'Not found' })
   }
 
@@ -80,7 +79,7 @@ test('Should return proper response when INVALID find all request is made', t =>
     t.notOk(body.success, 'Body success should be false when invalid request is made')
     t.equal(response.statusCode, 404, 'status code should be 404')
     t.equal(body.error, 'Not found')
-
+    nock.cleanAll()
     t.end()
   })
 })
@@ -117,8 +116,8 @@ test('Should return proper response format when request is made to message endpo
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}${modelName}`)
+    nock(urlToHit)
+      .get(`${modelName}`)
       .reply(200, mocks.message)
   }
 
@@ -132,10 +131,9 @@ test('Should return proper response format when request is made to message endpo
 
     body.messages.map((item) => {
       var properties = Object.getOwnPropertyNames(item)
-
       t.deepEqual(properties, expectedProperties, `Each item should have the same properties as the ${modelName} model`)
     })
-
+    nock.cleanAll()
     t.end()
   })
 })
@@ -143,7 +141,8 @@ test('Should return proper response format when request is made to message endpo
 test('Should return proper response format when request is made to call endpoint', t => {
   const modelName = '/call'
   const uri = `${urlToHit}${modelName}`
-  const expectedProperties = ['id',
+  const expectedProperties = [
+    'id',
     'sid',
     'date_created',
     'to',
@@ -168,8 +167,8 @@ test('Should return proper response format when request is made to call endpoint
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}${modelName}`)
+    nock(urlToHit)
+      .get(`${modelName}`)
       .reply(200, mocks.call)
   }
 
@@ -189,7 +188,7 @@ test('Should return proper response format when request is made to call endpoint
         t.ok(call.hasOwnProperty(prop), `Each item should have the same properties as the ${modelName} model`)
       })
     })
-
+    nock.cleanAll()
     t.end()
   })
 })
@@ -214,8 +213,8 @@ test('Should return proper response format when request is made to address endpo
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}${modelName}`)
+    nock(urlToHit)
+      .get(`${modelName}`)
       .reply(200, mocks.address)
   }
 
@@ -228,13 +227,12 @@ test('Should return proper response format when request is made to address endpo
     t.equal(response.statusCode, 200, 'status code should be 200')
 
     body.addresses.map((address) => {
-      // var properties = Object.getOwnPropertyNames(address)
-
       expectedProperties.map((prop) => {
         t.ok(address.hasOwnProperty(prop), `Each item should have the same properties as the ${modelName} model`)
       })
     })
 
+    nock.cleanAll()
     t.end()
   })
 })
@@ -250,8 +248,8 @@ test('Should return result in proper format', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}${modelName}`)
+    nock(urlToHit)
+      .get(`${modelName}`)
       .reply(200, { success: true, recordings: {} })
   }
 
@@ -263,7 +261,7 @@ test('Should return result in proper format', t => {
     t.ok(body.success, 'Body success should be true')
     t.equal(response.statusCode, 200, 'status code should be 200')
     t.equal(typeof body.recordings, 'object')
-
+    nock.cleanAll()
     t.end()
   })
 })
@@ -279,8 +277,8 @@ test('Should return NON empty result', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}${modelName}`)
+    nock(urlToHit)
+      .get(`${modelName}`)
       .reply(200, mocks.call)
   }
 
@@ -293,7 +291,7 @@ test('Should return NON empty result', t => {
     t.equal(response.statusCode, 200, 'status code should be 200')
     t.equal(typeof body.calls, 'object')
     t.ok(body.calls.length > 0)
-
+    nock.cleanAll()
     t.end()
   })
 })

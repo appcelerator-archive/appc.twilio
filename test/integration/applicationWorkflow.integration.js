@@ -1,5 +1,4 @@
-const tap = require('tap')
-const test = tap.test
+const test = require('tap').test
 const request = require('request')
 const config = require('../server/config.js')
 const nock = require('nock')
@@ -38,8 +37,8 @@ test('Should go through with auth alright', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}${modelName}`)
+    nock(urlToHit)
+      .get(`${modelName}`)
       .reply(200, { success: true })
   }
 
@@ -70,8 +69,8 @@ test('Should fail with wrong auth params', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}${modelName}`)
+    nock(urlToHit)
+      .get(`${modelName}`)
       .reply(401, { success: false, message: 'Unauthorized' })
   }
 
@@ -99,8 +98,8 @@ test('Should make sure auth is required', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}${modelName}`)
+    nock(urlToHit)
+      .get(`${modelName}`)
       .reply(401, { success: false, message: 'Unauthorized' })
   }
 
@@ -113,6 +112,7 @@ test('Should make sure auth is required', t => {
     t.equal(body.message, 'Unauthorized')
     t.notOk(body.success, 'With wrong auth body succes should be false')
 
+    nock.cleanAll()
     t.end()
   })
 })

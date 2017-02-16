@@ -1,6 +1,4 @@
-const tap = require('tap')
-const test = tap.test
-
+const test = require('tap').test
 const request = require('request')
 const config = require('../server/config.js')
 const nock = require('nock')
@@ -41,8 +39,8 @@ test('Should return proper status code when valid request is passed', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}/${modelName}/query?where=%7B%22status%22:%20%22busy%22%7D`)
+    nock(urlToHit)
+      .get(`/${modelName}/query?where=%7B%22status%22:%20%22busy%22%7D`)
       .reply(200, { success: true })
   }
 
@@ -68,8 +66,8 @@ test('Should return only calls with status busy', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}/${modelName}/query?where=%7B%22status%22:%20%22busy%22%7D`)
+    nock(urlToHit)
+      .get(`/${modelName}/query?where=%7B%22status%22:%20%22busy%22%7D`)
       .reply(200, mocks.busyCalls)
   }
 
@@ -99,8 +97,8 @@ test('Should return proper response based on query parameters', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}/${modelName}/query?where=%7B%22status%22:%20%22completed%22,%20%22to%22:%20%22+359899638562%22%7D`)
+    nock(urlToHit)
+      .get(`/${modelName}/query?where=%7B%22status%22:%20%22completed%22,%20%22to%22:%20%22+359899638562%22%7D`)
       .reply(200, mocks.completedCalls)
   }
 
@@ -131,8 +129,8 @@ test('Should return NO response if there is no call to a given number', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}/${modelName}/query?where=%7B%22to%22:%20%22+359271825%22%7D`)
+    nock(urlToHit)
+      .get(`/${modelName}/query?where=%7B%22to%22:%20%22+359271825%22%7D`)
       .reply(200, { success: true, calls: [] })
   }
 
@@ -193,8 +191,8 @@ test('Should return return all messages to a given number', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}/${modelName}/query?where=%7B%22to%22:%20%22+359899982932%22%7D`)
+    nock(urlToHit)
+      .get(`/${modelName}/query?where=%7B%22to%22:%20%22+359899982932%22%7D`)
       .reply(200, mocks.messageToNumber)
   }
 
@@ -226,8 +224,8 @@ test('Should return return all messages to a given number and date', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}/${modelName}/query?where=%7B%22to%22:%20%22+359899982932%22,%20%22DateSent%22:%20%22Thu,%2026%20Jan%202017%22%7D`)
+    nock(urlToHit)
+      .get(`/${modelName}/query?where=%7B%22to%22:%20%22+359899982932%22,%20%22DateSent%22:%20%22Thu,%2026%20Jan%202017%22%7D`)
       .reply(200, mocks.messagesOnExactDate)
   }
 
@@ -258,8 +256,8 @@ test('Should return return all if no query parameters are passed', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}/${modelName}/query?`)
+    nock(urlToHit)
+      .get(`/${modelName}/query?`)
       .reply(200, mocks.call)
   }
 
@@ -286,8 +284,8 @@ test('Should return all addresses with friendly name "The Simpsons" ', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}/${modelName}/query?where=%7B%22friendlyName%22:%20%22The%20Simpsons%22%7D`)
+    nock(urlToHit)
+      .get(`/${modelName}/query?where=%7B%22friendlyName%22:%20%22The%20Simpsons%22%7D`)
       .reply(200, mocks.addressByName)
   }
 
@@ -299,7 +297,7 @@ test('Should return all addresses with friendly name "The Simpsons" ', t => {
     body.addresses.map((address) => {
       t.equal(address.friendlyName, 'The Simpsons')
     })
-
+    nock.cleanAll()
     t.end()
   })
 })
@@ -316,8 +314,8 @@ test('Should return NO address when there is no such address based on the query 
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}/${modelName}/query?where=%7B%22friendlyName%22:%20%22The%20Simpsons%22,%20%22customerName%22:%20%22Homer%22%7D`)
+    nock(urlToHit)
+      .get(`/${modelName}/query?where=%7B%22friendlyName%22:%20%22The%20Simpsons%22,%20%22customerName%22:%20%22Homer%22%7D`)
       .reply(200, { success: true, addresses: [] })
   }
 
@@ -344,8 +342,8 @@ test('Should return return NO results if there is no outgoing caller id with thi
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}/${modelName}/query?where=%7B%22phoneNumber%22:%20%22+16467625508%22%7D`)
+    nock(urlToHit)
+      .get(`/${modelName}/query?where=%7B%22phoneNumber%22:%20%22+16467625508%22%7D`)
       .reply(200, { success: true, outgoingcallerids: [] })
   }
 

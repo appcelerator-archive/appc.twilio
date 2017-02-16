@@ -1,6 +1,4 @@
-const tap = require('tap')
-const test = tap.test
-
+const test = require('tap').test
 const request = require('request')
 const config = require('../server/config.js')
 const nock = require('nock')
@@ -41,8 +39,8 @@ test('Should get last call id to delete it', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}${modelName}`)
+    nock(urlToHit)
+      .get(`${modelName}`)
       .reply(200, mocks.call)
   }
 
@@ -70,8 +68,8 @@ test('Should delete a call if required parameters are passed', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .delete(`${apiPrefix}/${modelName}/${id}`)
+    nock(urlToHit)
+      .delete(`/${modelName}/${id}`)
       .reply(204)
   }
 
@@ -98,8 +96,8 @@ test('Should get last message id to delete it', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .get(`${apiPrefix}${modelName}`)
+    nock(urlToHit)
+      .get(`${modelName}`)
       .reply(200, mocks.message)
   }
 
@@ -110,7 +108,7 @@ test('Should get last message id to delete it', t => {
     }
     id = body.messages[0].sid
     t.ok(body.success)
-
+    nock.cleanAll()
     t.end()
   })
 })
@@ -126,8 +124,8 @@ test('Should delete a message if required parameters are passed', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .delete(`${apiPrefix}/${modelName}/${id}`)
+    nock(urlToHit)
+      .delete(`/${modelName}/${id}`)
       .reply(204)
   }
 
@@ -154,8 +152,8 @@ test('Should NOT delete if id param is not valid', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .delete(`${apiPrefix}/${modelName}/invalid`)
+    nock(urlToHit)
+      .delete(`/${modelName}/invalid`)
       .reply(500, { success: false, message: 'Could not find message with ID: invalid' })
   }
 

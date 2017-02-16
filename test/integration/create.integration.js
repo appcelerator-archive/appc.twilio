@@ -1,6 +1,4 @@
-const tap = require('tap')
-const test = tap.test
-
+const test = require('tap').test
 const request = require('request')
 const config = require('../server/config.js')
 const nock = require('nock')
@@ -42,8 +40,8 @@ test('Should create a call if required parameters are passed', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .post(`${apiPrefix}/${modelName}`, {
+    nock(urlToHit)
+      .post(`/${modelName}`, {
         to: '+359899638562'
       })
       .reply(201)
@@ -55,6 +53,7 @@ test('Should create a call if required parameters are passed', t => {
       t.end()
     }
     t.equal(response.statusCode, 201, 'status code should be 201 created')
+    nock.cleanAll()
     t.end()
   })
 })
@@ -70,8 +69,8 @@ test('Should NOT create a call if required parameters are not passed', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .post(`${apiPrefix}${modelName}`)
+    nock(urlToHit)
+      .post(`${modelName}`)
       .reply(400, { success: false })
   }
 
@@ -82,6 +81,7 @@ test('Should NOT create a call if required parameters are not passed', t => {
     }
     t.notOk(body.success, 'Body success should be false')
     t.equal(response.statusCode, 400, 'status code should be 400')
+    nock.cleanAll()
     t.end()
   })
 })
@@ -101,8 +101,8 @@ test('Should create a message if required parameters are passed', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .post(`${apiPrefix}${modelName}`, {
+    nock(urlToHit)
+      .post(`${modelName}`, {
         to: '+359899638562',
         body: 'Hi there !'
       })
@@ -119,6 +119,7 @@ test('Should create a message if required parameters are passed', t => {
     t.equal(response.statusCode, 201, 'status code should be 201')
     t.equal(reqBody.to, '+359899638562')
     t.equal(reqBody.body, 'Hi there !')
+    nock.cleanAll()
     t.end()
   })
 })
@@ -143,8 +144,8 @@ test('Should create an address if required parameters are passed', t => {
   }
 
   if (config.mockAPI) {
-    nock(baseUrl)
-      .post(`${apiPrefix}${modelName}`, {
+    nock(urlToHit)
+      .post(`${modelName}`, {
         friendlyName: 'Test Address',
         customerName: 'Test',
         street: 'Some beautiful street',
