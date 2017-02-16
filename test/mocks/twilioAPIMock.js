@@ -1,6 +1,6 @@
 const mockData = require('./data/mockData')
 const messagesData = require('./data/messages')
-//const queriesData = require('./data/query')
+// const queriesData = require('./data/query')
 const pluralize = require('pluralize')
 
 module.exports = function (config) {
