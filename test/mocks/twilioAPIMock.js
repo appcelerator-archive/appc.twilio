@@ -1,5 +1,7 @@
+const mockData = require('./data/mockData')
 const messagesData = require('./data/messages')
-const queriesData = require('./data/query')
+//const queriesData = require('./data/query')
+const pluralize = require('pluralize')
 
 module.exports = function (config) {
   return {
@@ -20,9 +22,11 @@ module.exports = function (config) {
   }
 
   function findAll (Model, callback) {
+    const key = pluralize(Model.name)
+
     const instances = []
 
-    messagesData.map((item, index) => {
+    mockData[key].map((item, index) => {
       const instance = Model.instance(item, true)
       instance.setPrimaryKey(index + 1)
       instances.push(instance)
@@ -44,13 +48,21 @@ module.exports = function (config) {
   }
 
   function query (Model, options, callback) {
+    const key = pluralize(Model.name)
     const instances = []
 
-    queriesData.forEach((item) => {
+    const db = mockData.query[key]
+    const data = db.find(findMockData)
+
+    data.value.forEach((item) => {
       instances.push(Model.instance(item, true))
     })
 
     callback(null, instances)
+
+    function findMockData (mockData) {
+      return JSON.stringify(mockData.where) === JSON.stringify(options.where)
+    }
   }
 
   function createCall (Model, values, number, callback) {

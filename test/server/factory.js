@@ -4,7 +4,7 @@ module.exports = {
    * This one expose Arrow http server based on Express
    */
   startHTTPArrow: function (config, callback) {
-    const server = this.startPlainArrow(config)
+    const { server } = this.startPlainArrow(config)
     server.start(function () {
       callback(server)
     })

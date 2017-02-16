@@ -1,30 +1,23 @@
 const test = require('tap').test
 const request = require('request')
-const config = require('../server/config.js')
-const nock = require('nock')
-const port = config.port || 8080
+const port = 8080
 const baseUrl = `http://localhost:${port}`
 const apiPrefix = '/api'
-const mocks = require('../mocks/data.integration')
 const urlToHit = `${baseUrl}${apiPrefix}`
-const auth = {
-  user: config.apikey_development,
-  password: ''
-}
+const server = require('../server/factory')
 
 var SERVER
-const serverFactory = require('../server/factory')
+const AUTH = {}
 test('### START SERVER ###', function (t) {
-  if (!config.mockAPI) {
-    serverFactory(config, arrow => {
-      t.ok(arrow, 'Arrow has been started')
-      SERVER = arrow
-      t.end()
-    })
-  } else {
-    t.pass('Arrow is skipped ... working with mock server')
+  server.startHTTPArrow({}, arrow => {
+    t.ok(arrow, 'Arrow has been started')
+    SERVER = arrow
+
+    t.ok(SERVER.config.apikey, 'apikey is set')
+    AUTH.user = SERVER.config.apikey
+
     t.end()
-  }
+  })
 })
 
 test('Should return proper status code when valid request is made', t => {
@@ -33,14 +26,8 @@ test('Should return proper status code when valid request is made', t => {
   const options = {
     uri: uri,
     method: 'GET',
-    auth: auth,
+    auth: AUTH,
     json: true
-  }
-
-  if (config.mockAPI) {
-    nock(urlToHit)
-      .get(`${modelName}`)
-      .reply(200, { success: true })
   }
 
   request(options, function (err, response, body) {
@@ -50,7 +37,7 @@ test('Should return proper status code when valid request is made', t => {
     }
     t.ok(body.success, 'Body success should be true')
     t.equal(response.statusCode, 200, 'status code should be 200')
-    nock.cleanAll()
+
     t.end()
   })
 })
@@ -61,14 +48,8 @@ test('Should return proper response when INVALID find all request is made', t =>
   const options = {
     uri: uri,
     method: 'GET',
-    auth: auth,
+    auth: AUTH,
     json: true
-  }
-
-  if (config.mockAPI) {
-    nock(urlToHit)
-      .get(`${modelName}`)
-      .reply(404, { success: false, error: 'Not found' })
   }
 
   request(options, function (err, response, body) {
@@ -79,7 +60,7 @@ test('Should return proper response when INVALID find all request is made', t =>
     t.notOk(body.success, 'Body success should be false when invalid request is made')
     t.equal(response.statusCode, 404, 'status code should be 404')
     t.equal(body.error, 'Not found')
-    nock.cleanAll()
+
     t.end()
   })
 })
@@ -111,14 +92,8 @@ test('Should return proper response format when request is made to message endpo
   const options = {
     uri: uri,
     method: 'GET',
-    auth: auth,
+    auth: AUTH,
     json: true
-  }
-
-  if (config.mockAPI) {
-    nock(urlToHit)
-      .get(`${modelName}`)
-      .reply(200, mocks.message)
   }
 
   request(options, function (err, response, body) {
@@ -133,7 +108,7 @@ test('Should return proper response format when request is made to message endpo
       var properties = Object.getOwnPropertyNames(item)
       t.deepEqual(properties, expectedProperties, `Each item should have the same properties as the ${modelName} model`)
     })
-    nock.cleanAll()
+
     t.end()
   })
 })
@@ -162,14 +137,8 @@ test('Should return proper response format when request is made to call endpoint
   const options = {
     uri: uri,
     method: 'GET',
-    auth: auth,
+    auth: AUTH,
     json: true
-  }
-
-  if (config.mockAPI) {
-    nock(urlToHit)
-      .get(`${modelName}`)
-      .reply(200, mocks.call)
   }
 
   request(options, function (err, response, body) {
@@ -188,7 +157,7 @@ test('Should return proper response format when request is made to call endpoint
         t.ok(call.hasOwnProperty(prop), `Each item should have the same properties as the ${modelName} model`)
       })
     })
-    nock.cleanAll()
+
     t.end()
   })
 })
@@ -208,14 +177,8 @@ test('Should return proper response format when request is made to address endpo
   const options = {
     uri: uri,
     method: 'GET',
-    auth: auth,
+    auth: AUTH,
     json: true
-  }
-
-  if (config.mockAPI) {
-    nock(urlToHit)
-      .get(`${modelName}`)
-      .reply(200, mocks.address)
   }
 
   request(options, function (err, response, body) {
@@ -232,7 +195,6 @@ test('Should return proper response format when request is made to address endpo
       })
     })
 
-    nock.cleanAll()
     t.end()
   })
 })
@@ -243,14 +205,8 @@ test('Should return result in proper format', t => {
   const options = {
     uri: uri,
     method: 'GET',
-    auth: auth,
+    auth: AUTH,
     json: true
-  }
-
-  if (config.mockAPI) {
-    nock(urlToHit)
-      .get(`${modelName}`)
-      .reply(200, { success: true, recordings: {} })
   }
 
   request(options, function (err, response, body) {
@@ -261,7 +217,7 @@ test('Should return result in proper format', t => {
     t.ok(body.success, 'Body success should be true')
     t.equal(response.statusCode, 200, 'status code should be 200')
     t.equal(typeof body.recordings, 'object')
-    nock.cleanAll()
+
     t.end()
   })
 })
@@ -272,14 +228,8 @@ test('Should return NON empty result', t => {
   const options = {
     uri: uri,
     method: 'GET',
-    auth: auth,
+    auth: AUTH,
     json: true
-  }
-
-  if (config.mockAPI) {
-    nock(urlToHit)
-      .get(`${modelName}`)
-      .reply(200, mocks.call)
   }
 
   request(options, function (err, response, body) {
@@ -291,18 +241,14 @@ test('Should return NON empty result', t => {
     t.equal(response.statusCode, 200, 'status code should be 200')
     t.equal(typeof body.calls, 'object')
     t.ok(body.calls.length > 0)
-    nock.cleanAll()
+
     t.end()
   })
 })
 
 test('### STOP SERVER ###', function (t) {
-  if (!config.mockAPI) {
-    SERVER.stop(function () {
-      t.pass('Arrow has been stopped!')
-      t.end()
-    })
-  } else {
+  SERVER.stop(function () {
+    t.pass('Arrow has been stopped!')
     t.end()
-  }
+  })
 })

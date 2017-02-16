@@ -1,29 +1,23 @@
 const test = require('tap').test
 const request = require('request')
-const config = require('../server/config.js')
-const nock = require('nock')
-const port = config.port || 8080
+const port = 8080
 const baseUrl = `http://localhost:${port}`
 const apiPrefix = '/api'
 const urlToHit = `${baseUrl}${apiPrefix}`
-const auth = {
-  user: config.apikey_development,
-  password: ''
-}
+const server = require('../server/factory')
 
 var SERVER
-const serverFactory = require('../server/factory')
+const AUTH = {}
 test('### START SERVER ###', function (t) {
-  if (!config.mockAPI) {
-    serverFactory(config, arrow => {
-      t.ok(arrow, 'Arrow has been started')
-      SERVER = arrow
-      t.end()
-    })
-  } else {
-    t.pass('Arrow is skipped ... working with mock server')
+  server.startHTTPArrow({}, arrow => {
+    t.ok(arrow, 'Arrow has been started')
+    SERVER = arrow
+
+    t.ok(SERVER.config.apikey, 'apikey is set')
+    AUTH.user = SERVER.config.apikey
+
     t.end()
-  }
+  })
 })
 
 test('Should go through with auth alright', t => {
@@ -32,16 +26,9 @@ test('Should go through with auth alright', t => {
   const options = {
     uri: uri,
     method: 'GET',
-    auth: auth,
+    auth: AUTH,
     json: true
   }
-
-  if (config.mockAPI) {
-    nock(urlToHit)
-      .get(`${modelName}`)
-      .reply(200, { success: true })
-  }
-
   request(options, function (err, response, body) {
     if (err) {
       t.error(err)
@@ -49,8 +36,6 @@ test('Should go through with auth alright', t => {
     }
     t.ok(body.success, 'Body success should be true')
     t.equal(response.statusCode, 200, 'status code should be 200')
-
-    nock.cleanAll()
     t.end()
   })
 })
@@ -67,13 +52,6 @@ test('Should fail with wrong auth params', t => {
     },
     json: true
   }
-
-  if (config.mockAPI) {
-    nock(urlToHit)
-      .get(`${modelName}`)
-      .reply(401, { success: false, message: 'Unauthorized' })
-  }
-
   request(options, function (err, response, body) {
     if (err) {
       t.error(err)
@@ -83,7 +61,6 @@ test('Should fail with wrong auth params', t => {
     t.equal(body.message, 'Unauthorized')
     t.notOk(body.success, 'With wrong auth body succes should be false')
 
-    nock.cleanAll()
     t.end()
   })
 })
@@ -97,12 +74,6 @@ test('Should make sure auth is required', t => {
     json: true
   }
 
-  if (config.mockAPI) {
-    nock(urlToHit)
-      .get(`${modelName}`)
-      .reply(401, { success: false, message: 'Unauthorized' })
-  }
-
   request(options, function (err, response, body) {
     if (err) {
       t.error(err)
@@ -111,19 +82,13 @@ test('Should make sure auth is required', t => {
     t.equal(response.statusCode, 401, 'status code should be 401')
     t.equal(body.message, 'Unauthorized')
     t.notOk(body.success, 'With wrong auth body succes should be false')
-
-    nock.cleanAll()
     t.end()
   })
 })
 
 test('### STOP SERVER ###', function (t) {
-  if (!config.mockAPI) {
-    SERVER.stop(function () {
-      t.pass('Arrow has been stopped!')
-      t.end()
-    })
-  } else {
+  SERVER.stop(function () {
+    t.pass('Arrow has been stopped!')
     t.end()
-  }
+  })
 })

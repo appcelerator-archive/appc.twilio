@@ -472,17 +472,17 @@ const mockedAddresses = {
   success: true,
   'request-id': 'd6c80bb0-0f70-4fd0-aa81-e7af1b12f55a',
   key: 'addresses',
-  addresses:
-  [{
-    id: 1,
-    sid: 'ADeeca6f73ab05629944633358ec84d413',
-    customerName: 'Changed customer',
-    street: '2 Hasselhoff Lane',
-    city: 'NYC',
-    region: 'Unknown',
-    postalCode: '10013',
-    isoCountry: 'US'
-  },
+  addresses: [
+    {
+      id: 1,
+      sid: 'ADeeca6f73ab05629944633358ec84d413',
+      customerName: 'Changed customer',
+      street: '2 Hasselhoff Lane',
+      city: 'NYC',
+      region: 'Unknown',
+      postalCode: '10013',
+      isoCountry: 'US'
+    },
     {
       id: 2,
       sid: 'ADea0177403a7d81e0792de7e50965831b',

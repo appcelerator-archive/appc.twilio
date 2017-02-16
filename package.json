@@ -38,7 +38,8 @@
     "test:unit": "npm run lint-fix && tap test/unit/*.js --color --bail --cov",
     "lint": "standard | snazzy",
     "lint-fix": "standard --fix | snazzy",
-    "precommit": "npm run lint-fix"    
+    "precommit": "npm run lint-fix",
+    "standalone": "tap test/integration/query.integration.js --color --bail --cov"
   },
   "standard": {
     "ignore": [

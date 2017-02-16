@@ -1,14 +1,13 @@
 const test = require('tap').test
 const mockedData = require('../mocks/data/test.unit')
 const { server } = require('../server/factory').startPlainArrow()
-const config = server.config
-const connectorConfig = config.connectors['appc.twilio']
-const configNumber = connectorConfig.twilio_number
+const config = server.config.connectors['appc.twilio']
+const configNumber = config.twilio_number
 var twilioAPI
 if (config.mockAPI) {
-  twilioAPI = require('../mocks/twilioAPIMock')(connectorConfig)
+  twilioAPI = require('../mocks/twilioAPIMock')(config)
 } else {
-  twilioAPI = require('./../../utils/twilioAPI')(connectorConfig)
+  twilioAPI = require('./../../utils/twilioAPI')(config)
 }
 
 var messageId
@@ -163,7 +162,7 @@ test('### createQueue ###', function (t) {
 test('### updateQueue ###', function (t) {
   const model = server.getModel('queue')
   const doc = {
-    maxSize: 120,
+    max_size: 120,
     friendlyName: 'friendlyName'
   }
   twilioAPI.updateQueue(model, queueId, doc, (err, resp) => {
@@ -179,7 +178,7 @@ test('### updateQueue ###', function (t) {
         t.end()
       }
       t.ok(resp, 'found queue')
-      t.ok(resp.max_size === doc.maxSize, 'queue updated successfully')
+      t.ok(resp.max_size === doc.max_size, 'queue updated successfully')
       t.end()
     })
   })
