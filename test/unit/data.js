@@ -1,0 +1,93 @@
+module.exports = {
+  call: {
+    'sid': 'CAea1ad9387b401c865af99fcb52370360',
+    'date_created': 'Mon, 13 Feb 2017 13:17:05 +0000',
+    'date_updated': 'Mon, 13 Feb 2017 13:18:05 +0000',
+    'parent_call_sid': null,
+    'account_sid': 'ACf7bcbac2b0d089ae965a9876b25cf661',
+    'to': '+359899982932',
+    'to_formatted': '+359899982932',
+    'from': '+12694751394',
+    'from_formatted': '(269) 475-1394',
+    'phone_number_sid': '',
+    'status': 'no-answer',
+    'start_time': 'Mon, 13 Feb 2017 13:17:05 +0000',
+    'end_time': 'Mon, 13 Feb 2017 13:18:05 +0000',
+    'duration': '0',
+    'price': null,
+    'price_unit': 'USD',
+    'direction': 'outbound-api',
+    'answered_by': null,
+    'annotation': null,
+    'api_version': '2010-04-01',
+    'forwarded_from': null,
+    'group_sid': null,
+    'caller_name': '',
+    'uri': '/2010-04-01/Accounts/ACf7bcbac2b0d089ae965a9876b25cf661/Calls/CAea1ad9387b401c865af99fcb52370360.json',
+    'subresource_uris': {
+      'notifications': '/2010-04-01/Accounts/ACf7bcbac2b0d089ae965a9876b25cf661/Calls/CAea1ad9387b401c865af99fcb52370360/Notifications.json',
+      'recordings': '/2010-04-01/Accounts/ACf7bcbac2b0d089ae965a9876b25cf661/Calls/CAea1ad9387b401c865af99fcb52370360/Recordings.json'
+    }
+  },
+  message: {
+    'sid': 'SM1c4471776d77434d822d77c3edf725a2',
+    'date_created': 'Wed, 15 Feb 2017 15:01:43 +0000',
+    'date_updated': 'Wed, 15 Feb 2017 15:01:47 +0000',
+    'date_sent': 'Wed, 15 Feb 2017 15:01:43 +0000',
+    'account_sid': 'ACf7bcbac2b0d089ae965a9876b25cf661',
+    'to': '+359899982932',
+    'from': '+12694751394',
+    'messaging_service_sid': null,
+    'body': 'Sent from your Twilio trial account - trial',
+    'status': 'delivered',
+    'num_segments': '1',
+    'num_media': '0',
+    'direction': 'outbound-api',
+    'api_version': '2010-04-01',
+    'price': '-0.13000',
+    'price_unit': 'USD',
+    'error_code': null,
+    'error_message': null,
+    'uri': '/2010-04-01/Accounts/ACf7bcbac2b0d089ae965a9876b25cf661/Messages/SM1c4471776d77434d822d77c3edf725a2.json',
+    'subresource_uris': {
+      'media': '/2010-04-01/Accounts/ACf7bcbac2b0d089ae965a9876b25cf661/Messages/SM1c4471776d77434d822d77c3edf725a2/Media.json'
+    }
+  },
+  address: {
+    'sid': 'AD45a4bea310b6125de60852e7f9dd9494',
+    'account_sid': 'ACf7bcbac2b0d089ae965a9876b25cf661',
+    'friendly_name': null,
+    'customerName': 'Joe Doe',
+    'street': '2 Hasselhoff Lane',
+    'street_secondary': null,
+    'city': 'NYC',
+    'region': 'Unknown',
+    'postal_code': '10013',
+    'iso_country': 'US',
+    'uri': '/2010-04-01/Accounts/ACf7bcbac2b0d089ae965a9876b25cf661/Addresses/AD45a4bea310b6125de60852e7f9dd9494.json',
+    'date_created': 'Tue, 14 Feb 2017 09:46:42 +0000',
+    'date_updated': 'Tue, 14 Feb 2017 09:46:42 +0000',
+    'emergency_enabled': false,
+    'validated': false
+  },
+  queue: {
+    'sid': 'QU52e0b0239ea7460baa8a3654a659644b',
+    'account_sid': 'ACf7bcbac2b0d089ae965a9876b25cf661',
+    'friendly_name': 'Queue_13918',
+    'current_size': 0,
+    'average_wait_time': 0,
+    'max_size': 100,
+    'date_created': 'Sun, 12 Feb 2017 10:58:02 +0000',
+    'date_updated': 'Sun, 12 Feb 2017 10:58:02 +0000',
+    'uri': '/2010-04-01/Accounts/ACf7bcbac2b0d089ae965a9876b25cf661/Queues/QU52e0b0239ea7460baa8a3654a659644b.json'
+  },
+  outgoingCallerId: {
+    'sid': 'PN4758a112f98d1118c4091e2590f3747e',
+    'account_sid': 'ACf7bcbac2b0d089ae965a9876b25cf661',
+    'friendly_name': 'User',
+    'phone_number': '+359899982932',
+    'date_created': 'Tue, 07 Feb 2017 16:39:46 +0000',
+    'date_updated': 'Sun, 12 Feb 2017 10:58:03 +0000',
+    'uri': '/2010-04-01/Accounts/ACf7bcbac2b0d089ae965a9876b25cf661/OutgoingCallerIds/PN4758a112f98d1118c4091e2590f3747e.json'
+  }
+}
