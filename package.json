@@ -37,8 +37,7 @@
     "test:integration": "tap test/integration/*.js --color --bail --cov",
     "test:unit": "tap test/unit/*.js --color --bail --cov",
     "lint": "standard | snazzy",
-    "style-fix": "standard --fix | snazzy",
-    "precommit": "npm run style-fix"
+    "style-fix": "standard --fix | snazzy"
   },
   "standard": {
     "ignore": [
