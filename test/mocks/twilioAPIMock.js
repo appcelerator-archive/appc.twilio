@@ -1,3 +1,6 @@
+const messagesData = require('./data/messages')
+const queriesData = require('./data/query')
+
 module.exports = function (config) {
   return {
     createCall: createCall,
@@ -18,9 +21,8 @@ module.exports = function (config) {
 
   function findAll (Model, callback) {
     const instances = []
-    const data = require('./messages')
 
-    data.map((item, index) => {
+    messagesData.map((item, index) => {
       const instance = Model.instance(item, true)
       instance.setPrimaryKey(index + 1)
       instances.push(instance)
@@ -34,9 +36,7 @@ module.exports = function (config) {
       callback(new Error('Missing required parameter "id"'))
     }
 
-    const data = require('./messages')
-
-    data.forEach((item) => {
+    messagesData.forEach((item) => {
       if (item.sid === id) {
         callback(null, Model.instance(item, true))
       }
@@ -46,9 +46,7 @@ module.exports = function (config) {
   function query (Model, options, callback) {
     const instances = []
 
-    const data = require('./query')
-
-    data.forEach((item) => {
+    queriesData.forEach((item) => {
       instances.push(Model.instance(item, true))
     })
 
