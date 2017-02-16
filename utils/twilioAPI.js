@@ -163,9 +163,7 @@ module.exports = function (config) {
   }
 
   function updateQueue (Model, id, doc, callback) {
-    client.queues(id).update({
-      maxSize: doc.max_size
-    }, function (err, queue) {
+    client.queues(id).update(doc, function (err, queue) {
       if (err) {
         callback(new Error('Could not update this item'))
       }
