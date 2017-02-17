@@ -163,7 +163,7 @@ test('### updateQueue ###', function (t) {
   const model = server.getModel('queue')
   const doc = {
     max_size: 120,
-    friendlyName: 'friendlyName'
+    friendlyName: `Queue_${Math.floor(Math.random() * 100000)}`
   }
   twilioAPI.updateQueue(model, queueId, doc, (err, resp) => {
     if (err) {

@@ -21,9 +21,7 @@ module.exports = Arrow.createModel('message', {
     error_code: { type: String },
     error_message: { type: String },
     uri: { type: String },
-    subresource_uris: {
-      media: { type: String }
-    }
+    subresource_uris: { type: Object }
   },
   connector: 'appc.twilio',
   actions: ['create', 'read', 'delete']
