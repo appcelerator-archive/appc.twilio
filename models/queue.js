@@ -4,11 +4,11 @@ module.exports = Arrow.createModel('queue', {
   fields: {
     sid: { type: String },
     friendlyName: { type: String },
-    current_size: { type: Number },
-    average_wait_time: { type: Number },
-    max_size: { type: Number },
-    date_created: { type: String },
-    date_updated: { type: String },
+    currentSize: { type: Number },
+    averageWaitTime: { type: Number },
+    maxSize: { type: Number },
+    dateCreated: { type: String },
+    dateUpdated: { type: String },
     uri: { type: String }
   },
   connector: 'appc.twilio'

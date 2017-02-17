@@ -2,14 +2,14 @@ var Arrow = require('arrow')
 
 module.exports = Arrow.createModel('notification', {
   fields: {
-    first_page_uri: { type: String },
+    firstPageUri: { type: String },
     end: { type: Number },
-    previous_page_uri: { type: String },
+    previousPageUri: { type: String },
     uri: { type: String },
-    page_size: { type: Number },
+    pageSize: { type: Number },
     page: { type: Number },
     notifications: { type: Array },
-    next_page_uri: { type: String },
+    nextPageUri: { type: String },
     start: { type: Number }
   },
   connector: 'appc.twilio',

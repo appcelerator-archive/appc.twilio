@@ -70,22 +70,22 @@ test('Should return proper response format when request is made to message endpo
   const expectedProperties = [
     'id',
     'sid',
-    'date_created',
-    'date_updated',
-    'date_sent',
-    'account_sid',
+    'dateCreated',
+    'dateUpdated',
+    'dateSent',
+    'accountSid',
     'to',
     'from',
     'body',
     'status',
-    'num_segments',
-    'num_media',
+    'numSegments',
+    'numMedia',
     'direction',
-    'api_version',
+    'apiVersion',
     'price',
-    'price_unit',
+    'priceUnit',
     'uri',
-    'subresource_uris'
+    'subresourceUris'
   ]
 
   const uri = `${urlToHit}${modelName}`
@@ -119,20 +119,20 @@ test('Should return proper response format when request is made to call endpoint
   const expectedProperties = [
     'id',
     'sid',
-    'date_created',
+    'dateCreated',
     'to',
     'from',
-    'from_formatted',
-    'phone_number_sid',
+    'fromFormatted',
+    'phoneNumberSid',
     'status',
-    'start_time',
-    'end_time',
+    'startTime',
+    'endTime',
     'duration',
-    'price_unit',
+    'priceUnit',
     'direction',
-    'api_version',
+    'apiVersion',
     'uri',
-    'subresource_uris']
+    'subresourceUris']
 
   const options = {
     uri: uri,
@@ -148,10 +148,7 @@ test('Should return proper response format when request is made to call endpoint
     }
     t.ok(body.success, 'Body success should be true')
     t.equal(response.statusCode, 200, 'status code should be 200')
-
     body.calls.map((call) => {
-      // var properties = Object.getOwnPropertyNames(call)
-
       // Check if call has required and auto generated properties
       expectedProperties.map((prop) => {
         t.ok(call.hasOwnProperty(prop), `Each item should have the same properties as the ${modelName} model`)

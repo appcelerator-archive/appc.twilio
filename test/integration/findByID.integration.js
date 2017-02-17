@@ -63,7 +63,7 @@ test('Should return proper status code when valid request is passed to call endp
     t.ok(body.success)
     t.equal(response.statusCode, 200, 'status code should be 200')
     t.equal(body.calls[0].status, 'busy')
-    t.equal(body.calls[0].price_unit, 'USD')
+    t.equal(body.calls[0].priceUnit, 'USD')
     t.equal(body.calls[0].duration, '0')
     t.end()
   })

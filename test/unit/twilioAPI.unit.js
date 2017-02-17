@@ -162,7 +162,7 @@ test('### createQueue ###', function (t) {
 test('### updateQueue ###', function (t) {
   const model = server.getModel('queue')
   const doc = {
-    max_size: 120,
+    maxSize: 120,
     friendlyName: `Queue_${Math.floor(Math.random() * 100000)}`
   }
   twilioAPI.updateQueue(model, queueId, doc, (err, resp) => {
@@ -178,7 +178,7 @@ test('### updateQueue ###', function (t) {
         t.end()
       }
       t.ok(resp, 'found queue')
-      t.ok(resp.max_size === doc.max_size, 'queue updated successfully')
+      t.ok(resp.maxSize === doc.maxSize, 'queue updated successfully')
       t.end()
     })
   })

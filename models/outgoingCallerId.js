@@ -3,11 +3,11 @@ var Arrow = require('arrow')
 module.exports = Arrow.createModel('outgoingCallerId', {
   fields: {
     sid: { type: String },
-    account_sid: { type: String },
-    friendly_name: { type: String },
-    phone_number: { type: String },
-    date_created: { type: String },
-    date_updated: { type: String },
+    accountSid: { type: String },
+    friendlyName: { type: String },
+    phoneNumber: { type: String },
+    dateCreated: { type: String },
+    dateUpdated: { type: String },
     uri: { type: String }
   },
   connector: 'appc.twilio',

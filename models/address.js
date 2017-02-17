@@ -3,7 +3,7 @@ var Arrow = require('arrow')
 module.exports = Arrow.createModel('address', {
   fields: {
     sid: { type: String, description: 'A 34 character string that uniquely identifies this address.' },
-    account_sid: { type: String, description: 'The unique id of the Account responsible for this address.' },
+    accountSid: { type: String, description: 'The unique id of the Account responsible for this address.' },
     friendlyName: { type: String, description: 'A human-readable description of the address. Maximum 64 characters.' },
     customerName: { type: String, description: 'Your name or business name, or that of your customer.' },
     street: { type: String, description: 'The number and street address where you or your customer is located.' },

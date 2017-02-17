@@ -35,7 +35,7 @@ module.exports = {
   timeout: 120000,
 
   // logging configuration
-  logLevel: 'debug', // Log level of the main logger.
+  logLevel: 'error', // Log level of the main logger.
   logging: {
     // location of the logs if enabled
     logdir: './logs',

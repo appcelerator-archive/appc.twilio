@@ -7,8 +7,7 @@ const urlToHit = `${baseUrl}${apiPrefix}`
 const server = require('../server/factory')
 
 var SERVER
-var ID = 2324
-var INVALIDID = 'invalid'
+var ID
 const AUTH = {}
 test('### START SERVER ###', function (t) {
   server.startHTTPArrow({}, arrow => {
@@ -37,7 +36,7 @@ test('Should get last call id to delete it', t => {
       t.error(err)
       t.end()
     }
-    id = body.calls[1].sid
+    ID = body.calls[1].sid
     t.ok(body.success)
     t.end()
   })

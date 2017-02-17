@@ -130,7 +130,7 @@ test('Should return return all calls on the date passed in the query parameters'
 
     body.calls.map((call) => {
       // If start time is correct should be true
-      t.ok(call.start_time.indexOf(expectedCallTime) !== -1)
+      t.ok(call.startTime.indexOf(expectedCallTime) !== -1)
     })
 
     t.end()
@@ -182,7 +182,7 @@ test('Should return return all messages to a given number and date', t => {
 
     body.messages.map((message) => {
       t.equal(message.to, '+359899982932', 'there nust be only messages to +359899982932')
-      t.ok(message.date_sent.indexOf(expectedMessageDate) !== -1, `Date sent should be ${expectedMessageDate}`)
+      t.ok(message.dateSent.indexOf(expectedMessageDate) !== -1, `Date sent should be ${expectedMessageDate}`)
     })
 
     t.end()

@@ -2,16 +2,16 @@ var Arrow = require('arrow')
 
 module.exports = Arrow.createModel('transcription', {
   fields: {
-    account_sid: { type: String },
-    api_version: { type: String },
-    date_created: { type: String },
-    date_updated: { type: String },
+    accountSid: { type: String },
+    apiVersion: { type: String },
+    dateCreated: { type: String },
+    dateUpdated: { type: String },
     duration: { type: String },
     price: { type: String },
-    recording_sid: { type: String },
+    recordingSid: { type: String },
     sid: { type: String },
     status: { type: String },
-    transcription_text: { type: String },
+    transcriptionText: { type: String },
     type: { type: String },
     url: { type: String }
   },
