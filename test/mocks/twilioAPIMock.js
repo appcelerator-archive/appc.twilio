@@ -1,6 +1,4 @@
 const mockData = require('./data/mockData')
-const messagesData = require('./data/messages')
-// const queriesData = require('./data/query')
 const pluralize = require('pluralize')
 
 module.exports = function (config) {
@@ -36,15 +34,17 @@ module.exports = function (config) {
   }
 
   function findByID (Model, id, callback) {
-    if (!id) {
-      callback(new Error('Missing required parameter "id"'))
-    }
+    const key = pluralize(Model.name)
 
-    messagesData.forEach((item) => {
-      if (item.sid === id) {
-        callback(null, Model.instance(item, true))
-      }
+    const instances = []
+
+    mockData.findByID[key].map((item, index) => {
+      const instance = Model.instance(item, true)
+      instance.setPrimaryKey(index + 1)
+      instances.push(instance)
     })
+
+    callback(null, instances)
   }
 
   function query (Model, options, callback) {
@@ -101,6 +101,9 @@ module.exports = function (config) {
   }
 
   function deleteById (Model, id, callback) {
+    if (id === 'invalid') {
+      throw new Error('Message string')
+    }
     callback(null, [])
   }
 }

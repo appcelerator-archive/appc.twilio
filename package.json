@@ -35,7 +35,7 @@
     "start": "appc run",
     "test": "npm run lint-fix && npm run test:*",
     "test:integration": "npm run lint-fix && tap test/integration/*.js --color --bail --cov",
-    "test:unit": "npm run lint-fix && tap test/unit/*.js --color --bail --cov",
+    "test:unit": "tap test/unit/*.js --color --bail --cov",
     "lint": "standard | snazzy",
     "lint-fix": "standard --fix | snazzy",
     "precommit": "npm run lint-fix",
