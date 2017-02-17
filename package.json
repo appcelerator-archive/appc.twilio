@@ -1,13 +1,16 @@
 {
   "name": "appc.twilio",
-  "description": "",
+  "description": "Connector to Twilio API",
   "version": "1.0.0",
   "author": "Toshko Popov",
-  "license": "",
+  "license": "Apache 2.0",
   "framework": "none",
   "keywords": [
     "appcelerator",
-    "arrow"
+    "arrow",
+    "connector",
+    "twilio",
+    "api"
   ],
   "repository": {},
   "private": true,
@@ -17,18 +20,13 @@
   "devDependencies": {
     "arrow": "^*",
     "cross-env": "^3.1.4",
-    "debug": "^2.6.0",
     "husky": "^0.13.1",
-    "istanbul": "^0.4.1",
-    "nock": "^9.0.4",
     "nyc": "^10.1.2",
     "pluralize": "^3.1.0",
     "request": "^2.79.0",
     "snazzy": "^6.0.0",
     "standard": "^8.6.0",
     "tap": "^10.1.0",
-    "tap-diff": "^0.1.1",
-    "tap-spec": "^4.1.1",
     "twilio": "^2.11.1"
   },
   "scripts": {

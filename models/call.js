@@ -21,7 +21,7 @@ module.exports = Arrow.createModel('call', {
     apiVersion: { type: String },
     forwardedFrom: { type: String },
     groupSid: { type: String },
-    caller_name: { type: String },
+    callerName: { type: String },
     uri: { type: String },
     subresourceUris: { type: Object }
   },
