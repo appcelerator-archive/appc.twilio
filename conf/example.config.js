@@ -5,7 +5,8 @@ module.exports = {
       sid: '<YOUR TWILLIO ACCOUNT SID>',
       auth_token: '<YOUR TWILLIO ACCOUNT TOKEN>',
       twilio_number: '<YOUR TWILLIO ACCOUNT NUMBER>',
-      modelAutogen: true
+      modelAutogen: true,
+      mockAPI: false
     }
   }
 }
