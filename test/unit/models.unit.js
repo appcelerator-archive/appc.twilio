@@ -1,5 +1,5 @@
 const test = require('tap').test
-const { server } = require('../server/factory').startPlainArrow()
+const { server } = require('../utils/server').startPlainArrow()
 
 test('test call model', function (t) {
   const model = server.getModel('call')

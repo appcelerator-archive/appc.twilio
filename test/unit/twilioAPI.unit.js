@@ -1,11 +1,11 @@
 const test = require('tap').test
-const mockedData = require('../mocks/data/test.unit')
-const { server } = require('../server/factory').startPlainArrow()
+const mockedData = require('../data/test.unit')
+const { server } = require('../utils/server').startPlainArrow()
 const config = server.config.connectors['appc.twilio']
 const configNumber = config.twilio_number
 var twilioAPI
 if (config.mockAPI) {
-  twilioAPI = require('../mocks/twilioAPIMock')(config)
+  twilioAPI = require('../utils/twilioAPIMock')(config)
 } else {
   twilioAPI = require('./../../utils/twilioAPI')(config)
 }

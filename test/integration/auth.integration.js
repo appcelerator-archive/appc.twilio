@@ -4,7 +4,7 @@ const port = 8080
 const baseUrl = `http://localhost:${port}`
 const apiPrefix = '/api'
 const urlToHit = `${baseUrl}${apiPrefix}`
-const server = require('../server/factory')
+const server = require('../utils/server')
 
 var SERVER
 const AUTH = {}
