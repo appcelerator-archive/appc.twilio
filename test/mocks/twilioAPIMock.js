@@ -34,17 +34,12 @@ module.exports = function (config) {
   }
 
   function findByID (Model, id, callback) {
-    const key = pluralize(Model.name)
+    const key = Model.name
 
-    const instances = []
+    // const instances = []
 
-    mockData.findByID[key].map((item, index) => {
-      const instance = Model.instance(item, true)
-      instance.setPrimaryKey(index + 1)
-      instances.push(instance)
-    })
-
-    callback(null, instances)
+    var instance = mockData.findByID[key]
+    callback(null, instance)
   }
 
   function query (Model, options, callback) {
@@ -67,6 +62,7 @@ module.exports = function (config) {
 
   function createCall (Model, values, number, callback) {
     values.From = number
+    console.log(Model.instance(values, true))
     callback(null, Model.instance(values, true))
   }
 

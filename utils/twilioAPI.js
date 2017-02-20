@@ -10,6 +10,7 @@ module.exports = function (config) {
     createMessage: createMessage,
     createOutgoingCallerId: createOutgoingCallerId,
     createQueue: createQueue,
+    createAccount: createAccount,
     query: query,
     updateAddress: updateAddress,
     updateOutgoingCallerId: updateOutgoingCallerId,
@@ -23,14 +24,12 @@ module.exports = function (config) {
 
   function findAll (Model, callback) {
     const key = pluralize(Model.name)
-
     client[key].list(function (err, data) {
       const instances = []
 
       if (err) {
-        callback(new Error('Could not get calls'))
+        callback(new Error(err.message))
       }
-
       data[key].map((item, index) => {
         const instance = Model.instance(item, true)
         instance.setPrimaryKey(index + 1)
@@ -49,7 +48,7 @@ module.exports = function (config) {
     client[key](id).get(function (err, call) {
       // invalid id
       if (err) {
-        callback(new Error(`Could not find ${Model.name} with ID: ${id}`))
+        callback(new Error(`Could not find ${Model.name} with ID: ${id}: ${err.message}`))
       }
       // if valid id is passed
       if (!err) {
@@ -64,7 +63,7 @@ module.exports = function (config) {
 
     client[key].list(options.where, function (err, data) {
       if (err) {
-        callback(new Error('Could not make query request !'))
+        callback(new Error(err.message))
       }
       data[key].map((item) => {
         instances.push(Model.instance(item, true))
@@ -86,7 +85,7 @@ module.exports = function (config) {
 
     }, (err, result) => {
       if (err) {
-        callback(new Error('Could not make this call!'))
+        callback(new Error(err.message))
       }
       callback(null, Model.instance(result, true))
     })
@@ -95,7 +94,7 @@ module.exports = function (config) {
   function createAddress (Model, values, callback) {
     client.addresses.create(values, (err, result) => {
       if (err) {
-        callback(new Error('Could not create this address'))
+        callback(new Error(err.message))
       }
       callback(null, Model.instance(result, true))
     })
@@ -108,7 +107,7 @@ module.exports = function (config) {
       body: values.body
     }, (err, result) => {
       if (err) {
-        callback(new Error('Could not send this message!'))
+        callback(new Error(err.message))
       }
       callback(null, Model.instance(result, true))
     })
@@ -119,7 +118,7 @@ module.exports = function (config) {
       friendlyName: values.friendlyName || ''
     }, (err, result) => {
       if (err) {
-        callback(new Error('Could not create this queue!'))
+        callback(new Error(err.message))
       }
       if (!err) {
         var instance = Model.instance(result, true)
@@ -134,7 +133,19 @@ module.exports = function (config) {
       phoneNumber: number
     }, (err, result) => {
       if (err) {
-        callback(new Error('Could not create this caller id!'))
+        callback(new Error(err.message))
+      }
+      callback(null, Model.instance(result, true))
+    })
+  }
+
+  function createAccount (Model, values, callback) {
+    console.log(values)
+    client.accounts.create({
+      friendlyName: values.friendlyName
+    }, (err, result) => {
+      if (err) {
+        callback(new Error(err.message))
       }
       callback(null, Model.instance(result, true))
     })
@@ -143,7 +154,7 @@ module.exports = function (config) {
   function updateAddress (Model, id, doc, callback) {
     client.addresses(id).post(doc, function (err, address) {
       if (err) {
-        callback(new Error('Could not update this model'))
+        callback(new Error(err.message))
       }
       // TODO check this out - upsert
       Model.instance(address, true)
@@ -156,7 +167,7 @@ module.exports = function (config) {
       friendlyName: doc
     }, function (err, callerId) {
       if (err) {
-        callback(new Error('Could not update this item'))
+        callback(new Error(err.message))
       }
       callback(null, [])
     })
@@ -165,7 +176,7 @@ module.exports = function (config) {
   function updateQueue (Model, id, doc, callback) {
     client.queues(id).update(doc, function (err, queue) {
       if (err) {
-        callback(new Error('Could not update this item'))
+        callback(new Error(err.message))
       }
 
       callback(null, [])
@@ -180,7 +191,7 @@ module.exports = function (config) {
     }
     client[key](id).delete(function (err, data) {
       if (err) {
-        callback(new Error('Could not delete this item'))
+        callback(new Error(err.message))
       }
 
       callback(null, data)

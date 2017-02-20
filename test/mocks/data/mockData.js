@@ -308,8 +308,8 @@ module.exports = {
       }]
   },
   findByID: {
-    messages: [{
-      sid: 'SM998f7c270098420b82fd7c2c32fe2832',
+    message: {
+      sid: 'SMed58f4e57f0b4bafb575654d09b7cb85',
       dateCreated: 'Thu, 26 Jan 2017 08:37:39 +0000',
       dateUpdated: 'Thu, 26 Jan 2017 08:37:41 +0000',
       dateSent: 'Thu, 26 Jan 2017 08:37:39 +0000',
@@ -326,9 +326,9 @@ module.exports = {
       priceUnit: 'USD',
       uri: '/2010-04-01/Accounts/AC87eb3a123eb2b04f0d0d0a4ed18654f9/Messages/SM998f7c270098420b82fd7c2c32fe2832.json',
       subresourceUris: { media: '/2010-04-01/Accounts/AC87eb3a123eb2b04f0d0d0a4ed18654f9/Messages/SM998f7c270098420b82fd7c2c32fe2832/Media.json' }
-    }],
-    calls: [{
-      sid: 'CA8a3f92d936e485725f08b67a37bbcf89',
+    },
+    call: {
+      sid: 'CAaaa5541f73182afad749d857ced61d0b',
       dateCreated: 'Tue, 31 Jan 2017 13:14:28 +0000',
       to: '+359899638562',
       from: '+16467625508',
@@ -348,6 +348,6 @@ module.exports = {
         notifications: '/2010-04-01/Accounts/AC87eb3a123eb2b04f0d0d0a4ed18654f9/Calls/CA8a3f92d936e485725f08b67a37bbcf89/Notifications.json',
         recordings: '/2010-04-01/Accounts/AC87eb3a123eb2b04f0d0d0a4ed18654f9/Calls/CA8a3f92d936e485725f08b67a37bbcf89/Recordings.json'
       }
-    }]
+    }
   }
 }

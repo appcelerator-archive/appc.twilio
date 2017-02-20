@@ -62,27 +62,27 @@ test('Should delete a call if required parameters are passed', t => {
   })
 })
 
-// test('Should get last message id to delete it', t => {
-//   const modelName = '/message'
+test('Should get last message id to delete it', t => {
+  const modelName = '/message'
 
-//   const uri = `${urlToHit}${modelName}`
-//   const options = {
-//     uri: uri,
-//     method: 'GET',
-//     auth: AUTH,
-//     json: true
-//   }
+  const uri = `${urlToHit}${modelName}`
+  const options = {
+    uri: uri,
+    method: 'GET',
+    auth: AUTH,
+    json: true
+  }
 
-//   request(options, function (err, response, body) {
-//     if (err) {
-//       t.error(err)
-//       t.end()
-//     }
-//     id = body.messages[0].sid
-//     t.ok(body.success)
-//     t.end()
-//   })
-// })
+  request(options, function (err, response, body) {
+    if (err) {
+      t.error(err)
+      t.end()
+    }
+    ID = body.messages[1].sid
+    t.ok(body.success)
+    t.end()
+  })
+})
 
 test('Should delete a message if required parameters are passed', t => {
   const modelName = 'message'
@@ -105,29 +105,27 @@ test('Should delete a message if required parameters are passed', t => {
   })
 })
 
-// test('Should NOT delete if id param is not valid', t => {
-//   const modelName = 'message'
-//   id = 'invalid';
-//   const uri = `${urlToHit}/${modelName}/${id}`
-//   const options = {
-//     uri: uri,
-//     method: 'DELETE',
-//     auth: AUTH,
-//     json: true
-//   }
+test('Should NOT delete if id param is not valid', t => {
+  const modelName = 'message'
+  ID = 'invalid'
+  const uri = `${urlToHit}/${modelName}/${ID}`
+  const options = {
+    uri: uri,
+    method: 'DELETE',
+    auth: AUTH,
+    json: true
+  }
 
-//   request(options, function (err, response, body) {
-//     if (err) {
-//       t.error(err)
-//       t.end()
-//     }
-//     t.equal(response.statusCode, 500, 'status code should be 500 not found')
-//     t.equal(body.success, false)
-//     t.equal(body.message, 'Could not find message with ID: invalid', `Error message is correct`)
-
-//     t.end()
-//   })
-// })
+  request(options, function (err, response, body) {
+    if (err) {
+      t.error(err)
+      t.end()
+    }
+    t.equal(response.statusCode, 500, 'status code should be 500 not found')
+    t.equal(body.success, false)
+    t.end()
+  })
+})
 
 test('### STOP SERVER ###', function (t) {
   SERVER.stop(function () {

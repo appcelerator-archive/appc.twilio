@@ -127,7 +127,6 @@ test('Should return proper response format when request is made to call endpoint
     'status',
     'startTime',
     'endTime',
-    'duration',
     'priceUnit',
     'direction',
     'apiVersion',

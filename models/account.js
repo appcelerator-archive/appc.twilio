@@ -4,7 +4,7 @@ module.exports = Arrow.createModel('account', {
   fields: {
     sid: { type: String, description: 'A 34 character string that uniquely identifies this account.' },
     ownerAccountSid: { type: String, description: 'The Sid of the parent account for this account. The OwnerAccountSid of a parent account is its own sid.' },
-    friendlyName: { type: String, description: 'A human readable description of this account, up to 64 characters long' },
+    friendlyName: { type: String, required: true, description: 'A human readable description of this account, up to 64 characters long' },
     status: { type: String, description: 'The status of this account. Usually active, but can be suspended or closed.' },
     dateCreated: { type: String, description: 'The date that this account was created' },
     dateUpdated: { type: String, description: 'The date that this account was last updated' },
