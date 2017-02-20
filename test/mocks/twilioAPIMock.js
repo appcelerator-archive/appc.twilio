@@ -62,7 +62,6 @@ module.exports = function (config) {
 
   function createCall (Model, values, number, callback) {
     values.From = number
-    console.log(Model.instance(values, true))
     callback(null, Model.instance(values, true))
   }
 

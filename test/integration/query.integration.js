@@ -114,7 +114,7 @@ test('Should return return all calls on the date passed in the query parameters'
   const modelName = 'call'
   const uri = `${urlToHit}/${modelName}`
   const where = '{"startTime": "2017-01-31"}'
-  const expectedCallTime = '31 Jan 2017'
+  const expectedCallTime = '2017-01-31'
   const options = {
     uri: `${uri}/query?where=${where}`,
     method: 'GET',
@@ -166,7 +166,7 @@ test('Should return return all messages to a given number and date', t => {
   const modelName = 'message'
   const uri = `${urlToHit}/${modelName}`
   const where = '{"to": "359899982932", "DateSent": "Thu, 26 Jan 2017"}'
-  const expectedMessageDate = 'Thu, 26 Jan 2017'
+  const expectedMessageDate = '2017-01-26'
   const options = {
     uri: `${uri}/query?where=${where}`,
     method: 'GET',

@@ -140,7 +140,6 @@ module.exports = function (config) {
   }
 
   function createAccount (Model, values, callback) {
-    console.log(values)
     client.accounts.create({
       friendlyName: values.friendlyName
     }, (err, result) => {
