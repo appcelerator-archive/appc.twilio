@@ -17,5 +17,7 @@ module.exports = {
     const connector = server.getConnector('appc.twilio')
     return { server, connector }
   }
+
+  // TODO add connector.connect
 }
 
