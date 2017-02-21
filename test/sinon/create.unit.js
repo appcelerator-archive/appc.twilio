@@ -8,9 +8,8 @@ connector.twilioAPI = twilioAPI
 test('### Create Call - Error Case ###', function (t) {
   // DATA STUFF
   const Model = server.getModel('call')
-  function cbError (error) {
-    t.ok(error)
-  }
+  const errorMessage = 'My error'
+  function cbError (errorMessage) {}
   const cbErrorSpy = sinon.spy(cbError)
 
   // MOCKING STUFF
@@ -22,7 +21,7 @@ test('### Create Call - Error Case ###', function (t) {
       // This is the body of the mocked function from twilio API
 
       // This is the anonymous function inside create.js
-      callback(new Error('dsfsdfsfs'))
+      callback(errorMessage)
     }
   )
 
@@ -30,6 +29,7 @@ test('### Create Call - Error Case ###', function (t) {
   createMethod.bind(connector, Model, {}, cbErrorSpy)()
   t.ok(twilioAPIStubError.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
+  t.ok(cbErrorSpy.calledWith(errorMessage))
 
   twilioAPIStubError.restore()
   t.end()
@@ -40,10 +40,8 @@ test('### Create Call - Ok Case ###', function (t) {
 
   // DATA STUFF
   const Model = server.getModel('call')
-  function cbOk (error, data) {
-    t.notOk(error)
-    t.equal(data, 'MyDataPrim')
-  }
+  const data = 'MyData'
+  function cbOk (errorMessage, data) {}
   const cbOkSpy = sinon.spy(cbOk)
 
   // MOCKING STUFF
@@ -55,7 +53,7 @@ test('### Create Call - Ok Case ###', function (t) {
       // This is the body of the mocked function from twilio API
 
       // This is the anonymous function inside create.js
-      callback(null, 'MyData')
+      callback(null, data)
     }
   )
 
@@ -63,6 +61,7 @@ test('### Create Call - Ok Case ###', function (t) {
   createMethod.bind(connector, Model, {}, cbOkSpy)()
   t.ok(twilioAPIStubOk.calledOnce)
   t.ok(cbOkSpy.calledOnce)
+  t.ok(cbOkSpy.calledWith(null, data))
 
   twilioAPIStubOk.restore()
   t.end()
