@@ -1,4 +1,4 @@
-const mockData = require('./data/mockData')
+const mockData = require('./../data/mockData')
 const pluralize = require('pluralize')
 
 module.exports = function (config) {
