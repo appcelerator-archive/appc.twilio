@@ -24,6 +24,7 @@
     "nyc": "^10.1.2",
     "pluralize": "^3.1.0",
     "request": "^2.79.0",
+    "sinon": "^1.17.7",
     "snazzy": "^6.0.0",
     "standard": "^8.6.0",
     "tap": "^10.1.0",
@@ -37,7 +38,7 @@
     "lint": "standard | snazzy",
     "lint-fix": "standard --fix | snazzy",
     "precommit": "npm run lint-fix",
-    "standalone": "tap test/integration/auth.integration.js --color --bail --cov"
+    "standalone": "tap test/sinon/create.unit.js --color --bail --cov"
   },
   "standard": {
     "ignore": [
