@@ -37,7 +37,7 @@
     "test:unit": "tap test/unit/*.js --color --bail --cov",
     "lint": "standard | snazzy",
     "lint-fix": "standard --fix | snazzy",
-    "precommit": "npm run lint-fix",
+    "precommit": "npm run lint",
     "standalone": "tap test/sinon/create.unit.js --color --bail --cov"
   },
   "standard": {
