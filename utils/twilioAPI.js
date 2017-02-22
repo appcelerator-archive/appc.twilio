@@ -140,9 +140,7 @@ module.exports = function (config) {
   }
 
   function createAccount (Model, values, callback) {
-    client.accounts.create({
-      friendlyName: values.friendlyName
-    }, (err, result) => {
+    client.accounts.create(values, (err, result) => {
       if (err) {
         callback(new Error(err.message))
       }

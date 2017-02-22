@@ -3,7 +3,7 @@ var Arrow = require('arrow')
 module.exports = Arrow.createModel('transcription', {
   fields: {
     accountSid: { type: String, description: 'The unique id of the Account responsible for this transcription.' },
-    apiVersion: { type: String, description: '' },
+    apiVersion: { type: String, description: 'Version of the Twilio API' },
     dateCreated: { type: String, description: 'The date that this resource was created, given in RFC 2822 format.' },
     dateUpdated: { type: String, description: 'The date that this resource was last updated, given in RFC 2822 format.' },
     duration: { type: String, description: 'The duration of the transcribed audio, in seconds.' },

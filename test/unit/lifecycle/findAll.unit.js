@@ -1,7 +1,7 @@
 const test = require('tap').test
-const { server, connector } = require('./../utils/server').startPlainArrow()
-const findAllMethod = require('../../lib/methods/findAll')['findAll']
-const twilioAPI = require('../../utils/twilioAPI')(connector.config)
+const { server, connector } = require('./../../utils/server').startPlainArrow()
+const findAllMethod = require('../../../lib/methods/findAll')['findAll']
+const twilioAPI = require('../../../utils/twilioAPI')(connector.config)
 const sinon = require('sinon')
 connector.twilioAPI = twilioAPI
 

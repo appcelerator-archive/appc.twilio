@@ -348,6 +348,17 @@ module.exports = {
         notifications: '/2010-04-01/Accounts/AC87eb3a123eb2b04f0d0d0a4ed18654f9/Calls/CA8a3f92d936e485725f08b67a37bbcf89/Notifications.json',
         recordings: '/2010-04-01/Accounts/AC87eb3a123eb2b04f0d0d0a4ed18654f9/Calls/CA8a3f92d936e485725f08b67a37bbcf89/Recordings.json'
       }
+    },
+    address: {
+      sid: 'AD48ccdf78144b40bef35abece569ecac3',
+      accountSid: 'AC87eb3a123eb2b04f0d0d0a4ed18654f9',
+      friendlyName: 'Test Address',
+      customerName: 'Test',
+      street: 'Some beautiful street',
+      city: 'Racoon City',
+      region: 'CA',
+      postalCode: '12345',
+      isoCountry: 'US'
     }
   }
 }

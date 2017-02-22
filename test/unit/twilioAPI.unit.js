@@ -12,7 +12,7 @@ if (config.mockAPI) {
 
 var messageId
 var addressId
-var queueId
+// var queueId
 // var outgoingCallerId
 
 test('### createCall ###', function (t) {
@@ -33,7 +33,7 @@ test('### createMessage ###', function (t) {
   const model = server.getModel('message')
 
   const smsValues = config.mockAPI ? mockedData.message : {
-    to: '+359899982932',
+    to: '+359899638562',
     body: 'trial'
   }
 
@@ -62,6 +62,8 @@ test('### findAll ###', function (t) {
 test('### findByID ###', function (t) {
   const model = server.getModel('message')
 
+  messageId = config.mockAPI ? 'SMed58f4e57f0b4bafb575654d09b7cb85' : messageId
+
   twilioAPI.find.byId(model, messageId, (err, resp) => {
     t.notOk(err, 'should not display error')
     t.ok(resp, 'should receive response')
@@ -75,7 +77,7 @@ test('### query ###', function (t) {
   const model = server.getModel('call')
 
   const options = {
-    where: { 'status': 'failed' }
+    where: { 'status': 'busy' }
   }
 
   twilioAPI.query(model, options, (err, resp) => {
@@ -131,58 +133,58 @@ test('### updateAddress ###', function (t) {
   })
 })
 
-test('### deleteById ###', function (t) {
-  const model = server.getModel('address')
+// test('### deleteById ###', function (t) {
+//   const model = server.getModel('address')
 
-  twilioAPI.deleteById(model, addressId, (err, resp) => {
-    t.notOk(err, 'should not display error')
-    twilioAPI.find.byId(model, addressId, (err, resp) => {
-      t.ok(err, 'deleted successfully')
-      t.end()
-    })
-  })
-})
+//   twilioAPI.deleteById(model, addressId, (err, resp) => {
+//     t.notOk(err, 'should not display error')
+//     twilioAPI.find.byId(model, addressId, (err, resp) => {
+//       t.ok(err, 'deleted successfully')
+//       t.end()
+//     })
+//   })
+// })
 
-test('### createQueue ###', function (t) {
-  const model = server.getModel('queue')
+// test('### createQueue ###', function (t) {
+//   const model = server.getModel('queue')
 
-  const values = config.mockAPI ? mockedData.queue : {
-    friendlyName: `Queue_${Math.floor(Math.random() * 100000)}`
-  }
+//   const values = config.mockAPI ? mockedData.queue : {
+//     friendlyName: `Queue_${Math.floor(Math.random() * 100000)}`
+//   }
 
-  twilioAPI.createQueue(model, values, configNumber, (err, resp) => {
-    t.notOk(err, 'should not display error')
-    t.ok(resp, 'should receive response')
-    t.ok(resp.sid, 'SID has been assigned')
-    queueId = resp.sid
-    t.end()
-  })
-})
+//   twilioAPI.createQueue(model, values, configNumber, (err, resp) => {
+//     t.notOk(err, 'should not display error')
+//     t.ok(resp, 'should receive response')
+//     t.ok(resp.sid, 'SID has been assigned')
+//     queueId = resp.sid
+//     t.end()
+//   })
+// })
 
-test('### updateQueue ###', function (t) {
-  const model = server.getModel('queue')
-  const doc = {
-    maxSize: 120,
-    friendlyName: `Queue_${Math.floor(Math.random() * 100000)}`
-  }
-  twilioAPI.updateQueue(model, queueId, doc, (err, resp) => {
-    if (err) {
-      t.error(err)
-      t.end()
-    }
-    t.notOk(err, 'should not display error')
-    t.ok(resp, 'should receive response')
-    twilioAPI.find.byId(model, queueId, (err, resp) => {
-      if (err) {
-        t.error(err)
-        t.end()
-      }
-      t.ok(resp, 'found queue')
-      t.ok(resp.maxSize === doc.maxSize, 'queue updated successfully')
-      t.end()
-    })
-  })
-})
+// test('### updateQueue ###', function (t) {
+//   const model = server.getModel('queue')
+//   const doc = {
+//     maxSize: 120,
+//     friendlyName: `Queue_${Math.floor(Math.random() * 100000)}`
+//   }
+//   twilioAPI.updateQueue(model, queueId, doc, (err, resp) => {
+//     if (err) {
+//       t.error(err)
+//       t.end()
+//     }
+//     t.notOk(err, 'should not display error')
+//     t.ok(resp, 'should receive response')
+//     twilioAPI.find.byId(model, queueId, (err, resp) => {
+//       if (err) {
+//         t.error(err)
+//         t.end()
+//       }
+//       t.ok(resp, 'found queue')
+//       t.ok(resp.maxSize === doc.maxSize, 'queue updated successfully')
+//       t.end()
+//     })
+//   })
+// })
 
 // creating outgoingCallerId requires code validation
 // test.skip('### createOutgoingCallerId ###', function (t) {

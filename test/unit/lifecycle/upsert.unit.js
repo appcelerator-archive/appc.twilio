@@ -1,7 +1,7 @@
 const test = require('tap').test
-const { server, connector } = require('./../utils/server').startPlainArrow()
-const upsertMethod = require('../../lib/methods/upsert')['upsert']
-const twilioAPI = require('../../utils/twilioAPI')(connector.config)
+const { server, connector } = require('./../../utils/server').startPlainArrow()
+const upsertMethod = require('../../../lib/methods/upsert')['upsert']
+const twilioAPI = require('../../../utils/twilioAPI')(connector.config)
 const sinon = require('sinon')
 connector.twilioAPI = twilioAPI
 
@@ -149,5 +149,19 @@ test('### updateQueue - Ok Case ###', function (t) {
   t.ok(cbOkSpy.calledWith(null, data))
 
   twilioAPIStubOk.restore()
+  t.end()
+})
+
+test('Update With Invalid Model', function (t) {
+  // To invoke the default clause in upsert.js we pass an invalid model name
+  const Model = 'invalid'
+  const errorMessage = new Error()
+  function cbError (errorMessage) { }
+  const cbErrorSpy = sinon.spy(cbError)
+
+  upsertMethod.bind(connector, Model, '', {}, cbErrorSpy)()
+  t.ok(cbErrorSpy.calledOnce)
+  t.ok(cbErrorSpy.calledWith(errorMessage))
+
   t.end()
 })

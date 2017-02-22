@@ -1,26 +1,26 @@
 const test = require('tap').test
-const { server, connector } = require('./../utils/server').startPlainArrow()
-const queryMethod = require('../../lib/methods/query')['query']
-const twilioAPI = require('../../utils/twilioAPI')(connector.config)
+const { server, connector } = require('./../../utils/server').startPlainArrow()
+const findByIdMethod = require('../../../lib/methods/findByID')['findByID']
+const twilioAPI = require('../../../utils/twilioAPI')(connector.config)
 const sinon = require('sinon')
 connector.twilioAPI = twilioAPI
 
-test('### query Call - Error Case ###', function (t) {
+test('### findById Call - Error Case ###', function (t) {
   const Model = server.getModel('call')
 
-  const errorMessage = 'query error'
+  const errorMessage = 'findById error'
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)
 
   const twilioAPIStubError = sinon.stub(
-    twilioAPI,
-    'query',
+    twilioAPI.find,
+    'byId',
     (Model, id, callback) => {
       callback(errorMessage)
     }
   )
 
-  queryMethod.bind(connector, Model, {}, cbErrorSpy)()
+  findByIdMethod.bind(connector, Model, '', cbErrorSpy)()
   t.ok(twilioAPIStubError.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
   t.ok(cbErrorSpy.calledWith(errorMessage))
@@ -29,7 +29,7 @@ test('### query Call - Error Case ###', function (t) {
   t.end()
 })
 
-test('### query Call - Ok Case ###', function (t) {
+test('### findById Call - Ok Case ###', function (t) {
   connector.twilioAPI = twilioAPI
 
   const Model = server.getModel('call')
@@ -38,14 +38,14 @@ test('### query Call - Ok Case ###', function (t) {
   const cbOkSpy = sinon.spy(cbOk)
 
   const twilioAPIStubOk = sinon.stub(
-    twilioAPI,
-    'query',
-    (Model, options, callback) => {
+    twilioAPI.find,
+    'byId',
+    (Model, id, callback) => {
       callback(null, data)
     }
   )
 
-  queryMethod.bind(connector, Model, {}, cbOkSpy)()
+  findByIdMethod.bind(connector, Model, '', cbOkSpy)()
   t.ok(twilioAPIStubOk.calledOnce)
   t.ok(cbOkSpy.calledOnce)
   t.ok(cbOkSpy.calledWith(null, data))

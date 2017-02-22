@@ -15,7 +15,7 @@ test('### START SERVER ###', function (t) {
 })
 
 test('Should go through with auth alright', t => {
-  const modelName = '/call'
+  const modelName = 'call'
   REQUESTER.getData({ model: modelName }, (response, body) => {
     t.ok(body.success, 'Body success should be true')
     t.equal(response.statusCode, 200, 'status code should be 200')
@@ -24,7 +24,7 @@ test('Should go through with auth alright', t => {
 })
 
 test('Should fail with wrong auth params', t => {
-  const modelName = '/call'
+  const modelName = 'call'
   const auth = {
     user: 'John',
     password: 'Invalid'
@@ -38,7 +38,7 @@ test('Should fail with wrong auth params', t => {
 })
 
 test('Should make sure auth is required', t => {
-  const modelName = '/call'
+  const modelName = 'call'
   REQUESTER.getData({ model: modelName, skipAuth: true }, (response, body) => {
     t.equal(response.statusCode, 401, 'status code should be 401')
     t.equal(body.message, 'Unauthorized')

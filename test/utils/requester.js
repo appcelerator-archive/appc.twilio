@@ -11,12 +11,23 @@ module.exports = (appConfig) => {
       makeRequest(createRequestOptions(options), callback)
     },
 
+    getDataByID: (options, callback) => {
+      options.uri = `${url}/${options.model}/${options.id}`
+      makeRequest(createRequestOptions(options), callback)
+    },
+
+    getDataByQuery: (options, callback) => {
+      options.uri = `${url}/${options.model}/query?${options.where}`
+      makeRequest(createRequestOptions(options), callback)
+    },
+
     postData: (options, callback) => {
       options.method = 'POST'
       makeRequest(createRequestOptions(options), callback)
     },
 
     deleteData: (options, callback) => {
+      options.uri = `${url}/${options.model}/${options.id}`
       options.method = 'DELETE'
       makeRequest(createRequestOptions(options), callback)
     }
@@ -24,9 +35,10 @@ module.exports = (appConfig) => {
 
   function createRequestOptions (options) {
     const requestOptions = {
-      uri: `${url}${options.model}`,
+      uri: options.uri || `${url}/${options.model}`,
       method: options.method || 'GET',
-      json: true
+      json: true,
+      body: options.body || {}
     }
     const defaultAuth = {
       user: appConfig.apikey

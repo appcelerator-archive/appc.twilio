@@ -12,6 +12,5 @@ module.exports = Arrow.createModel('address', {
     postalCode: { type: String, description: 'The postal code in which you or your customer is located.' },
     isoCountry: { type: String, required: true, description: 'The ISO country code of your or your customers address.' }
   },
-  connector: 'appc.twilio',
-  actions: ['read', 'create', 'update', 'delete']
+  connector: 'appc.twilio'
 })

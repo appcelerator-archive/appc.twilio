@@ -13,5 +13,6 @@ module.exports = Arrow.createModel('account', {
     uri: { type: String, description: 'The URI for this resource' },
     subresourceUris: { type: Object, description: 'The list of subresources under this account.' }
   },
-  connector: 'appc.twilio'
+  connector: 'appc.twilio',
+  actions: ['create', 'read']
 })

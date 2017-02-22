@@ -38,7 +38,7 @@
     "lint": "standard | snazzy",
     "lint-fix": "standard --fix | snazzy",
     "precommit": "npm run lint",
-    "standalone": "tap test/sinon/create.unit.js --color --bail --cov"
+    "standalone": "tap test/unit/lifecycle/*.js --color --bail --cov"
   },
   "standard": {
     "ignore": [

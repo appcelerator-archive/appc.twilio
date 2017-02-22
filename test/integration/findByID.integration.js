@@ -1,40 +1,24 @@
 const test = require('tap').test
-const request = require('request')
-const port = 8080
-const baseUrl = `http://localhost:${port}`
-const apiPrefix = '/api'
-const urlToHit = `${baseUrl}${apiPrefix}`
 const server = require('../utils/server')
+const requester = require('../utils/requester')
 
 var SERVER
-const AUTH = {}
+var REQUESTER
+
 test('### START SERVER ###', function (t) {
   server.startHTTPArrow({}, arrow => {
     t.ok(arrow, 'Arrow has been started')
     SERVER = arrow
-
-    t.ok(SERVER.config.apikey, 'apikey is set')
-    AUTH.user = SERVER.config.apikey
+    REQUESTER = requester(SERVER.config)
     t.end()
   })
 })
+
 test('Should return proper status code when valid request is passed', t => {
   const id = 'SM998f7c270098420b82fd7c2c32fe2832'
   const modelName = 'message'
-  const uri = `${urlToHit}/${modelName}`
-  const options = {
-    uri: `${uri}/${id}`,
-    method: 'GET',
-    auth: AUTH,
-    json: true
-  }
 
-  request(options, function (err, response, body) {
-    if (err) {
-      t.error(err)
-      t.end()
-    }
-    t.notOk(err)
+  REQUESTER.getData({ model: modelName, id: id }, (response, body) => {
     t.ok(body.success)
     t.equal(response.statusCode, 200, 'statusCode should be 200')
     t.end()
@@ -43,21 +27,9 @@ test('Should return proper status code when valid request is passed', t => {
 
 test('Should return proper status code when valid request is passed to call endpoint', t => {
   const modelName = 'call'
-  const uri = `${urlToHit}/${modelName}`
   const id = 'CAaaa5541f73182afad749d857ced61d0b'
-  const options = {
-    uri: `${uri}/${id}`,
-    method: 'GET',
-    auth: AUTH,
-    json: true
-  }
 
-  request(options, function (err, response, body) {
-    if (err) {
-      t.error(err)
-      t.end()
-    }
-    t.notOk(err)
+  REQUESTER.getDataByID({ model: modelName, id: id }, (response, body) => {
     t.ok(body.success)
     t.equal(response.statusCode, 200, 'status code should be 200')
     t.equal(body.call.status, 'busy')
@@ -69,21 +41,9 @@ test('Should return proper status code when valid request is passed to call endp
 
 test('Should return proper response when correct ID is passed to message endpoint', t => {
   const modelName = 'message'
-  const uri = `${urlToHit}/${modelName}`
   const id = 'SMed58f4e57f0b4bafb575654d09b7cb85'
-  const options = {
-    uri: `${uri}/${id}`,
-    method: 'GET',
-    auth: AUTH,
-    json: true
-  }
 
-  request(options, function (err, response, body) {
-    if (err) {
-      t.error(err)
-      t.end()
-    }
-
+  REQUESTER.getDataByID({ model: modelName, id: id }, (response, body) => {
     t.ok(body.success, 'Body success should be true')
     t.equal(response.statusCode, 200, 'status code should be 200')
     t.equal(body.message.sid, id)
