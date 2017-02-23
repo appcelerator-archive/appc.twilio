@@ -1,6 +1,6 @@
 const test = require('tap').test
-const server = require('../utils/server')
-const requester = require('../utils/requester')
+const server = require('../../utils/server')
+const requester = require('../../utils/requester')
 
 var SERVER
 var REQUESTER

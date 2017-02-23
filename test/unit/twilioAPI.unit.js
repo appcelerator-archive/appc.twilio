@@ -1,137 +1,158 @@
 const test = require('tap').test
-const mockedData = require('../data/test.unit')
+const mockedData = require('../data/mockedData')
 const { server } = require('../utils/server').startPlainArrow()
 const config = server.config.connectors['appc.twilio']
-const configNumber = config.twilio_number
-var twilioAPI
+// const configNumber = config.twilio_number
+const twilioAPI = require('./../../utils/twilioAPI')(config)
+const twilioSDK = twilioAPI.client
+const sinon = require('sinon')
+
 if (config.mockAPI) {
-  twilioAPI = require('../utils/twilioAPIMock')(config)
-} else {
-  twilioAPI = require('./../../utils/twilioAPI')(config)
+  // twilioAPI = require('../utils/twilioAPIMock')(config)
+  twilioSDK
 }
 
-var messageId
-var addressId
+// var messageId
+// var addressId
 // var queueId
 // var outgoingCallerId
 
-test('### createCall ###', function (t) {
-  const model = server.getModel('call')
+// test('### createCall ###', function (t) {
+//   const model = server.getModel('call')
 
-  const callValues = config.mockAPI ? mockedData.call : { to: '+359899982932' }
+//   const callValues = config.mockAPI ? mockedData.call : { to: '+359899982932' }
 
-  twilioAPI.createCall(model, callValues, configNumber, (err, resp) => {
-    t.notOk(err, 'should not display error')
-    t.ok(resp, 'should receive response')
-    t.ok(resp.sid, 'call sid found')
-    t.ok(resp.to === callValues.to, 'calling target correct')
-    t.end()
-  })
-})
+//   twilioAPI.createCall(model, callValues, configNumber, (err, resp) => {
+//     t.notOk(err, 'should not display error')
+//     t.ok(resp, 'should receive response')
+//     t.ok(resp.sid, 'call sid found')
+//     t.ok(resp.to === callValues.to, 'calling target correct')
+//     t.end()
+//   })
+// })
 
-test('### createMessage ###', function (t) {
-  const model = server.getModel('message')
+// test('### createMessage ###', function (t) {
+//   const model = server.getModel('message')
 
-  const smsValues = config.mockAPI ? mockedData.message : {
-    to: '+359899638562',
-    body: 'trial'
-  }
+//   const smsValues = config.mockAPI ? mockedData.message : {
+//     to: '+359899638562',
+//     body: 'trial'
+//   }
 
-  twilioAPI.createMessage(model, smsValues, configNumber, (err, resp) => {
-    t.notOk(err, 'should not display error')
-    t.ok(resp, 'should receive response')
-    t.ok(resp.sid, 'SID has been assigned')
-    messageId = resp.sid
-    t.ok(resp.to === smsValues.to, 'SMS receiver is correct')
-    t.end()
-  })
-})
+//   twilioAPI.createMessage(model, smsValues, configNumber, (err, resp) => {
+//     t.notOk(err, 'should not display error')
+//     t.ok(resp, 'should receive response')
+//     t.ok(resp.sid, 'SID has been assigned')
+//     messageId = resp.sid
+//     t.ok(resp.to === smsValues.to, 'SMS receiver is correct')
+//     t.end()
+//   })
+// })
 
 test('### findAll ###', function (t) {
   const model = server.getModel('message')
+  const resultData = mockedData.messages
+  function cbOk (errorMessage, data) { }
+  const cbOkSpy = sinon.spy(cbOk)
 
-  twilioAPI.find.all(model, (err, resp) => {
-    t.notOk(err, 'should not display error')
-    t.ok(resp, 'should receive response')
-    t.ok(resp instanceof Array, 'findAll response type is correct')
-    t.ok(resp.length > 0, 'should return more than one element')
-    t.end()
-  })
+  const twilioSDKStub = sinon.stub(
+    twilioSDK.messages,
+    'list',
+    (errorMessage, data) => {
+      cbOkSpy(null, resultData)
+    }
+  )
+  twilioAPI.find.all(model, cbOkSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(cbOkSpy.calledOnce)
+  t.ok(cbOkSpy.calledWith(null, resultData))
+  twilioSDKStub.restore()
+  t.end()
+
+  // twilioAPI.find.all(model, (err, resp) => {
+  //   t.notOk(err, 'should not display error')
+  //   t.ok(resp, 'should receive response')
+  //   t.ok(resp instanceof Array, 'findAll response type is correct')
+  //   t.ok(resp.length > 0, 'should return more than one element')
+  //   t.end()
+  // })
 })
 
-test('### findByID ###', function (t) {
-  const model = server.getModel('message')
+// test('### findByID ###', function (t) {
+//   const model = server.getModel('message')
 
-  messageId = config.mockAPI ? 'SMed58f4e57f0b4bafb575654d09b7cb85' : messageId
+//   messageId = config.mockAPI ? 'SMed58f4e57f0b4bafb575654d09b7cb85' : messageId
 
-  twilioAPI.find.byId(model, messageId, (err, resp) => {
-    t.notOk(err, 'should not display error')
-    t.ok(resp, 'should receive response')
-    t.ok(resp.sid === messageId, 'found correct message')
-    t.ok(resp.status, 'status has been set')
-    t.end()
-  })
-})
+//   twilioAPI.find.byId(model, messageId, (err, resp) => {
+//     t.notOk(err, 'should not display error')
+//     t.ok(resp, 'should receive response')
+//     t.ok(resp.sid === messageId, 'found correct message')
+//     t.ok(resp.status, 'status has been set')
+//     t.end()
+//   })
+// })
 
-test('### query ###', function (t) {
-  const model = server.getModel('call')
+// test('### query ###', function (t) {
+//   const model = server.getModel('call')
 
-  const options = {
-    where: { 'status': 'busy' }
-  }
+//   const options = {
+//     where: { 'status': 'busy' }
+//   }
 
-  twilioAPI.query(model, options, (err, resp) => {
-    t.notOk(err, 'should not display error')
-    t.ok(resp, 'should receive response')
-    t.ok(resp instanceof Array, 'query for multiple objects')
-    t.end()
-  })
-})
+//   twilioAPI.query(model, options, (err, resp) => {
+//     t.notOk(err, 'should not display error')
+//     t.ok(resp, 'should receive response')
+//     t.ok(resp instanceof Array, 'query for multiple objects')
+//     t.end()
+//   })
+// })
 
-test('### createAddress ####', function (t) {
-  const model = server.getModel('address')
-  const address = {
-    street: '2 Hasselhoff Lane',
-    customerName: 'Joe Doe',
-    city: 'NYC',
-    region: 'Unknown',
-    postalCode: 10013,
-    isoCountry: 'US'
-  }
+// test('### createAddress ####', function (t) {
+//   const model = server.getModel('address')
+//   const address = {
+//     street: '2 Hasselhoff Lane',
+//     customerName: 'Joe Doe',
+//     city: 'NYC',
+//     region: 'Unknown',
+//     postalCode: 10013,
+//     isoCountry: 'US'
+//   }
 
-  const values = config.mockAPI ? mockedData.address : address
+//   const values = config.mockAPI ? mockedData.address : address
 
-  twilioAPI.createAddress(model, values, (err, resp) => {
-    t.notOk(err, 'should not display error')
-    t.ok(resp, 'should receive response')
-    t.ok(resp.sid, 'SID has been assigned')
-    addressId = resp.sid
-    t.equal(resp.customerName, values.customerName, 'Customer name is correct')
-    t.end()
-  })
-})
+//   twilioAPI.createAddress(model, values, (err, resp) => {
+//     t.notOk(err, 'should not display error')
+//     t.ok(resp, 'should receive response')
+//     t.ok(resp.sid, 'SID has been assigned')
+//     addressId = resp.sid
+//     t.equal(resp.customerName, values.customerName, 'Customer name is correct')
+//     t.end()
+//   })
+// })
 
-test('### updateAddress ###', function (t) {
-  const model = server.getModel('address')
+// test('### updateAddress ###', function (t) {
+//   const model = server.getModel('address')
 
-  const doc = {
-    customerName: 'Changed customer'
-  }
+//   const doc = {
+//     customerName: 'Changed customer'
+//   }
 
-  twilioAPI.updateAddress(model, addressId, doc, (err, resp) => {
-    t.notOk(err, 'should not display error')
-    t.ok(resp, 'should receive response')
-    twilioAPI.find.byId(model, addressId, (err, resp) => {
-      if (err) {
-        t.error(err)
-        t.end()
-      }
-      t.ok(resp, 'updated record found')
-      t.ok(resp.customerName === doc.customerName, 'record updated successfully')
-      t.end()
-    })
-  })
-})
+//   twilioAPI.updateAddress(model, addressId, doc, (err, resp) => {
+//     t.notOk(err, 'should not display error')
+//     t.ok(resp, 'should receive response')
+//     twilioAPI.find.byId(model, addressId, (err, resp) => {
+//       if (err) {
+//         t.error(err)
+//         t.end()
+//       }
+//       t.ok(resp, 'updated record found')
+//       t.ok(resp.customerName === doc.customerName, 'record updated successfully')
+//       t.end()
+//     })
+//   })
+// })
+
+// #########  REAL JUNK
 
 // test('### deleteById ###', function (t) {
 //   const model = server.getModel('address')

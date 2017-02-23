@@ -1,6 +1,6 @@
 const test = require('tap').test
-const server = require('../utils/server')
-const requester = require('../utils/requester')
+const server = require('../../utils/server')
+const requester = require('../../utils/requester')
 
 var SERVER
 var REQUESTER
@@ -38,7 +38,7 @@ test('Should get last message id to delete it', t => {
   const modelName = 'message'
 
   REQUESTER.getData({ model: modelName }, (response, body) => {
-    ID = body.messages[1].sid
+    ID = body.messages[body.messages.length - 1].sid
     t.ok(body.success)
     t.end()
   })

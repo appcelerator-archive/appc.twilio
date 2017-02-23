@@ -32,13 +32,15 @@
   },
   "scripts": {
     "start": "appc run",
-    "test": "npm run lint-fix && npm run test:*",
-    "test:integration": "npm run lint-fix && tap test/integration/*.js --color --bail --cov",
-    "test:unit": "tap test/unit/*.js --color --bail --cov",
+    "test": "npm run lint && npm run test:unit",
+    "test:unit": "tap test/unit/**/*.js --color --bail --cov",
+    "test:lifecycle": "tap test/unit/lifecycle/*.js --color --bail --cov",
+    "test:integration": "tap test/integration/*.js --color --bail --cov",
+    "test:integration:lifecycle": "tap test/integration/lifecycle/*.js --color --bail --cov",
     "lint": "standard | snazzy",
     "lint-fix": "standard --fix | snazzy",
     "precommit": "npm run lint",
-    "standalone": "tap test/unit/lifecycle/*.js --color --bail --cov"
+    "standalone": "tap test/unit/twilioAPI.unit.js --color --bail --cov"
   },
   "standard": {
     "ignore": [

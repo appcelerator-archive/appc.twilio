@@ -1,40 +1,23 @@
 const test = require('tap').test
-const request = require('request')
-const port = 8080
-const baseUrl = `http://localhost:${port}`
-const apiPrefix = '/api'
-const urlToHit = `${baseUrl}${apiPrefix}`
-const server = require('../server/factory')
+const server = require('../../utils/server')
+const requester = require('../../utils/requester')
 
 var SERVER
-const AUTH = {}
+var REQUESTER
+
 test('### START SERVER ###', function (t) {
   server.startHTTPArrow({}, arrow => {
     t.ok(arrow, 'Arrow has been started')
     SERVER = arrow
-
-    t.ok(SERVER.config.apikey, 'apikey is set')
-    AUTH.user = SERVER.config.apikey
-
+    REQUESTER = requester(SERVER.config)
     t.end()
   })
 })
 
 test('Should return proper status code when valid request is made', t => {
-  const modelName = '/message'
-  const uri = `${urlToHit}${modelName}`
-  const options = {
-    uri: uri,
-    method: 'GET',
-    auth: AUTH,
-    json: true
-  }
+  const modelName = 'message'
 
-  request(options, function (err, response, body) {
-    if (err) {
-      t.error(err)
-      t.end()
-    }
+  REQUESTER.getData({ model: modelName }, (response, body) => {
     t.ok(body.success, 'Body success should be true')
     t.equal(response.statusCode, 200, 'status code should be 200')
 
@@ -43,20 +26,9 @@ test('Should return proper status code when valid request is made', t => {
 })
 
 test('Should return proper response when INVALID find all request is made', t => {
-  const modelName = '/invalid'
-  const uri = `${urlToHit}${modelName}`
-  const options = {
-    uri: uri,
-    method: 'GET',
-    auth: AUTH,
-    json: true
-  }
+  const modelName = 'invalid'
 
-  request(options, function (err, response, body) {
-    if (err) {
-      t.error(err)
-      t.end()
-    }
+  REQUESTER.getData({ model: modelName }, (response, body) => {
     t.notOk(body.success, 'Body success should be false when invalid request is made')
     t.equal(response.statusCode, 404, 'status code should be 404')
     t.equal(body.error, 'Not found')
@@ -66,7 +38,7 @@ test('Should return proper response when INVALID find all request is made', t =>
 })
 
 test('Should return proper response format when request is made to message endpoint', t => {
-  const modelName = '/message'
+  const modelName = 'message'
   const expectedProperties = [
     'id',
     'sid',
@@ -88,19 +60,7 @@ test('Should return proper response format when request is made to message endpo
     'subresourceUris'
   ]
 
-  const uri = `${urlToHit}${modelName}`
-  const options = {
-    uri: uri,
-    method: 'GET',
-    auth: AUTH,
-    json: true
-  }
-
-  request(options, function (err, response, body) {
-    if (err) {
-      t.error(err)
-      t.end()
-    }
+  REQUESTER.getData({ model: modelName }, (response, body) => {
     t.ok(body.success, 'Body success should be true')
     t.equal(response.statusCode, 200, 'status code should be 200')
 
@@ -114,8 +74,7 @@ test('Should return proper response format when request is made to message endpo
 })
 
 test('Should return proper response format when request is made to call endpoint', t => {
-  const modelName = '/call'
-  const uri = `${urlToHit}${modelName}`
+  const modelName = 'call'
   const expectedProperties = [
     'id',
     'sid',
@@ -124,27 +83,13 @@ test('Should return proper response format when request is made to call endpoint
     'from',
     'fromFormatted',
     'phoneNumberSid',
-    'status',
-    'startTime',
-    'endTime',
     'priceUnit',
     'direction',
     'apiVersion',
     'uri',
     'subresourceUris']
 
-  const options = {
-    uri: uri,
-    method: 'GET',
-    auth: AUTH,
-    json: true
-  }
-
-  request(options, function (err, response, body) {
-    if (err) {
-      t.error(err)
-      t.end()
-    }
+  REQUESTER.getData({ model: modelName }, (response, body) => {
     t.ok(body.success, 'Body success should be true')
     t.equal(response.statusCode, 200, 'status code should be 200')
     body.calls.map((call) => {
@@ -159,8 +104,7 @@ test('Should return proper response format when request is made to call endpoint
 })
 
 test('Should return proper response format when request is made to address endpoint', t => {
-  const modelName = '/address'
-  const uri = `${urlToHit}${modelName}`
+  const modelName = 'address'
   const expectedProperties = ['id',
     'sid',
     'customerName',
@@ -170,18 +114,7 @@ test('Should return proper response format when request is made to address endpo
     'postalCode',
     'isoCountry']
 
-  const options = {
-    uri: uri,
-    method: 'GET',
-    auth: AUTH,
-    json: true
-  }
-
-  request(options, function (err, response, body) {
-    if (err) {
-      t.error(err)
-      t.end()
-    }
+  REQUESTER.getData({ model: modelName }, (response, body) => {
     t.ok(body.success, 'Body success should be true')
     t.equal(response.statusCode, 200, 'status code should be 200')
 
@@ -196,20 +129,9 @@ test('Should return proper response format when request is made to address endpo
 })
 
 test('Should return result in proper format', t => {
-  const modelName = '/recording'
-  const uri = `${urlToHit}${modelName}`
-  const options = {
-    uri: uri,
-    method: 'GET',
-    auth: AUTH,
-    json: true
-  }
+  const modelName = 'recording'
 
-  request(options, function (err, response, body) {
-    if (err) {
-      t.error(err)
-      t.end()
-    }
+  REQUESTER.getData({ model: modelName }, (response, body) => {
     t.ok(body.success, 'Body success should be true')
     t.equal(response.statusCode, 200, 'status code should be 200')
     t.equal(typeof body.recordings, 'object')
@@ -219,20 +141,9 @@ test('Should return result in proper format', t => {
 })
 
 test('Should return NON empty result', t => {
-  const modelName = '/call'
-  const uri = `${urlToHit}${modelName}`
-  const options = {
-    uri: uri,
-    method: 'GET',
-    auth: AUTH,
-    json: true
-  }
+  const modelName = 'call'
 
-  request(options, function (err, response, body) {
-    if (err) {
-      t.error(err)
-      t.end()
-    }
+  REQUESTER.getData({ model: modelName }, (response, body) => {
     t.ok(body.success, 'Body success should be true')
     t.equal(response.statusCode, 200, 'status code should be 200')
     t.equal(typeof body.calls, 'object')

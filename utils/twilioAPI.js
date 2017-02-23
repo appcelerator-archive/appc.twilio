@@ -5,6 +5,7 @@ module.exports = function (config) {
   const client = new twilio.RestClient(config.sid, config.auth_token)
 
   return {
+    client: client,
     createCall: createCall,
     createAddress: createAddress,
     createMessage: createMessage,
