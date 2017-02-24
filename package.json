@@ -40,7 +40,7 @@
     "lint": "standard | snazzy",
     "lint-fix": "standard --fix | snazzy",
     "precommit": "npm run lint",
-    "standalone": "tap test/unit/twilioAPI.unit.js --color --bail --cov"
+    "standalone": "tap test/unit/*.js --color --bail --cov"
   },
   "standard": {
     "ignore": [
