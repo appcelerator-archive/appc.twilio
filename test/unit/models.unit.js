@@ -1,6 +1,10 @@
 const test = require('tap').test
 const { server } = require('../utils/server').startPlainArrow()
 
+/**
+ * Twilio documentation - https://www.twilio.com/docs/api/rest/call
+ */
+
 test('test call model', function (t) {
   const model = server.getModel('call')
 
@@ -29,8 +33,14 @@ test('test call model', function (t) {
   t.equals(model.fields.uri.type, 'string')
   t.equals(model.fields.subresourceUris.type, 'object')
 
+  t.ok(model.fields.to.required)
+
   t.end()
 })
+
+/**
+ * Twilio documentation - https://www.twilio.com/docs/api/rest/message
+ */
 
 test('test message model', function (t) {
   const model = server.getModel('message')
@@ -58,8 +68,15 @@ test('test message model', function (t) {
   t.equals(model.fields.uri.type, 'string')
   t.equals(model.fields.subresourceUris.type, 'object')
 
+  t.ok(model.fields.to.required)
+  t.ok(model.fields.body.required)
+
   t.end()
 })
+
+/**
+ * Twilio documentation - https://www.twilio.com/docs/api/rest/account
+ */
 
 test('test account model', function (t) {
   const model = server.getModel('account')
@@ -77,8 +94,14 @@ test('test account model', function (t) {
   t.equals(model.fields.uri.type, 'string')
   t.equals(model.fields.subresourceUris.type, 'object')
 
+  t.ok(model.fields.friendlyName.required)
+
   t.end()
 })
+
+/**
+ * Twilio documentation - https://www.twilio.com/docs/api/rest/addresses
+ */
 
 test('test address model', function (t) {
   const model = server.getModel('address')
@@ -95,8 +118,14 @@ test('test address model', function (t) {
   t.equals(model.fields.postalCode.type, 'string')
   t.equals(model.fields.isoCountry.type, 'string')
 
+  t.ok(model.fields.isoCountry.required)
+
   t.end()
 })
+
+/**
+ * Twilio documentation - https://www.twilio.com/docs/api/rest/queue
+ */
 
 test('test queue model', function (t) {
   const model = server.getModel('queue')
@@ -112,8 +141,15 @@ test('test queue model', function (t) {
   t.equals(model.fields.dateUpdated.type, 'string')
   t.equals(model.fields.uri.type, 'string')
 
+  t.ok(model.fields.friendlyName.required)
+  t.ok(model.fields.maxSize.required)
+
   t.end()
 })
+
+/**
+ * Twilio documentation - https://www.twilio.com/docs/api/rest/applications
+ */
 
 test('test application model', function (t) {
   const model = server.getModel('application')
@@ -143,6 +179,10 @@ test('test application model', function (t) {
   t.end()
 })
 
+/**
+ * Twilio documentation - https://www.twilio.com/docs/api/rest/available-phone-numbers
+ */
+
 test('test availablePhoneNumber model', function (t) {
   const model = server.getModel('availablePhoneNumber')
 
@@ -163,6 +203,10 @@ test('test availablePhoneNumber model', function (t) {
   t.end()
 })
 
+/**
+ * Twilio documentation - https://www.twilio.com/docs/api/rest/outgoing-caller-ids
+ */
+
 test('test outgoingCallerId model', function (t) {
   const model = server.getModel('outgoingCallerId')
 
@@ -178,6 +222,10 @@ test('test outgoingCallerId model', function (t) {
 
   t.end()
 })
+
+/**
+ * Twilio documentation - https://www.twilio.com/docs/api/rest/recording
+ */
 
 test('test recordings model', function (t) {
   const model = server.getModel('recording')
@@ -200,6 +248,10 @@ test('test recordings model', function (t) {
 
   t.end()
 })
+
+/**
+ * Twilio documentation - https://www.twilio.com/docs/api/rest/transcription
+ */
 
 test('test transcription model', function (t) {
   const model = server.getModel('transcription')
