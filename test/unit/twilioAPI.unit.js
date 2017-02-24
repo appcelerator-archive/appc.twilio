@@ -1,96 +1,224 @@
 const test = require('tap').test
-const mockedData = require('../data/mockedData')
 const { server } = require('../utils/server').startPlainArrow()
 const config = server.config.connectors['appc.twilio']
-// const configNumber = config.twilio_number
-const twilioAPI = require('./../../utils/twilioAPI')(config)
-const twilioSDK = twilioAPI.client
+const configNumber = config.twilio_number
 const sinon = require('sinon')
+const sdkFacade = require('./../../utils/sdkFacade')(config)
+const transformer = require('./../../utils/transformer')
+const twilioAPI = require('./../../utils/twilioAPI')(config, sdkFacade, transformer)
 
-if (config.mockAPI) {
-  // twilioAPI = require('../utils/twilioAPIMock')(config)
-  twilioSDK
-}
+function cb (errorMessage, data) { }
+const cbSpy = sinon.spy(cb)
+const errorMessage = new Error()
+const dataFromTwilio = 'DATA_FROM_TWILIO'
+const transformToCollectionStub = sinon.stub(
+  transformer,
+  'transformToCollection',
+  (data) => {
+    return dataFromTwilio
+  }
+)
+const transformToModelStub = sinon.stub(
+  transformer,
+  'transformToModel',
+  (data) => {
+    return dataFromTwilio
+  }
+)
 
 // var messageId
 // var addressId
 // var queueId
 // var outgoingCallerId
 
-// test('### createCall ###', function (t) {
-//   const model = server.getModel('call')
-
-//   const callValues = config.mockAPI ? mockedData.call : { to: '+359899982932' }
-
-//   twilioAPI.createCall(model, callValues, configNumber, (err, resp) => {
-//     t.notOk(err, 'should not display error')
-//     t.ok(resp, 'should receive response')
-//     t.ok(resp.sid, 'call sid found')
-//     t.ok(resp.to === callValues.to, 'calling target correct')
-//     t.end()
-//   })
-// })
-
-// test('### createMessage ###', function (t) {
-//   const model = server.getModel('message')
-
-//   const smsValues = config.mockAPI ? mockedData.message : {
-//     to: '+359899638562',
-//     body: 'trial'
-//   }
-
-//   twilioAPI.createMessage(model, smsValues, configNumber, (err, resp) => {
-//     t.notOk(err, 'should not display error')
-//     t.ok(resp, 'should receive response')
-//     t.ok(resp.sid, 'SID has been assigned')
-//     messageId = resp.sid
-//     t.ok(resp.to === smsValues.to, 'SMS receiver is correct')
-//     t.end()
-//   })
-// })
-
-test('### findAll ###', function (t) {
-  const model = server.getModel('message')
-  const resultData = mockedData.messages
-  function cbOk (errorMessage, data) { }
-  const cbOkSpy = sinon.spy(cbOk)
-
+test('### createCall - Success ###', function (t) {
+  const model = server.getModel('call')
   const twilioSDKStub = sinon.stub(
-    twilioSDK.messages,
-    'list',
-    (errorMessage, data) => {
-      cbOkSpy(null, resultData)
+    sdkFacade,
+    'createCall',
+    (options, callback) => {
+      callback(null, dataFromTwilio)
     }
   )
-  twilioAPI.find.all(model, cbOkSpy)
-  t.ok(twilioSDKStub.calledOnce)
-  t.ok(cbOkSpy.calledOnce)
-  t.ok(cbOkSpy.calledWith(null, resultData))
-  twilioSDKStub.restore()
-  t.end()
 
-  // twilioAPI.find.all(model, (err, resp) => {
-  //   t.notOk(err, 'should not display error')
-  //   t.ok(resp, 'should receive response')
-  //   t.ok(resp instanceof Array, 'findAll response type is correct')
-  //   t.ok(resp.length > 0, 'should return more than one element')
-  //   t.end()
-  // })
+  twilioAPI.createCall(model, config.outgoing_caller_data, configNumber, cbSpy)
+
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(transformToModelStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  twilioSDKStub.restore()
+  transformToModelStub.reset()
+  cbSpy.reset()
+
+  t.end()
 })
 
-// test('### findByID ###', function (t) {
-//   const model = server.getModel('message')
+test('### createCall - Error ###', function (t) {
+  const model = server.getModel('call')
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'createCall',
+    (payload, callback) => {
+      callback(errorMessage)
+    }
+  )
 
-//   messageId = config.mockAPI ? 'SMed58f4e57f0b4bafb575654d09b7cb85' : messageId
+  twilioAPI.createCall(model, config.outgoing_caller_data, configNumber, cbSpy)
 
-//   twilioAPI.find.byId(model, messageId, (err, resp) => {
-//     t.notOk(err, 'should not display error')
-//     t.ok(resp, 'should receive response')
-//     t.ok(resp.sid === messageId, 'found correct message')
-//     t.ok(resp.status, 'status has been set')
-//     t.end()
-//   })
-// })
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+  twilioSDKStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### createMessage - Success ###', function (t) {
+  const model = server.getModel('message')
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'createMessage',
+    (payload, callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+  const smsValues = {
+    to: config.outgoing_caller_data,
+    body: 'trial'
+  }
+
+  twilioAPI.createMessage(model, smsValues, configNumber, cbSpy)
+
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(transformToModelStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  twilioSDKStub.restore()
+  transformToModelStub.reset()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### createMessage - Error ###', function (t) {
+  const model = server.getModel('message')
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'createMessage',
+    (payload, callback) => {
+      callback(errorMessage)
+    }
+  )
+  const smsValues = {
+    to: config.outgoing_caller_data,
+    body: 'trial'
+  }
+
+  twilioAPI.createMessage(model, smsValues, configNumber, cbSpy)
+
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  twilioSDKStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### findAll - Success ###', function (t) {
+  const model = server.getModel('message')
+  const twilioSDKStub = sinon.stub(
+    sdkFacade.find,
+    'all',
+    (model, callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+  twilioAPI.find.all(model, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(transformToCollectionStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  twilioSDKStub.restore()
+  transformToCollectionStub.reset()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### findAll - Error ###', function (t) {
+  const model = server.getModel('message')
+
+  // TODO stub the transformer as well
+  const twilioSDKStub = sinon.stub(
+    sdkFacade.find,
+    'all',
+    (model, callback) => {
+      callback(errorMessage)
+    }
+  )
+  twilioAPI.find.all(model, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  twilioSDKStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### findByID Success ###', function (t) {
+  const model = server.getModel('message')
+  const messageId = 'SMed58f4e57f0b4bafb575654d09b7cb85'
+  const twilioSDKStub = sinon.stub(
+    sdkFacade.find,
+    'byId',
+    (model, id, callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+  twilioAPI.find.byId(model, messageId, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(transformToModelStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  twilioSDKStub.restore()
+  transformToCollectionStub.reset()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### findByID - Error ###', function (t) {
+  const model = server.getModel('message')
+  const messageId = 'SMed58f4e57f0b4bafb575654d09b7cb85'
+  const twilioSDKStub = sinon.stub(
+    sdkFacade.find,
+    'byId',
+    (model, id, callback) => {
+      callback(errorMessage)
+    }
+  )
+  twilioAPI.find.byId(model, messageId, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(transformToModelStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  twilioSDKStub.restore()
+  transformToCollectionStub.reset()
+  cbSpy.reset()
+
+  t.end()
+})
 
 // test('### query ###', function (t) {
 //   const model = server.getModel('call')
