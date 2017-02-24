@@ -26,11 +26,6 @@ const transformToModelStub = sinon.stub(
   }
 )
 
-// var messageId
-// var addressId
-// var queueId
-// var outgoingCallerId
-
 test('### createCall - Success ###', function (t) {
   const model = server.getModel('call')
   const twilioSDKStub = sinon.stub(
@@ -155,7 +150,6 @@ test('### findAll - Success ###', function (t) {
 test('### findAll - Error ###', function (t) {
   const model = server.getModel('message')
 
-  // TODO stub the transformer as well
   const twilioSDKStub = sinon.stub(
     sdkFacade.find,
     'all',
@@ -174,7 +168,7 @@ test('### findAll - Error ###', function (t) {
   t.end()
 })
 
-test('### findByID Success ###', function (t) {
+test('### findByID - Success ###', function (t) {
   const model = server.getModel('message')
   const messageId = 'SMed58f4e57f0b4bafb575654d09b7cb85'
   const twilioSDKStub = sinon.stub(
@@ -186,12 +180,11 @@ test('### findByID Success ###', function (t) {
   )
   twilioAPI.find.byId(model, messageId, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
-  t.ok(transformToModelStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   twilioSDKStub.restore()
-  transformToCollectionStub.reset()
+  transformToModelStub.reset()
   cbSpy.reset()
 
   t.end()
@@ -209,9 +202,205 @@ test('### findByID - Error ###', function (t) {
   )
   twilioAPI.find.byId(model, messageId, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
-  t.ok(transformToModelStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(errorMessage))
+
+  twilioSDKStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### createAddress - Success ####', function (t) {
+  const model = server.getModel('address')
+  const address = {
+    street: '2 Hasselhoff Lane',
+    customerName: 'Joe Doe',
+    city: 'NYC',
+    region: 'Unknown',
+    postalCode: 10013,
+    isoCountry: 'US'
+  }
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'createAddress',
+    (payload, callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+  const values = address
+
+  twilioAPI.createAddress(model, values, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(transformToModelStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  twilioSDKStub.restore()
+  transformToModelStub.reset()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### createAddress - Error ####', function (t) {
+  const model = server.getModel('address')
+  const address = {
+    street: '2 Hasselhoff Lane',
+    customerName: 'Joe Doe',
+    city: 'NYC',
+    region: 'Unknown',
+    postalCode: 10013,
+    isoCountry: 'US'
+  }
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'createAddress',
+    (payload, callback) => {
+      callback(errorMessage)
+    }
+  )
+  const values = address
+
+  twilioAPI.createAddress(model, values, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  twilioSDKStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### createQueue - Success ####', function (t) {
+  const model = server.getModel('queue')
+  const queue = {
+    friendlyName: '2 Hasselhoff Lane',
+    maxSize: 100
+  }
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'createQueue',
+    (payload, callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+  const values = queue
+
+  twilioAPI.createQueue(model, values, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(transformToModelStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  twilioSDKStub.restore()
+  transformToModelStub.reset()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### createQueue - Error ####', function (t) {
+  const model = server.getModel('queue')
+  const queue = {
+    friendlyName: '2 Hasselhoff Lane',
+    maxSize: 100
+  }
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'createQueue',
+    (payload, callback) => {
+      callback(errorMessage)
+    }
+  )
+  const values = queue
+
+  twilioAPI.createQueue(model, values, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  twilioSDKStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### createAccount - Success ####', function (t) {
+  const model = server.getModel('account')
+  const account = {
+    friendlyName: 'Account'
+  }
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'createAccount',
+    (payload, callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+  const values = account
+
+  twilioAPI.createAccount(model, values, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(transformToModelStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  twilioSDKStub.restore()
+  transformToModelStub.reset()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### createAccount - Error ####', function (t) {
+  const model = server.getModel('account')
+  const account = {
+    friendlyName: 'Account'
+  }
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'createAccount',
+    (payload, callback) => {
+      callback(errorMessage)
+    }
+  )
+
+  twilioAPI.createAccount(model, account, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  twilioSDKStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### query - Success ####', function (t) {
+  const model = server.getModel('call')
+  const options = `where={"status": "completed"}`
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'query',
+    (model, callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+
+  twilioAPI.query(model, options, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(transformToCollectionStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   twilioSDKStub.restore()
   transformToCollectionStub.reset()
@@ -220,155 +409,25 @@ test('### findByID - Error ###', function (t) {
   t.end()
 })
 
-// test('### query ###', function (t) {
-//   const model = server.getModel('call')
+test('### query - Error ####', function (t) {
+  const model = server.getModel('call')
+  const options = `where={"status": "completed"}`
 
-//   const options = {
-//     where: { 'status': 'busy' }
-//   }
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'query',
+    (model, callback) => {
+      callback(errorMessage)
+    }
+  )
 
-//   twilioAPI.query(model, options, (err, resp) => {
-//     t.notOk(err, 'should not display error')
-//     t.ok(resp, 'should receive response')
-//     t.ok(resp instanceof Array, 'query for multiple objects')
-//     t.end()
-//   })
-// })
+  twilioAPI.query(model, options, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
 
-// test('### createAddress ####', function (t) {
-//   const model = server.getModel('address')
-//   const address = {
-//     street: '2 Hasselhoff Lane',
-//     customerName: 'Joe Doe',
-//     city: 'NYC',
-//     region: 'Unknown',
-//     postalCode: 10013,
-//     isoCountry: 'US'
-//   }
+  twilioSDKStub.restore()
+  cbSpy.reset()
 
-//   const values = config.mockAPI ? mockedData.address : address
-
-//   twilioAPI.createAddress(model, values, (err, resp) => {
-//     t.notOk(err, 'should not display error')
-//     t.ok(resp, 'should receive response')
-//     t.ok(resp.sid, 'SID has been assigned')
-//     addressId = resp.sid
-//     t.equal(resp.customerName, values.customerName, 'Customer name is correct')
-//     t.end()
-//   })
-// })
-
-// test('### updateAddress ###', function (t) {
-//   const model = server.getModel('address')
-
-//   const doc = {
-//     customerName: 'Changed customer'
-//   }
-
-//   twilioAPI.updateAddress(model, addressId, doc, (err, resp) => {
-//     t.notOk(err, 'should not display error')
-//     t.ok(resp, 'should receive response')
-//     twilioAPI.find.byId(model, addressId, (err, resp) => {
-//       if (err) {
-//         t.error(err)
-//         t.end()
-//       }
-//       t.ok(resp, 'updated record found')
-//       t.ok(resp.customerName === doc.customerName, 'record updated successfully')
-//       t.end()
-//     })
-//   })
-// })
-
-// #########  REAL JUNK
-
-// test('### deleteById ###', function (t) {
-//   const model = server.getModel('address')
-
-//   twilioAPI.deleteById(model, addressId, (err, resp) => {
-//     t.notOk(err, 'should not display error')
-//     twilioAPI.find.byId(model, addressId, (err, resp) => {
-//       t.ok(err, 'deleted successfully')
-//       t.end()
-//     })
-//   })
-// })
-
-// test('### createQueue ###', function (t) {
-//   const model = server.getModel('queue')
-
-//   const values = config.mockAPI ? mockedData.queue : {
-//     friendlyName: `Queue_${Math.floor(Math.random() * 100000)}`
-//   }
-
-//   twilioAPI.createQueue(model, values, configNumber, (err, resp) => {
-//     t.notOk(err, 'should not display error')
-//     t.ok(resp, 'should receive response')
-//     t.ok(resp.sid, 'SID has been assigned')
-//     queueId = resp.sid
-//     t.end()
-//   })
-// })
-
-// test('### updateQueue ###', function (t) {
-//   const model = server.getModel('queue')
-//   const doc = {
-//     maxSize: 120,
-//     friendlyName: `Queue_${Math.floor(Math.random() * 100000)}`
-//   }
-//   twilioAPI.updateQueue(model, queueId, doc, (err, resp) => {
-//     if (err) {
-//       t.error(err)
-//       t.end()
-//     }
-//     t.notOk(err, 'should not display error')
-//     t.ok(resp, 'should receive response')
-//     twilioAPI.find.byId(model, queueId, (err, resp) => {
-//       if (err) {
-//         t.error(err)
-//         t.end()
-//       }
-//       t.ok(resp, 'found queue')
-//       t.ok(resp.maxSize === doc.maxSize, 'queue updated successfully')
-//       t.end()
-//     })
-//   })
-// })
-
-// creating outgoingCallerId requires code validation
-// test.skip('### createOutgoingCallerId ###', function (t) {
-//   const model = server.getModel('outgoingCallerId')
-
-//   var values = {
-//     friendlyName: '359',
-//     phone_number: config.caller_number
-//   }
-
-//   twilioAPI.createOutgoingCallerId(model, values, (err, resp) => {
-//     t.notOk(err, 'should not display error')
-//     t.ok(resp, 'should receive response')
-//     id = resp.sid
-//     t.end()
-//   })
-// })
-
-// test('### updateOutgoingCallerId ###', function (t) {
-//   const model = server.getModel('outgoingCallerId')
-
-//   const doc = 'User'
-
-//   twilioAPI.find.all(model, (err, resp) => {
-//     t.notOk(err, 'should not display error')
-//     t.ok(resp, 'should receive response')
-//     t.ok(resp[0].sid, 'SID has been assigned')
-//     id = resp[0].sid
-
-//     twilioAPI.updateOutgoingCallerId(model, id, doc, (err, resp) => {
-//       twilioAPI.find.byId(model, id, (err, resp) => {
-//         t.ok(resp, 'found caller id')
-//         t.ok(resp.friendly_name === doc, 'updated successfully')
-//         t.end()
-//       })
-//     })
-//   })
-// })
+  t.end()
+})

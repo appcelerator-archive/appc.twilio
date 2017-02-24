@@ -8,7 +8,6 @@ module.exports = function (config, sdkFacade, transformer) {
     createCall: createCall,
     createAddress: createAddress,
     createMessage: createMessage,
-    createOutgoingCallerId: createOutgoingCallerId,
     createQueue: createQueue,
     createAccount: createAccount,
     query: query,
@@ -33,19 +32,8 @@ module.exports = function (config, sdkFacade, transformer) {
   }
 
   function query (Model, options, callback) {
-    const instances = []
     const key = pluralize(Model.name)
-
-    client[key].list(options.where, function (err, data) {
-      if (err) {
-        callback(new Error(err.message))
-      }
-      data[key].map((item) => {
-        instances.push(Model.instance(item, true))
-      })
-
-      callback(null, instances)
-    })
+    sdkFacade.query(key, throwErrorOrTransformToCollection.bind(null, Model, callback))
   }
 
   function createCall (Model, values, number, callback) {
@@ -57,12 +45,7 @@ module.exports = function (config, sdkFacade, transformer) {
   }
 
   function createAddress (Model, values, callback) {
-    client.addresses.create(values, (err, result) => {
-      if (err) {
-        callback(new Error(err.message))
-      }
-      callback(null, Model.instance(result, true))
-    })
+    sdkFacade.createAddress(values, throwErrorOrTransformToModel.bind(null, Model, callback))
   }
 
   function createMessage (Model, values, number, callback) {
@@ -73,39 +56,12 @@ module.exports = function (config, sdkFacade, transformer) {
     }, throwErrorOrTransformToModel.bind(null, Model, callback))
   }
 
-  function createQueue (Model, values, number, callback) {
-    client.queues.create({
-      friendlyName: values.friendlyName || ''
-    }, (err, result) => {
-      if (err) {
-        callback(new Error(err.message))
-      }
-      if (!err) {
-        var instance = Model.instance(result, true)
-        callback(null, instance)
-      }
-    })
-  }
-
-  function createOutgoingCallerId (Model, values, number, callback) {
-    client.outgoingCallerIds.create({
-      friendlyName: values.friendlyName || number,
-      phoneNumber: number
-    }, (err, result) => {
-      if (err) {
-        callback(new Error(err.message))
-      }
-      callback(null, Model.instance(result, true))
-    })
+  function createQueue (Model, values, callback) {
+    sdkFacade.createQueue(values, throwErrorOrTransformToModel.bind(null, Model, callback))
   }
 
   function createAccount (Model, values, callback) {
-    client.accounts.create(values, (err, result) => {
-      if (err) {
-        callback(new Error(err.message))
-      }
-      callback(null, Model.instance(result, true))
-    })
+    sdkFacade.createAccount(values, throwErrorOrTransformToModel.bind(null, Model, callback))
   }
 
   function updateAddress (Model, id, doc, callback) {

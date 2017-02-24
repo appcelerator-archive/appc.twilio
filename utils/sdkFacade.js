@@ -8,7 +8,6 @@ module.exports = function (config) {
     createCall: createCall,
     createAddress: createAddress,
     createMessage: createMessage,
-    createOutgoingCallerId: createOutgoingCallerId,
     createQueue: createQueue,
     createAccount: createAccount,
     query: query,
@@ -58,10 +57,6 @@ module.exports = function (config) {
 
   function createQueue (payload, callback) {
     client.queues.create(payload, throwOrRespondWithData.bind(null, null, callback))
-  }
-
-  function createOutgoingCallerId (payload, callback) {
-    client.outgoingCallerIds.create(payload, throwOrRespondWithData.bind(null, null, callback))
   }
 
   function createAccount (payload, callback) {
