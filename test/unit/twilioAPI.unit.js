@@ -431,3 +431,211 @@ test('### query - Error ####', function (t) {
 
   t.end()
 })
+
+test('### updateAddress - Success ###', function (t) {
+  const model = server.getModel('address')
+
+  const doc = {
+    customerName: 'Changed customer'
+  }
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'updateAddress',
+    (model, id, doc, callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+
+  twilioAPI.updateAddress(model, '', doc, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(transformToModelStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  twilioSDKStub.restore()
+  transformToModelStub.reset()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### updateAddress - Error ###', function (t) {
+  const model = server.getModel('address')
+
+  const doc = {
+    customerName: 'Changed customer'
+  }
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'updateAddress',
+    (model, id, doc, callback) => {
+      callback(errorMessage)
+    }
+  )
+
+  twilioAPI.updateAddress(model, '', doc, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  twilioSDKStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### updateOutgoingCallerId - Success ###', function (t) {
+  const model = server.getModel('outgoingCallerId')
+
+  const doc = {
+    customerName: 'Changed customer'
+  }
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'updateOutgoingCallerId',
+    (model, id, doc, callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+
+  twilioAPI.updateOutgoingCallerId(model, '', doc, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(transformToModelStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  twilioSDKStub.restore()
+  transformToModelStub.reset()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### updateOutgoingCallerId - Error ###', function (t) {
+  const model = server.getModel('outgoingCallerId')
+
+  const doc = {
+    customerName: 'Changed customer'
+  }
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'updateOutgoingCallerId',
+    (model, id, doc, callback) => {
+      callback(errorMessage)
+    }
+  )
+
+  twilioAPI.updateOutgoingCallerId(model, '', doc, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  twilioSDKStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### updateQueue - Success ###', function (t) {
+  const model = server.getModel('queue')
+
+  const doc = {
+    maxSize: 120
+  }
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'updateQueue',
+    (model, id, doc, callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+
+  twilioAPI.updateQueue(model, '', doc, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(transformToModelStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  twilioSDKStub.restore()
+  transformToModelStub.reset()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### updateQueue - Error ###', function (t) {
+  const model = server.getModel('queue')
+
+  const doc = {
+    maxSize: 120
+  }
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'updateQueue',
+    (model, id, doc, callback) => {
+      callback(errorMessage)
+    }
+  )
+
+  twilioAPI.updateQueue(model, '', doc, cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  twilioSDKStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### deleteById - Success ###', function (t) {
+  const model = server.getModel('address')
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'deleteById',
+    (model, id, callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+
+  twilioAPI.deleteById(model, '', cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(transformToModelStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  twilioSDKStub.restore()
+  transformToModelStub.reset()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### deleteById - Error ###', function (t) {
+  const model = server.getModel('address')
+
+  const twilioSDKStub = sinon.stub(
+    sdkFacade,
+    'deleteById',
+    (model, id, callback) => {
+      callback(errorMessage)
+    }
+  )
+
+  twilioAPI.deleteById(model, '', cbSpy)
+  t.ok(twilioSDKStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  twilioSDKStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})

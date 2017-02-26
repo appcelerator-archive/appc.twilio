@@ -1,9 +1,6 @@
-const twilio = require('twilio')
 const pluralize = require('pluralize')
 
 module.exports = function (config, sdkFacade, transformer) {
-  const client = new twilio.RestClient(config.sid, config.auth_token)
-
   return {
     createCall: createCall,
     createAddress: createAddress,
@@ -65,50 +62,19 @@ module.exports = function (config, sdkFacade, transformer) {
   }
 
   function updateAddress (Model, id, doc, callback) {
-    client.addresses(id).post(doc, function (err, address) {
-      if (err) {
-        callback(new Error(err.message))
-      }
-      // TODO check this out - upsert
-      Model.instance(address, true)
-      callback(null, [])
-    })
+    sdkFacade.updateAddress(Model, id, doc, throwErrorOrTransformToModel.bind(null, Model, callback))
   }
 
   function updateOutgoingCallerId (Model, id, doc, callback) {
-    client.outgoingCallerIds(id).post({
-      friendlyName: doc
-    }, function (err, callerId) {
-      if (err) {
-        callback(new Error(err.message))
-      }
-      callback(null, [])
-    })
+    sdkFacade.updateOutgoingCallerId(Model, id, doc, throwErrorOrTransformToModel.bind(null, Model, callback))
   }
 
   function updateQueue (Model, id, doc, callback) {
-    client.queues(id).update(doc, function (err, queue) {
-      if (err) {
-        callback(new Error(err.message))
-      }
-
-      callback(null, [])
-    })
+    sdkFacade.updateQueue(Model, id, doc, throwErrorOrTransformToModel.bind(null, Model, callback))
   }
 
   function deleteById (Model, id, callback) {
-    const key = pluralize(Model.name)
-
-    if (!id) {
-      callback(new Error('Missing required parameter "id"'))
-    }
-    client[key](id).delete(function (err, data) {
-      if (err) {
-        callback(new Error(err.message))
-      }
-
-      callback(null, data)
-    })
+    sdkFacade.deleteById(Model, id, throwErrorOrTransformToModel.bind(null, Model, callback))
   }
 
   function throwErrorOrTransformToCollection (Model, callback, err, data) {
