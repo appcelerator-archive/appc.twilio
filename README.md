@@ -25,17 +25,23 @@ Set the configuration object in your ``conf/default.js`` file :
 You need to set the following configuration properties:
 ```sh
     connectors: {
-		'appc.twilio': {
-			sid: '<youtTwilioAccountSID>',
-			auth_token: '<yourTwilioAuthToken>',
-			twilio_number: '<yourTwilioPhoneNumber>',
-			modelAutogen: true
-		}
+      'appc.twilio': {
+        sid: '<youtTwilioAccountSID>',
+        auth_token: '<yourTwilioAuthToken>',
+        twilio_number: '<yourTwilioPhoneNumber>',
+        modelAutogen: true,
+        twilioWelcomeVoiceURL: 'https://demo.twilio.com/welcome/voice',
+        outgoing_caller_data: {
+          to: '<THE RECEIVING PHONE NUMBER>'
+        }
+      }
     }
 ```
 - **sid** - Your Twilio account sid
 - **auth_token** - Your Twilio account auth_token
 - **twilio_number** - Your Twilio phone number
+- **twilioWelcomeVoiceURL** - Default voice message url
+- **outgoing_caller_data.to** - Receiving phone number. Needed for integration test suite only.
 
 ## 3. Development
 > This section is for individuals developing the Twilio Connector and not intended
