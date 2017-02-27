@@ -19,18 +19,18 @@ module.exports = function (config, sdkFacade, transformer) {
   }
 
   function findAll (Model, callback) {
-    const key = pluralize(Model.name)
-    sdkFacade.find.all(key, throwErrorOrTransformToCollection.bind(null, Model, callback))
+    const modelName = pluralize(Model.name)
+    sdkFacade.find.all(modelName, throwErrorOrTransformToCollection.bind(null, Model, callback))
   }
 
   function findByID (Model, id, callback) {
-    const key = pluralize(Model.name)
-    sdkFacade.find.byId(key, id, throwErrorOrTransformToModel.bind(null, Model, callback))
+    const modelName = pluralize(Model.name)
+    sdkFacade.find.byId(modelName, id, throwErrorOrTransformToModel.bind(null, Model, callback))
   }
 
   function query (Model, options, callback) {
-    const key = pluralize(Model.name)
-    sdkFacade.query(key, throwErrorOrTransformToCollection.bind(null, Model, callback))
+    const modelName = pluralize(Model.name)
+    sdkFacade.query(modelName, throwErrorOrTransformToCollection.bind(null, Model, callback))
   }
 
   function createCall (Model, values, number, callback) {
@@ -62,19 +62,20 @@ module.exports = function (config, sdkFacade, transformer) {
   }
 
   function updateAddress (Model, id, doc, callback) {
-    sdkFacade.updateAddress(Model, id, doc, throwErrorOrTransformToModel.bind(null, Model, callback))
+    sdkFacade.updateAddress(id, doc, throwErrorOrTransformToModel.bind(null, Model, callback))
   }
 
   function updateOutgoingCallerId (Model, id, doc, callback) {
-    sdkFacade.updateOutgoingCallerId(Model, id, doc, throwErrorOrTransformToModel.bind(null, Model, callback))
+    sdkFacade.updateOutgoingCallerId(id, doc, throwErrorOrTransformToModel.bind(null, Model, callback))
   }
 
   function updateQueue (Model, id, doc, callback) {
-    sdkFacade.updateQueue(Model, id, doc, throwErrorOrTransformToModel.bind(null, Model, callback))
+    sdkFacade.updateQueue(id, doc, throwErrorOrTransformToModel.bind(null, Model, callback))
   }
 
   function deleteById (Model, id, callback) {
-    sdkFacade.deleteById(Model, id, throwErrorOrTransformToModel.bind(null, Model, callback))
+    const modelName = pluralize(Model.name)
+    sdkFacade.deleteById(modelName, id, throwErrorOrContinue.bind(null, callback))
   }
 
   function throwErrorOrTransformToCollection (Model, callback, err, data) {
@@ -90,6 +91,14 @@ module.exports = function (config, sdkFacade, transformer) {
       callback(err)
     } else {
       callback(null, transformer.transformToModel(Model, data))
+    }
+  }
+
+  function throwErrorOrContinue (callback, err, data) {
+    if (err) {
+      callback(err)
+    } else {
+      callback(null, data)
     }
   }
 }

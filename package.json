@@ -33,13 +33,14 @@
   "scripts": {
     "start": "appc run",
     "test": "npm run lint && npm run test:unit",
-    "test:unit": "tap test/unit/**/*.js --color --bail --cov",
-    "test:lifecycle": "tap test/unit/lifecycle/*.js --color --bail --cov",
-    "test:integration": "tap test/integration/*.js --color --bail --cov",
-    "test:integration:lifecycle": "tap test/integration/lifecycle/*.js --color --bail --cov",
+    "test:unit": "tap test/unit/*.js test/unit/lifecycle/*.js --color --bail --cov",
+    "test:integration": "tap test/integration/*.js test/integration/lifecycle/*.js --color --bail --cov",
     "lint": "standard | snazzy",
     "lint-fix": "standard --fix | snazzy",
     "precommit": "npm run lint",
+
+    "test:unit:lifecycle": "tap test/unit/lifecycle/*.js --color --bail --cov",
+    "test:integration:lifecycle": "tap test/integration/lifecycle/*.js --color --bail --cov",    
     "standalone": "tap test/unit/*.js --color --bail --cov"
   },
   "standard": {

@@ -37,7 +37,7 @@ test('### validateId ###', function (t) {
   t.end()
 })
 
-test('### validateError - Success ###', function (t) {
+test('### validateId - Success ###', function (t) {
   validator.id('call', cbSpy)
 
   t.ok(cbSpy.notCalled)

@@ -22,30 +22,23 @@ module.exports = function (config) {
     }
   }
 
-  function findAll (model, callback) {
-    validate.model(model, callback)
-    // validateModel(model, callback)
-    client[model].list(throwOrRespondWithData.bind(null, model, callback))
+  function findAll (modelName, callback) {
+    validate.model(modelName, callback)
+    client[modelName].list(throwOrRespondWithData.bind(null, modelName, callback))
   }
 
-  function findByID (model, id, callback) {
-    validate.model(model, callback)
+  function findByID (modelName, id, callback) {
+    validate.model(modelName, callback)
     validate.id(id, callback)
-    // validateModel(model, callback)
-    // validateId(id, callback)
-    client[model](id).get(throwOrRespondWithData.bind(null, model, callback))
+    client[modelName](id).get(throwOrRespondWithData.bind(null, modelName, callback))
   }
 
-  function query (model, criteria, callback) {
-    // TODO: test how it behaves when criteria is undefined
-    // validateModel(model, callback)
-    validate.model(model, callback)
-    client[model].list(criteria, throwOrRespondWithData.bind(null, model, callback))
+  function query (modelName, criteria, callback) {
+    validate.model(modelName, callback)
+    client[modelName].list(criteria, throwOrRespondWithData.bind(null, modelName, callback))
   }
 
   function createCall (payload, callback) {
-    // validateToNumber(payload.to)
-    // validateFromNumber(payload.from)
     validate.numberTo(payload.to, callback)
     validate.numberFrom(payload.from, callback)
     client.makeCall(payload, throwOrRespondWithData.bind(null, null, callback))
@@ -56,9 +49,6 @@ module.exports = function (config) {
   }
 
   function createMessage (payload, callback) {
-    // validateToNumber(payload.to)
-    // validateFromNumber(payload.from)
-    // validateMessageBody(payload.body)
     validate.numberTo(payload.to, callback)
     validate.numberFrom(payload.from, callback)
     validate.messageBody(payload.body, callback)
@@ -74,13 +64,11 @@ module.exports = function (config) {
   }
 
   function updateAddress (id, payload, callback) {
-    // validateId(id, callback)
     validate.id(id, callback)
     client.addresses(id).post(payload, throwOrRespondWithData.bind(null, null, callback))
   }
 
   function updateOutgoingCallerId (id, payload, callback) {
-    // validateId(id, callback)
     validate.id(id, callback)
     client.outgoingCallerIds(id).post(payload, throwOrRespondWithData.bind(null, null, callback))
   }
@@ -89,49 +77,18 @@ module.exports = function (config) {
     client.queues(id).update(payload, throwOrRespondWithData.bind(null, null, callback))
   }
 
-  function deleteById (model, id, callback) {
-    // validateId(id, callback)
+  function deleteById (modelName, id, callback) {
     validate.id(id, callback)
-    client[model](id).delete(throwOrRespondWithData.bind(null, model, callback))
+    client[modelName](id).delete(throwOrRespondWithData.bind(null, modelName, callback))
   }
 }
 
-// function validateId (id, callback) {
-//   if (!id) {
-//     callback(new Error('Missing required parameter "id"'))
-//   }
-// }
-
-// function validateModel (model, callback) {
-//   if (!model) {
-//     callback(new Error('Missing required parameter "model"'))
-//   }
-// }
-
-// function validateToNumber (toNumber, callback) {
-//   if (!toNumber) {
-//     callback(new Error('Required parameters "toNumber" must be passed to make a call'))
-//   }
-// }
-
-// function validateFromNumber (fromNumber, callback) {
-//   if (!fromNumber) {
-//     callback(new Error('Required parameters "fromNumber" must be passed to make a call'))
-//   }
-// }
-
-// function validateMessageBody (messageBody, callback) {
-//   if (!messageBody) {
-//     callback(new Error('Required parameters "messageBody" must be passed to send message'))
-//   }
-// }
-
-function throwOrRespondWithData (model, callback, err, data) {
+function throwOrRespondWithData (modelName, callback, err, data) {
   if (err) {
     callback(err)
   } else {
-    if (model) {
-      callback(null, data[model])
+    if (modelName && data && data[modelName]) {
+      callback(null, data[modelName])
     } else {
       callback(null, data)
     }

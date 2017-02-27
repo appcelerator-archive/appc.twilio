@@ -442,7 +442,7 @@ test('### updateAddress - Success ###', function (t) {
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'updateAddress',
-    (model, id, doc, callback) => {
+    (id, doc, callback) => {
       callback(null, dataFromTwilio)
     }
   )
@@ -470,7 +470,7 @@ test('### updateAddress - Error ###', function (t) {
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'updateAddress',
-    (model, id, doc, callback) => {
+    (id, doc, callback) => {
       callback(errorMessage)
     }
   )
@@ -496,7 +496,7 @@ test('### updateOutgoingCallerId - Success ###', function (t) {
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'updateOutgoingCallerId',
-    (model, id, doc, callback) => {
+    (id, doc, callback) => {
       callback(null, dataFromTwilio)
     }
   )
@@ -524,7 +524,7 @@ test('### updateOutgoingCallerId - Error ###', function (t) {
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'updateOutgoingCallerId',
-    (model, id, doc, callback) => {
+    (id, doc, callback) => {
       callback(errorMessage)
     }
   )
@@ -550,7 +550,7 @@ test('### updateQueue - Success ###', function (t) {
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'updateQueue',
-    (model, id, doc, callback) => {
+    (id, doc, callback) => {
       callback(null, dataFromTwilio)
     }
   )
@@ -578,7 +578,7 @@ test('### updateQueue - Error ###', function (t) {
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'updateQueue',
-    (model, id, doc, callback) => {
+    (id, doc, callback) => {
       callback(errorMessage)
     }
   )
@@ -607,12 +607,10 @@ test('### deleteById - Success ###', function (t) {
 
   twilioAPI.deleteById(model, '', cbSpy)
   t.ok(twilioSDKStub.calledOnce)
-  t.ok(transformToModelStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   twilioSDKStub.restore()
-  transformToModelStub.reset()
   cbSpy.reset()
 
   t.end()
