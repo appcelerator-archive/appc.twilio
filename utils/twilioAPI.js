@@ -30,7 +30,7 @@ module.exports = function (config, sdkFacade, transformer) {
 
   function query (Model, options, callback) {
     const modelName = pluralize(Model.name)
-    sdkFacade.query(modelName, throwErrorOrTransformToCollection.bind(null, Model, callback))
+    sdkFacade.query(modelName, options.where, throwErrorOrTransformToCollection.bind(null, Model, callback))
   }
 
   function createCall (Model, values, number, callback) {

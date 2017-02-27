@@ -391,7 +391,7 @@ test('### query - Success ####', function (t) {
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'query',
-    (model, callback) => {
+    (model, criteria, callback) => {
       callback(null, dataFromTwilio)
     }
   )
@@ -416,7 +416,7 @@ test('### query - Error ####', function (t) {
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'query',
-    (model, callback) => {
+    (model, criteria, callback) => {
       callback(errorMessage)
     }
   )

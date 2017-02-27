@@ -142,7 +142,7 @@ test('### createQueue ###', function (t) {
     friendlyName: `Queue_${Math.floor(Math.random() * 100000)}`
   }
 
-  twilioAPI.createQueue(model, values, configNumber, (err, resp) => {
+  twilioAPI.createQueue(model, values, (err, resp) => {
     t.notOk(err, 'should not display error')
     t.ok(resp, 'should receive response')
     t.ok(resp.sid, 'SID has been assigned')

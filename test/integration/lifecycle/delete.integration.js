@@ -19,7 +19,7 @@ test('Should get last call id to delete it', t => {
   const modelName = 'call'
 
   REQUESTER.getData({ model: modelName }, (response, body) => {
-    ID = body.calls[1].sid
+    ID = body.calls[body.calls.length - 1].sid
     t.ok(body.success)
     t.end()
   })
