@@ -1,4 +1,5 @@
 const twilio = require('twilio')
+const validate = require('./validator').validate
 
 module.exports = function (config) {
   const client = new twilio.RestClient(config.sid, config.auth_token)
@@ -22,25 +23,31 @@ module.exports = function (config) {
   }
 
   function findAll (model, callback) {
-    validateModel(model, callback)
+    validate.model(model, callback)
+    // validateModel(model, callback)
     client[model].list(throwOrRespondWithData.bind(null, model, callback))
   }
 
   function findByID (model, id, callback) {
-    validateModel(model, callback)
-    validateId(id, callback)
+    validate.model(model, callback)
+    validate.id(id, callback)
+    // validateModel(model, callback)
+    // validateId(id, callback)
     client[model](id).get(throwOrRespondWithData.bind(null, model, callback))
   }
 
   function query (model, criteria, callback) {
     // TODO: test how it behaves when criteria is undefined
-    validateModel(model, callback)
+    // validateModel(model, callback)
+    validate.model(model, callback)
     client[model].list(criteria, throwOrRespondWithData.bind(null, model, callback))
   }
 
   function createCall (payload, callback) {
-    validateToNumber(payload.to)
-    validateFromNumber(payload.from)
+    // validateToNumber(payload.to)
+    // validateFromNumber(payload.from)
+    validate.numberTo(payload.to, callback)
+    validate.numberFrom(payload.from, callback)
     client.makeCall(payload, throwOrRespondWithData.bind(null, null, callback))
   }
 
@@ -49,9 +56,12 @@ module.exports = function (config) {
   }
 
   function createMessage (payload, callback) {
-    validateToNumber(payload.to)
-    validateFromNumber(payload.from)
-    validateMessageBody(payload.body)
+    // validateToNumber(payload.to)
+    // validateFromNumber(payload.from)
+    // validateMessageBody(payload.body)
+    validate.numberTo(payload.to, callback)
+    validate.numberFrom(payload.from, callback)
+    validate.messageBody(payload.body, callback)
     client.messages.create(payload, throwOrRespondWithData.bind(null, null, callback))
   }
 
@@ -64,12 +74,14 @@ module.exports = function (config) {
   }
 
   function updateAddress (id, payload, callback) {
-    validateId(id, callback)
+    // validateId(id, callback)
+    validate.id(id, callback)
     client.addresses(id).post(payload, throwOrRespondWithData.bind(null, null, callback))
   }
 
   function updateOutgoingCallerId (id, payload, callback) {
-    validateId(id, callback)
+    // validateId(id, callback)
+    validate.id(id, callback)
     client.outgoingCallerIds(id).post(payload, throwOrRespondWithData.bind(null, null, callback))
   }
 
@@ -78,40 +90,41 @@ module.exports = function (config) {
   }
 
   function deleteById (model, id, callback) {
-    validateId(id, callback)
+    // validateId(id, callback)
+    validate.id(id, callback)
     client[model](id).delete(throwOrRespondWithData.bind(null, model, callback))
   }
 }
 
-function validateId (id, callback) {
-  if (!id) {
-    callback(new Error('Missing required parameter "id"'))
-  }
-}
+// function validateId (id, callback) {
+//   if (!id) {
+//     callback(new Error('Missing required parameter "id"'))
+//   }
+// }
 
-function validateModel (model, callback) {
-  if (!model) {
-    callback(new Error('Missing required parameter "model"'))
-  }
-}
+// function validateModel (model, callback) {
+//   if (!model) {
+//     callback(new Error('Missing required parameter "model"'))
+//   }
+// }
 
-function validateToNumber (toNumber, callback) {
-  if (!toNumber) {
-    callback(new Error('Required parameters "toNumber" must be passed to make a call'))
-  }
-}
+// function validateToNumber (toNumber, callback) {
+//   if (!toNumber) {
+//     callback(new Error('Required parameters "toNumber" must be passed to make a call'))
+//   }
+// }
 
-function validateFromNumber (fromNumber, callback) {
-  if (!fromNumber) {
-    callback(new Error('Required parameters "fromNumber" must be passed to make a call'))
-  }
-}
+// function validateFromNumber (fromNumber, callback) {
+//   if (!fromNumber) {
+//     callback(new Error('Required parameters "fromNumber" must be passed to make a call'))
+//   }
+// }
 
-function validateMessageBody (messageBody, callback) {
-  if (!messageBody) {
-    callback(new Error('Required parameters "messageBody" must be passed to send message'))
-  }
-}
+// function validateMessageBody (messageBody, callback) {
+//   if (!messageBody) {
+//     callback(new Error('Required parameters "messageBody" must be passed to send message'))
+//   }
+// }
 
 function throwOrRespondWithData (model, callback, err, data) {
   if (err) {
