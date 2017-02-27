@@ -203,52 +203,6 @@ test('Create Queue Success Case', function (t) {
   t.end()
 })
 
-test('Create OutgoingCalledId Error Case', function (t) {
-  const Model = server.getModel('outgoingCallerId')
-  const errorMessage = 'Error'
-  function cbError (errorMessage) { }
-  const cbErrorSpy = sinon.spy(cbError)
-
-  const twilioAPICreateOutgoingCallerIdStub = sinon.stub(
-    twilioAPI,
-    'createOutgoingCallerId',
-    (Model, values, number, callback) => {
-      callback(errorMessage)
-    }
-  )
-
-  createMethod.bind(connector, Model, {}, cbErrorSpy)()
-  t.ok(twilioAPICreateOutgoingCallerIdStub.calledOnce)
-  t.ok(cbErrorSpy.calledOnce)
-  t.ok(cbErrorSpy.calledWith(errorMessage))
-
-  twilioAPICreateOutgoingCallerIdStub.restore()
-  t.end()
-})
-
-test('Create OutgoingCalledId Success Case', function (t) {
-  const Model = server.getModel('outgoingCallerId')
-  const data = 'Correct Data'
-  function cbOk (errorMessage, data) { }
-  const cbOkSpy = sinon.spy(cbOk)
-
-  const twilioAPICreateOutgoingCallerIdStub = sinon.stub(
-    twilioAPI,
-    'createOutgoingCallerId',
-    (Model, values, number, callback) => {
-      callback(null, data)
-    }
-  )
-
-  createMethod.bind(connector, Model, {}, cbOkSpy)()
-  t.ok(twilioAPICreateOutgoingCallerIdStub.calledOnce)
-  t.ok(cbOkSpy.calledOnce)
-  t.ok(cbOkSpy.calledWith(null, data))
-
-  twilioAPICreateOutgoingCallerIdStub.restore()
-  t.end()
-})
-
 test('Create Account Error Case', function (t) {
   const Model = server.getModel('account')
   const errorMessage = 'Error'
