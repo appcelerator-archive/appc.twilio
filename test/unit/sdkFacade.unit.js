@@ -1,6 +1,8 @@
 const test = require('tap').test
-const { server } = require('../utils/server').startPlainArrow()
-const config = server.config.connectors['appc.twilio']
+const config = {
+  sid: '123456789012345678901234567890112345',
+  auth_token: '123456789012345678901234567890112345'
+}
 const sinon = require('sinon')
 const sdkFacade = require('./../../utils/sdkFacade')(config)
 const client = sdkFacade.client

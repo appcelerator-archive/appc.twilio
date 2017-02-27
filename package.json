@@ -28,7 +28,7 @@
     "snazzy": "^6.0.0",
     "standard": "^8.6.0",
     "tap": "^10.1.0",
-    "twilio": "^2.11.1"
+    "twilio": "2.11.1"
   },
   "scripts": {
     "start": "appc run",

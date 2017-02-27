@@ -1,7 +1,9 @@
 const test = require('tap').test
 const { server } = require('../utils/server').startPlainArrow()
-const config = server.config.connectors['appc.twilio']
-const configNumber = config.twilio_number
+const config = {
+  sid: '123456789012345678901234567890112345',
+  auth_token: '123456789012345678901234567890112345'
+}
 const sinon = require('sinon')
 const sdkFacade = require('./../../utils/sdkFacade')(config)
 const transformer = require('./../../utils/transformer')
@@ -36,7 +38,7 @@ test('### createCall - Success ###', function (t) {
     }
   )
 
-  twilioAPI.createCall(model, config.outgoing_caller_data, configNumber, cbSpy)
+  twilioAPI.createCall(model, {}, 'configNumber', cbSpy)
 
   t.ok(twilioSDKStub.calledOnce)
   t.ok(transformToModelStub.calledOnce)
@@ -60,7 +62,7 @@ test('### createCall - Error ###', function (t) {
     }
   )
 
-  twilioAPI.createCall(model, config.outgoing_caller_data, configNumber, cbSpy)
+  twilioAPI.createCall(model, 'numberTo', 'configNumber', cbSpy)
 
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -81,11 +83,11 @@ test('### createMessage - Success ###', function (t) {
     }
   )
   const smsValues = {
-    to: config.outgoing_caller_data,
+    to: 'yourNumber',
     body: 'trial'
   }
 
-  twilioAPI.createMessage(model, smsValues, configNumber, cbSpy)
+  twilioAPI.createMessage(model, smsValues, 'configNumber', cbSpy)
 
   t.ok(twilioSDKStub.calledOnce)
   t.ok(transformToModelStub.calledOnce)
@@ -109,11 +111,11 @@ test('### createMessage - Error ###', function (t) {
     }
   )
   const smsValues = {
-    to: config.outgoing_caller_data,
+    to: 'number',
     body: 'trial'
   }
 
-  twilioAPI.createMessage(model, smsValues, configNumber, cbSpy)
+  twilioAPI.createMessage(model, smsValues, 'configNumber', cbSpy)
 
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
