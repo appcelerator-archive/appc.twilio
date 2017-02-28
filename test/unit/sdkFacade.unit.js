@@ -178,3 +178,87 @@ test('### createAccount - Error ###', function (t) {
 
   t.end()
 })
+
+test('### Query - Error ###', function (t) {
+  const facadeStub = sinon.stub(
+    client.calls,
+    'list',
+    (criteria, callback) => {
+      callback(errorMessage)
+    }
+  )
+
+  sdkFacade.query('calls', { friendlyName: 'name' }, cbSpy)
+
+  t.ok(facadeStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### Query - Success ###', function (t) {
+  const facadeStub = sinon.stub(
+    client.calls,
+    'list',
+    (criteria, callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+
+  sdkFacade.query('calls', { friendlyName: 'name' }, cbSpy)
+
+  t.ok(facadeStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### FindAll - Success ###', function (t) {
+  const facadeStub = sinon.stub(
+    client.calls,
+    'list',
+    (callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+
+  sdkFacade.find.all('calls', cbSpy)
+
+  t.ok(facadeStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### FindAll - Error ###', function (t) {
+  const facadeStub = sinon.stub(
+    client.calls,
+    'list',
+    (callback) => {
+      callback(errorMessage)
+    }
+  )
+
+  sdkFacade.find.all('calls', cbSpy)
+
+  t.ok(facadeStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
