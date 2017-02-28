@@ -4,7 +4,7 @@ const config = {
   auth_token: '123456789012345678901234567890112345'
 }
 const sinon = require('sinon')
-const sdkFacade = require('./../../utils/sdkFacade')(config)
+const sdkFacade = require('../../utils/sdkFacade')(config)
 const client = sdkFacade.client
 function cb (errorMessage, data) { }
 const cbSpy = sinon.spy(cb)

@@ -1,7 +1,7 @@
 const test = require('tap').test
-const { server } = require('../utils/server').startPlainArrow()
-const transformer = require('./../../utils/transformer')
-const mockedData = require('./../data/mockData').calls
+const server = require('../utils/server').startPlainArrow().server
+const transformer = require('../../utils/transformer')
+const mockedData = require('../data/mockData').calls
 
 test('### transformToCollection', function (t) {
   const model = server.getModel('call')

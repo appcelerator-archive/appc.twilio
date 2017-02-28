@@ -1,13 +1,13 @@
 const test = require('tap').test
-const { server } = require('../utils/server').startPlainArrow()
+const server = require('../utils/server').startPlainArrow().server
 const config = {
   sid: '123456789012345678901234567890112345',
   auth_token: '123456789012345678901234567890112345'
 }
 const sinon = require('sinon')
-const sdkFacade = require('./../../utils/sdkFacade')(config)
-const transformer = require('./../../utils/transformer')
-const twilioAPI = require('./../../utils/twilioAPI')(config, sdkFacade, transformer)
+const sdkFacade = require('../../utils/sdkFacade')(config)
+const transformer = require('../../utils/transformer')
+const twilioAPI = require('../../utils/twilioAPI')(config, sdkFacade, transformer)
 
 function cb (errorMessage, data) { }
 const cbSpy = sinon.spy(cb)

@@ -1,5 +1,5 @@
 const test = require('tap').test
-const { server } = require('../utils/server').startPlainArrow()
+const server = require('../utils/server').startPlainArrow().server
 const config = server.config.connectors['appc.twilio']
 const configNumber = config.twilio_number
 const outgoingCallerData = config.outgoing_caller_data
