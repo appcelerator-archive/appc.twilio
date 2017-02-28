@@ -1,6 +1,14 @@
 {
-	"type":"connector",
-	"group":"arrow",
-	"dependencies": {
-	}
+	"type": "connector",
+	"group": "arrow",
+	"access": "public",
+	"owners": [
+		"tpopov@axway.com",
+		"vchobanov@axway.com",
+		"ptodorov@axway.com"
+	],
+	"assets": {
+		"small_logo": "docs/twilio_logo.png"
+	},
+	"dependencies": {}
 }

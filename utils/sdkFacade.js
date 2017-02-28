@@ -24,7 +24,7 @@ module.exports = function (config) {
 
   function findAll (modelName, callback) {
     validate.model(modelName, callback)
-    client[modelName].list(throwOrRespondWithData.bind(null, modelName, callback))
+    client[modelName].list({ 'PageSize': '1000' }, throwOrRespondWithData.bind(null, modelName, callback))
   }
 
   function findByID (modelName, id, callback) {
