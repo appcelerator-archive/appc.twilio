@@ -1,5 +1,5 @@
 const test = require('tap').test
-const { server } = require('../utils/server').startPlainArrow()
+const server = require('../utils/server').startPlainArrow().server
 
 /**
  * Twilio documentation - https://www.twilio.com/docs/api/rest/call

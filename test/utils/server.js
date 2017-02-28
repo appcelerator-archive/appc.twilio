@@ -4,7 +4,7 @@ module.exports = {
    * This one expose Arrow http server based on Express
    */
   startHTTPArrow: function (config, callback) {
-    const { server } = this.startPlainArrow(config)
+    const server = this.startPlainArrow(config).server
     server.start(function () {
       callback(server)
     })
@@ -15,7 +15,7 @@ module.exports = {
   startPlainArrow: function (config) {
     const server = new Arrow(config)
     const connector = server.getConnector('appc.twilio')
-    return { server, connector }
+    return { server: server, connector: connector }
   }
 
   // TODO add connector.connect

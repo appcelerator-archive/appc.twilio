@@ -1,5 +1,6 @@
 const test = require('tap').test
-const { server, connector } = require('./../../utils/server').startPlainArrow()
+const server = require('../../utils/server').startPlainArrow().server
+const connector = require('../../utils/server').startPlainArrow().connector
 const findByIdMethod = require('../../../lib/methods/findByID')['findByID']
 const twilioAPI = require('../../../utils/twilioAPI')(connector.config)
 const sinon = require('sinon')
