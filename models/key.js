@@ -1,6 +1,6 @@
-var Arrow = require('arrow')
+const Arrow = require('arrow')
 
-module.exports = Arrow.createModel('key', {
+const Key = Arrow.createModel('key', {
   fields: {
     dateUpdated: { type: String, description: 'The date-time this API Key was most recently updated, given as a UTC ISO 8601 Timestamp.' },
     dateCreated: { type: String, description: 'The date-time this API Key was created, given as a UTC ISO 8601 Timestamp.' },
@@ -9,3 +9,5 @@ module.exports = Arrow.createModel('key', {
   },
   connector: 'appc.twilio'
 })
+
+module.exports = Key

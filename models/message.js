@@ -1,6 +1,6 @@
-var Arrow = require('arrow')
+const Arrow = require('arrow')
 
-module.exports = Arrow.createModel('message', {
+const Message = Arrow.createModel('message', {
   fields: {
     sid: { type: String, description: 'A 34 character string that uniquely identifies this resource.' },
     dateCreated: { type: String, description: 'The date that this resource was created, given in RFC 2822 format.' },
@@ -26,3 +26,5 @@ module.exports = Arrow.createModel('message', {
   connector: 'appc.twilio',
   actions: ['create', 'read', 'delete']
 })
+
+module.exports = Message

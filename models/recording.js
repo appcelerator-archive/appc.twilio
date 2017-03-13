@@ -1,6 +1,6 @@
-var Arrow = require('arrow')
+const Arrow = require('arrow')
 
-module.exports = Arrow.createModel('recording', {
+const Recording = Arrow.createModel('recording', {
   fields: {
     accountSid: { type: String, description: 'The unique id of the Account responsible for this recording.' },
     apiVersion: { type: String, description: 'The version of the API in use during the recording.' },
@@ -19,3 +19,5 @@ module.exports = Arrow.createModel('recording', {
   connector: 'appc.twilio',
   actions: ['read']
 })
+
+module.exports = Recording

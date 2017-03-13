@@ -1,6 +1,6 @@
-var Arrow = require('arrow')
+const Arrow = require('arrow')
 
-module.exports = Arrow.createModel('queue', {
+const Queue = Arrow.createModel('queue', {
   fields: {
     sid: { type: String, description: 'A 34 character string that uniquely identifies this queue.' },
     friendlyName: { type: String, required: true, description: 'A user-provided string that identifies this queue.' },
@@ -13,3 +13,5 @@ module.exports = Arrow.createModel('queue', {
   },
   connector: 'appc.twilio'
 })
+
+module.exports = Queue

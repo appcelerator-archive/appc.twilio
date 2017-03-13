@@ -1,6 +1,6 @@
-var Arrow = require('arrow')
+const Arrow = require('arrow')
 
-module.exports = Arrow.createModel('address', {
+const Address = Arrow.createModel('address', {
   fields: {
     sid: { type: String, description: 'A 34 character string that uniquely identifies this address.' },
     accountSid: { type: String, description: 'The unique id of the Account responsible for this address.' },
@@ -14,3 +14,5 @@ module.exports = Arrow.createModel('address', {
   },
   connector: 'appc.twilio'
 })
+
+module.exports = Address

@@ -1,6 +1,6 @@
-var Arrow = require('arrow')
+const Arrow = require('arrow')
 
-module.exports = Arrow.createModel('outgoingCallerId', {
+const OutgoingCallerId = Arrow.createModel('outgoingCallerId', {
   fields: {
     sid: { type: String, description: 'A 34 character string that uniquely identifies this resource.' },
     accountSid: { type: String, description: 'The unique id of the Account responsible for this Caller Id.' },
@@ -13,3 +13,5 @@ module.exports = Arrow.createModel('outgoingCallerId', {
   connector: 'appc.twilio',
   actions: ['read', 'create', 'update', 'delete']
 })
+
+module.exports = OutgoingCallerId
