@@ -1,7 +1,7 @@
 {
 	"type": "connector",
 	"group": "arrow",
-	"access": "public",
+	"access": "private",
 	"owners": [
 		"tpopov@axway.com",
 		"vchobanov@axway.com",
