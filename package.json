@@ -16,14 +16,13 @@
   "private": true,
   "dependencies": {
     "semver": "^5.0.3",
-    "twilio": "2.11.1"
+    "twilio": "2.11.1",
+    "pluralize": "^3.1.0"
   },
   "devDependencies": {
     "arrow": "^*",
-    "cross-env": "^3.1.4",
     "husky": "^0.13.1",
-    "nyc": "^10.1.2",
-    "pluralize": "^3.1.0",
+    "nyc": "^10.1.2",    
     "request": "^2.79.0",
     "sinon": "^1.17.7",
     "snazzy": "^6.0.0",
