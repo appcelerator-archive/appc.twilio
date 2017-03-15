@@ -1,14 +1,22 @@
 const test = require('tap').test
-const server = require('../../utils/server').startPlainArrow().server
-const connector = require('../../utils/server').startPlainArrow().connector
+const utils = require('../../utils/serverUtils')()
+const server = utils.startPlainArrow()
+const connector = server.getConnector('appc.twilio')
 const createMethod = require('../../../lib/methods/create').create
-const twilioAPI = require('../../../utils/twilioAPI')(connector.config)
+const twilioAPI = require('../../../src/twilioAPI')(connector.config)
 const sinon = require('sinon')
-connector.twilioAPI = twilioAPI
+
+test('connect', (t) => {
+  connector.connect(err => {
+    connector.twilioAPI = twilioAPI
+    t.notOk(err)
+    t.end()
+  })
+})
 
 test('Create Call Error Case', function (t) {
   // DATA STUFF
-  const Model = server.getModel('call')
+  const Model = utils.get().call
   const errorMessage = 'My error'
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)
@@ -38,7 +46,7 @@ test('Create Call Error Case', function (t) {
 
 test('Create Call Success Case', function (t) {
   // DATA STUFF
-  const Model = server.getModel('call')
+  const Model = utils.get().call
   const data = 'MyData'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
@@ -65,7 +73,7 @@ test('Create Call Success Case', function (t) {
 })
 
 test('Create Message Error Case', function (t) {
-  const Model = server.getModel('message')
+  const Model = utils.get().message
   const errorMessage = 'My error'
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)
@@ -89,7 +97,7 @@ test('Create Message Error Case', function (t) {
 })
 
 test('Create Message Success Case', function (t) {
-  const Model = server.getModel('message')
+  const Model = utils.get().message
   const data = 'Message'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
@@ -113,7 +121,7 @@ test('Create Message Success Case', function (t) {
 })
 
 test('Create Address Error Case', function (t) {
-  const Model = server.getModel('address')
+  const Model = utils.get().address
   const errorMessage = 'Error'
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)
@@ -136,7 +144,7 @@ test('Create Address Error Case', function (t) {
 })
 
 test('Create Address Success Case', function (t) {
-  const Model = server.getModel('address')
+  const Model = utils.get().address
   const data = 'Correct Data'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
@@ -159,7 +167,7 @@ test('Create Address Success Case', function (t) {
 })
 
 test('Create Queue Error Case', function (t) {
-  const Model = server.getModel('queue')
+  const Model = utils.get().queue
   const errorMessage = 'Error'
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)
@@ -182,7 +190,7 @@ test('Create Queue Error Case', function (t) {
 })
 
 test('Create Queue Success Case', function (t) {
-  const Model = server.getModel('queue')
+  const Model = utils.get().queue
   const data = 'Correct Data'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
@@ -205,7 +213,7 @@ test('Create Queue Success Case', function (t) {
 })
 
 test('Create Account Error Case', function (t) {
-  const Model = server.getModel('account')
+  const Model = utils.get().account
   const errorMessage = 'Error'
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)
@@ -228,7 +236,7 @@ test('Create Account Error Case', function (t) {
 })
 
 test('Create Account Success Case', function (t) {
-  const Model = server.getModel('account')
+  const Model = utils.get().account
   const data = 'Correct Data'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
@@ -252,7 +260,7 @@ test('Create Account Success Case', function (t) {
 
 test('Create With Invalid Model', function (t) {
   // To invoke the default clause in create.js we pass an invalid model name
-  const Model = 'invalid'
+  const Model = {name: 'appc.twilio/invalid'}
   const errorMessage = new Error()
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)

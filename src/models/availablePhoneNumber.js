@@ -1,7 +1,7 @@
 const Arrow = require('arrow')
 
 module.exports = (connectorName, modelName) => {
-  Arrow.createModel(modelName, {
+  return Arrow.createModel(modelName, {
     fields: {
       friendlyName: { type: String, description: 'A nicely-formatted version of the phone number.' },
       phoneNumber: { type: String, description: 'The phone number, in E.164 (i.e. "+1") format.' },

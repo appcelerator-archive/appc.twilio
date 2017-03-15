@@ -40,7 +40,7 @@
 
     "test:unit:lifecycle": "tap test/unit/lifecycle/*.js --color --bail --cov",
     "test:integration:lifecycle": "tap test/integration/lifecycle/*.js --color --bail --cov",    
-    "standalone": "tap test/unit/transformer.unit.js --color --bail --cov"
+    "standalone": "tap test/unit/lifecycle/create.unit.js --color --bail --cov"
   },
   "standard": {
     "ignore": [

@@ -3,9 +3,9 @@ const server = require('../utils/server').startPlainArrow().server
 const config = server.config.connectors['appc.twilio']
 const configNumber = config.twilio_number
 const outgoingCallerData = config.outgoing_caller_data
-const sdkFacade = require('./../../utils/sdkFacade')(config)
-const transformer = require('./../../utils/transformer')
-const twilioAPI = require('./../../utils/twilioAPI')(config, sdkFacade, transformer)
+const sdkFacade = require('./../../src/sdkFacade')(config)
+const transformer = require('./../../src/transformer')
+const twilioAPI = require('./../../src/twilioAPI')(config, sdkFacade, transformer)
 
 var messageId
 var addressId

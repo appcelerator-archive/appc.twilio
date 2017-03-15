@@ -1,13 +1,21 @@
 const test = require('tap').test
-const server = require('../../utils/server').startPlainArrow().server
-const connector = require('../../utils/server').startPlainArrow().connector
+const utils = require('../../utils/serverUtils')()
+const server = utils.startPlainArrow()
+const connector = server.getConnector('appc.twilio')
 const findByIdMethod = require('../../../lib/methods/findByID')['findByID']
-const twilioAPI = require('../../../utils/twilioAPI')(connector.config)
+const twilioAPI = require('../../../src/twilioAPI')(connector.config)
 const sinon = require('sinon')
-connector.twilioAPI = twilioAPI
+
+test('connect', (t) => {
+  connector.connect(err => {
+    connector.twilioAPI = twilioAPI
+    t.notOk(err)
+    t.end()
+  })
+})
 
 test('### findById Call - Error Case ###', function (t) {
-  const Model = server.getModel('call')
+  const Model = utils.get().call
 
   const errorMessage = 'findById error'
   function cbError (errorMessage) { }
@@ -33,7 +41,7 @@ test('### findById Call - Error Case ###', function (t) {
 test('### findById Call - Ok Case ###', function (t) {
   connector.twilioAPI = twilioAPI
 
-  const Model = server.getModel('call')
+  const Model = utils.get().call
   const data = 'TestData'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)

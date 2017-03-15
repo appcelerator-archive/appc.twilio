@@ -1,7 +1,7 @@
 const Arrow = require('arrow')
 
 module.exports = (connectorName, modelName) => {
-  Arrow.createModel(modelName, {
+  return Arrow.createModel(modelName, {
     fields: {
       sid: { type: String, description: 'A 34 character string that uniquely identifies this queue.' },
       friendlyName: { type: String, required: true, description: 'A user-provided string that identifies this queue.' },

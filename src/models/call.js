@@ -1,7 +1,7 @@
 const Arrow = require('arrow')
 
 module.exports = (connectorName, modelName) => {
-  Arrow.createModel(modelName, {
+  return Arrow.createModel(modelName, {
     fields: {
       sid: { type: String, description: 'A 34 character string that uniquely identifies this resource.' },
       dateCreated: { type: String, description: 'The date that this resource was created, given as GMT in RFC 2822 format.' },

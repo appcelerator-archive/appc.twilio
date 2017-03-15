@@ -1,7 +1,7 @@
 const Arrow = require('arrow')
 
 module.exports = (connectorName, modelName) => {
-  Arrow.createModel(modelName, {
+  return Arrow.createModel(modelName, {
     fields: {
       accountSid: { type: String, description: 'The unique id of the Account responsible for this transcription.' },
       apiVersion: { type: String, description: 'Version of the Twilio API' },

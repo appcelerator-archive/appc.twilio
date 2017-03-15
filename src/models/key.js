@@ -1,7 +1,7 @@
 const Arrow = require('arrow')
 
 module.exports = (connectorName, modelName) => {
-  Arrow.createModel(modelName, {
+  return Arrow.createModel(modelName, {
     fields: {
       dateUpdated: { type: String, description: 'The date-time this API Key was most recently updated, given as a UTC ISO 8601 Timestamp.' },
       dateCreated: { type: String, description: 'The date-time this API Key was created, given as a UTC ISO 8601 Timestamp.' },

@@ -1,13 +1,13 @@
 const test = require('tap').test
-const server = require('../utils/server').startPlainArrow().server
+const arrow = require('../utils/server').startPlainArrow()
 const config = {
   sid: '123456789012345678901234567890112345',
   auth_token: '123456789012345678901234567890112345'
 }
 const sinon = require('sinon')
-const sdkFacade = require('../../utils/sdkFacade')(config)
-const transformer = require('../../utils/transformer')
-const twilioAPI = require('../../utils/twilioAPI')(config, sdkFacade, transformer)
+const sdkFacade = require('../../src/sdkFacade')(config)
+const transformer = require('../../src/transformer')
+const twilioAPI = require('../../src/twilioAPI')(config, sdkFacade, transformer)
 
 function cb (errorMessage, data) { }
 const cbSpy = sinon.spy(cb)
@@ -28,8 +28,15 @@ const transformToModelStub = sinon.stub(
   }
 )
 
+test('connect', (t) => {
+  arrow.connector.connect(err => {
+    t.notOk(err)
+    t.end()
+  })
+})
+
 test('### createCall - Success ###', function (t) {
-  const model = server.getModel('call')
+  const model = arrow.server.getModel('appc.twilio/call')
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'createCall',
@@ -53,7 +60,7 @@ test('### createCall - Success ###', function (t) {
 })
 
 test('### createCall - Error ###', function (t) {
-  const model = server.getModel('call')
+  const model = arrow.server.getModel('appc.twilio/call')
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'createCall',
@@ -74,7 +81,7 @@ test('### createCall - Error ###', function (t) {
 })
 
 test('### createMessage - Success ###', function (t) {
-  const model = server.getModel('message')
+  const model = arrow.server.getModel('appc.twilio/message')
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'createMessage',
@@ -102,7 +109,7 @@ test('### createMessage - Success ###', function (t) {
 })
 
 test('### createMessage - Error ###', function (t) {
-  const model = server.getModel('message')
+  const model = arrow.server.getModel('appc.twilio/message')
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'createMessage',
@@ -128,7 +135,7 @@ test('### createMessage - Error ###', function (t) {
 })
 
 test('### findAll - Success ###', function (t) {
-  const model = server.getModel('message')
+  const model = arrow.server.getModel('appc.twilio/message')
   const twilioSDKStub = sinon.stub(
     sdkFacade.find,
     'all',
@@ -150,7 +157,7 @@ test('### findAll - Success ###', function (t) {
 })
 
 test('### findAll - Error ###', function (t) {
-  const model = server.getModel('message')
+  const model = arrow.server.getModel('appc.twilio/message')
 
   const twilioSDKStub = sinon.stub(
     sdkFacade.find,
@@ -171,7 +178,7 @@ test('### findAll - Error ###', function (t) {
 })
 
 test('### findByID - Success ###', function (t) {
-  const model = server.getModel('message')
+  const model = arrow.server.getModel('appc.twilio/message')
   const messageId = 'SMed58f4e57f0b4bafb575654d09b7cb85'
   const twilioSDKStub = sinon.stub(
     sdkFacade.find,
@@ -193,7 +200,7 @@ test('### findByID - Success ###', function (t) {
 })
 
 test('### findByID - Error ###', function (t) {
-  const model = server.getModel('message')
+  const model = arrow.server.getModel('appc.twilio/message')
   const messageId = 'SMed58f4e57f0b4bafb575654d09b7cb85'
   const twilioSDKStub = sinon.stub(
     sdkFacade.find,
@@ -214,7 +221,7 @@ test('### findByID - Error ###', function (t) {
 })
 
 test('### createAddress - Success ####', function (t) {
-  const model = server.getModel('address')
+  const model = arrow.server.getModel('appc.twilio/address')
   const address = {
     street: '2 Hasselhoff Lane',
     customerName: 'Joe Doe',
@@ -247,7 +254,7 @@ test('### createAddress - Success ####', function (t) {
 })
 
 test('### createAddress - Error ####', function (t) {
-  const model = server.getModel('address')
+  const model = arrow.server.getModel('appc.twilio/address')
   const address = {
     street: '2 Hasselhoff Lane',
     customerName: 'Joe Doe',
@@ -278,7 +285,7 @@ test('### createAddress - Error ####', function (t) {
 })
 
 test('### createQueue - Success ####', function (t) {
-  const model = server.getModel('queue')
+  const model = arrow.server.getModel('appc.twilio/queue')
   const queue = {
     friendlyName: '2 Hasselhoff Lane',
     maxSize: 100
@@ -307,7 +314,7 @@ test('### createQueue - Success ####', function (t) {
 })
 
 test('### createQueue - Error ####', function (t) {
-  const model = server.getModel('queue')
+  const model = arrow.server.getModel('appc.twilio/queue')
   const queue = {
     friendlyName: '2 Hasselhoff Lane',
     maxSize: 100
@@ -334,7 +341,7 @@ test('### createQueue - Error ####', function (t) {
 })
 
 test('### createAccount - Success ####', function (t) {
-  const model = server.getModel('account')
+  const model = arrow.server.getModel('appc.twilio/account')
   const account = {
     friendlyName: 'Account'
   }
@@ -362,7 +369,7 @@ test('### createAccount - Success ####', function (t) {
 })
 
 test('### createAccount - Error ####', function (t) {
-  const model = server.getModel('account')
+  const model = arrow.server.getModel('appc.twilio/account')
   const account = {
     friendlyName: 'Account'
   }
@@ -387,7 +394,7 @@ test('### createAccount - Error ####', function (t) {
 })
 
 test('### query - Success ####', function (t) {
-  const model = server.getModel('call')
+  const model = arrow.server.getModel('appc.twilio/call')
   const options = `where={"status": "completed"}`
 
   const twilioSDKStub = sinon.stub(
@@ -412,7 +419,7 @@ test('### query - Success ####', function (t) {
 })
 
 test('### query - Error ####', function (t) {
-  const model = server.getModel('call')
+  const model = arrow.server.getModel('appc.twilio/call')
   const options = `where={"status": "completed"}`
 
   const twilioSDKStub = sinon.stub(
@@ -435,7 +442,7 @@ test('### query - Error ####', function (t) {
 })
 
 test('### updateAddress - Success ###', function (t) {
-  const model = server.getModel('address')
+  const model = arrow.server.getModel('appc.twilio/address')
 
   const doc = {
     customerName: 'Changed customer'
@@ -463,7 +470,7 @@ test('### updateAddress - Success ###', function (t) {
 })
 
 test('### updateAddress - Error ###', function (t) {
-  const model = server.getModel('address')
+  const model = arrow.server.getModel('appc.twilio/address')
 
   const doc = {
     customerName: 'Changed customer'
@@ -489,7 +496,7 @@ test('### updateAddress - Error ###', function (t) {
 })
 
 test('### updateOutgoingCallerId - Success ###', function (t) {
-  const model = server.getModel('outgoingCallerId')
+  const model = arrow.server.getModel('appc.twilio/outgoingCallerId')
 
   const doc = {
     customerName: 'Changed customer'
@@ -517,7 +524,7 @@ test('### updateOutgoingCallerId - Success ###', function (t) {
 })
 
 test('### updateOutgoingCallerId - Error ###', function (t) {
-  const model = server.getModel('outgoingCallerId')
+  const model = arrow.server.getModel('appc.twilio/outgoingCallerId')
 
   const doc = {
     customerName: 'Changed customer'
@@ -543,7 +550,7 @@ test('### updateOutgoingCallerId - Error ###', function (t) {
 })
 
 test('### updateQueue - Success ###', function (t) {
-  const model = server.getModel('queue')
+  const model = arrow.server.getModel('appc.twilio/queue')
 
   const doc = {
     maxSize: 120
@@ -571,7 +578,7 @@ test('### updateQueue - Success ###', function (t) {
 })
 
 test('### updateQueue - Error ###', function (t) {
-  const model = server.getModel('queue')
+  const model = arrow.server.getModel('appc.twilio/queue')
 
   const doc = {
     maxSize: 120
@@ -597,7 +604,7 @@ test('### updateQueue - Error ###', function (t) {
 })
 
 test('### deleteById - Success ###', function (t) {
-  const model = server.getModel('address')
+  const model = arrow.server.getModel('appc.twilio/address')
 
   const twilioSDKStub = sinon.stub(
     sdkFacade,
@@ -619,7 +626,7 @@ test('### deleteById - Success ###', function (t) {
 })
 
 test('### deleteById - Error ###', function (t) {
-  const model = server.getModel('address')
+  const model = arrow.server.getModel('appc.twilio/address')
 
   const twilioSDKStub = sinon.stub(
     sdkFacade,

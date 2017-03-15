@@ -1,13 +1,21 @@
 const test = require('tap').test
-const server = require('../../utils/server').startPlainArrow().server
-const connector = require('../../utils/server').startPlainArrow().connector
+const utils = require('../../utils/serverUtils')()
+const server = utils.startPlainArrow()
+const connector = server.getConnector('appc.twilio')
 const upsertMethod = require('../../../lib/methods/upsert')['upsert']
-const twilioAPI = require('../../../utils/twilioAPI')(connector.config)
+const twilioAPI = require('../../../src/twilioAPI')(connector.config)
 const sinon = require('sinon')
-connector.twilioAPI = twilioAPI
+
+test('connect', (t) => {
+  connector.connect(err => {
+    connector.twilioAPI = twilioAPI
+    t.notOk(err)
+    t.end()
+  })
+})
 
 test('### updateAddress - Error Case ###', function (t) {
-  const Model = server.getModel('address')
+  const Model = utils.get().address
 
   const errorMessage = 'upsert error'
   function cbError (errorMessage) { }
@@ -33,7 +41,7 @@ test('### updateAddress - Error Case ###', function (t) {
 test('### updateAddress - Ok Case ###', function (t) {
   connector.twilioAPI = twilioAPI
 
-  const Model = server.getModel('address')
+  const Model = utils.get().address
   const data = 'TestData'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
@@ -56,7 +64,7 @@ test('### updateAddress - Ok Case ###', function (t) {
 })
 
 test('### updateOutgoingCallerId - Error Case ###', function (t) {
-  const Model = server.getModel('outgoingCallerId')
+  const Model = utils.get().outgoingCallerId
 
   const errorMessage = 'upsert error'
   function cbError (errorMessage) { }
@@ -82,7 +90,7 @@ test('### updateOutgoingCallerId - Error Case ###', function (t) {
 test('### updateOutgoingCallerId - Ok Case ###', function (t) {
   connector.twilioAPI = twilioAPI
 
-  const Model = server.getModel('outgoingCallerId')
+  const Model = utils.get().outgoingCallerId
   const data = 'TestData'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
@@ -105,7 +113,7 @@ test('### updateOutgoingCallerId - Ok Case ###', function (t) {
 })
 
 test('### updateQueue - Error Case ###', function (t) {
-  const Model = server.getModel('queue')
+  const Model = utils.get().queue
 
   const errorMessage = 'upsert error'
   function cbError (errorMessage) { }
@@ -131,7 +139,7 @@ test('### updateQueue - Error Case ###', function (t) {
 test('### updateQueue - Ok Case ###', function (t) {
   connector.twilioAPI = twilioAPI
 
-  const Model = server.getModel('queue')
+  const Model = utils.get().queue
   const data = 'TestData'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
@@ -155,7 +163,7 @@ test('### updateQueue - Ok Case ###', function (t) {
 
 test('Update With Invalid Model', function (t) {
   // To invoke the default clause in upsert.js we pass an invalid model name
-  const Model = 'invalid'
+  const Model = {name: 'appc.twilio/invalid'}
   const errorMessage = new Error()
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)

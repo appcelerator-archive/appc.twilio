@@ -1,6 +1,6 @@
 const test = require('tap').test
 const sinon = require('sinon')
-const validator = require('../../utils/validator').validate
+const validator = require('../../src/validator').validate
 const errorMessage = new Error()
 function cb (errorMessage) { }
 const cbSpy = sinon.spy(cb)

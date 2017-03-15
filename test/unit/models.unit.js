@@ -1,12 +1,19 @@
 const test = require('tap').test
-const server = require('../utils/server').startPlainArrow().server
+const arrow = require('../utils/server').startPlainArrow()
+
+test('connect', (t) => {
+  arrow.connector.connect(err => {
+    t.notOk(err)
+    t.end()
+  })
+})
 
 /**
  * Twilio documentation - https://www.twilio.com/docs/api/rest/call
  */
 
 test('test call model', function (t) {
-  const model = server.getModel('call')
+  const model = arrow.server.getModel('appc.twilio/call')
 
   t.ok(model.fields, 'found model')
 
@@ -43,7 +50,7 @@ test('test call model', function (t) {
  */
 
 test('test message model', function (t) {
-  const model = server.getModel('message')
+  const model = arrow.server.getModel('appc.twilio/message')
 
   t.ok(model.fields, 'found model')
 
@@ -79,7 +86,7 @@ test('test message model', function (t) {
  */
 
 test('test account model', function (t) {
-  const model = server.getModel('account')
+  const model = arrow.server.getModel('appc.twilio/account')
 
   t.ok(model.fields, 'found model')
 
@@ -104,7 +111,7 @@ test('test account model', function (t) {
  */
 
 test('test address model', function (t) {
-  const model = server.getModel('address')
+  const model = arrow.server.getModel('appc.twilio/address')
 
   t.ok(model.fields, 'found model')
 
@@ -128,7 +135,7 @@ test('test address model', function (t) {
  */
 
 test('test queue model', function (t) {
-  const model = server.getModel('queue')
+  const model = arrow.server.getModel('appc.twilio/queue')
 
   t.ok(model.fields, 'found model')
 
@@ -152,7 +159,7 @@ test('test queue model', function (t) {
  */
 
 test('test application model', function (t) {
-  const model = server.getModel('application')
+  const model = arrow.server.getModel('appc.twilio/application')
 
   t.ok(model.fields, 'found model')
 
@@ -184,7 +191,7 @@ test('test application model', function (t) {
  */
 
 test('test availablePhoneNumber model', function (t) {
-  const model = server.getModel('availablePhoneNumber')
+  const model = arrow.server.getModel('appc.twilio/availablePhoneNumber')
 
   t.ok(model.fields, 'found model')
 
@@ -208,7 +215,7 @@ test('test availablePhoneNumber model', function (t) {
  */
 
 test('test outgoingCallerId model', function (t) {
-  const model = server.getModel('outgoingCallerId')
+  const model = arrow.server.getModel('appc.twilio/outgoingCallerId')
 
   t.ok(model.fields, 'found model')
 
@@ -228,7 +235,7 @@ test('test outgoingCallerId model', function (t) {
  */
 
 test('test recordings model', function (t) {
-  const model = server.getModel('recording')
+  const model = arrow.server.getModel('appc.twilio/recording')
 
   t.ok(model.fields, 'found model')
 
@@ -254,7 +261,7 @@ test('test recordings model', function (t) {
  */
 
 test('test transcription model', function (t) {
-  const model = server.getModel('transcription')
+  const model = arrow.server.getModel('appc.twilio/transcription')
 
   t.ok(model.fields, 'found model')
 

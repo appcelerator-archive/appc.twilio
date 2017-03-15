@@ -2,6 +2,8 @@
 module.exports = {
   connectors: {
     'appc.twilio': {
+      skipModelNamespace: '<DEFAULT IS FALSE AND WILL NAMESPACE THE MODEL WITH CONNECTOR NAME>',
+      modelNamespace: '<OPTIONAL. THIS IS THE WAY WE CAN OVERRIDE THE DEFAULT NAMESPACE WHICH IS THE CONNECTOR NAME.>',
       sid: '<YOUR TWILLIO ACCOUNT SID>',
       auth_token: '<YOUR TWILLIO ACCOUNT TOKEN>',
       twilio_number: '<YOUR TWILLIO ACCOUNT NUMBER>',
