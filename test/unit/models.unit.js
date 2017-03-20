@@ -1,9 +1,14 @@
 const test = require('tap').test
-const arrow = require('../utils/server').startPlainArrow()
+const ENV = {}
+const connectorUtils = require('../utils/connectorUtils')
+const models = connectorUtils.models
 
 test('connect', (t) => {
-  arrow.connector.connect(err => {
-    t.notOk(err)
+  connectorUtils.test.getConnectorDynamic(connectorUtils.connectorName, env => {
+    t.ok(env.container)
+    t.ok(env.connector)
+    ENV.container = env.container
+    ENV.connector = env.connector
     t.end()
   })
 })
@@ -13,7 +18,7 @@ test('connect', (t) => {
  */
 
 test('test call model', function (t) {
-  const model = arrow.server.getModel('appc.twilio/call')
+  const model = ENV.container.getModel(models.call)
 
   t.ok(model.fields, 'found model')
 
@@ -50,7 +55,7 @@ test('test call model', function (t) {
  */
 
 test('test message model', function (t) {
-  const model = arrow.server.getModel('appc.twilio/message')
+  const model = ENV.container.getModel(models.message)
 
   t.ok(model.fields, 'found model')
 
@@ -86,7 +91,7 @@ test('test message model', function (t) {
  */
 
 test('test account model', function (t) {
-  const model = arrow.server.getModel('appc.twilio/account')
+  const model = ENV.container.getModel(models.account)
 
   t.ok(model.fields, 'found model')
 
@@ -111,7 +116,7 @@ test('test account model', function (t) {
  */
 
 test('test address model', function (t) {
-  const model = arrow.server.getModel('appc.twilio/address')
+  const model = ENV.container.getModel(models.address)
 
   t.ok(model.fields, 'found model')
 
@@ -135,7 +140,7 @@ test('test address model', function (t) {
  */
 
 test('test queue model', function (t) {
-  const model = arrow.server.getModel('appc.twilio/queue')
+  const model = ENV.container.getModel(models.queue)
 
   t.ok(model.fields, 'found model')
 
@@ -159,7 +164,7 @@ test('test queue model', function (t) {
  */
 
 test('test application model', function (t) {
-  const model = arrow.server.getModel('appc.twilio/application')
+  const model = ENV.container.getModel(models.application)
 
   t.ok(model.fields, 'found model')
 
@@ -191,7 +196,7 @@ test('test application model', function (t) {
  */
 
 test('test availablePhoneNumber model', function (t) {
-  const model = arrow.server.getModel('appc.twilio/availablePhoneNumber')
+  const model = ENV.container.getModel(models.availablePhoneNumber)
 
   t.ok(model.fields, 'found model')
 
@@ -215,7 +220,7 @@ test('test availablePhoneNumber model', function (t) {
  */
 
 test('test outgoingCallerId model', function (t) {
-  const model = arrow.server.getModel('appc.twilio/outgoingCallerId')
+  const model = ENV.container.getModel(models.outgoingCallerId)
 
   t.ok(model.fields, 'found model')
 
@@ -235,7 +240,7 @@ test('test outgoingCallerId model', function (t) {
  */
 
 test('test recordings model', function (t) {
-  const model = arrow.server.getModel('appc.twilio/recording')
+  const model = ENV.container.getModel(models.recording)
 
   t.ok(model.fields, 'found model')
 
@@ -261,7 +266,7 @@ test('test recordings model', function (t) {
  */
 
 test('test transcription model', function (t) {
-  const model = arrow.server.getModel('appc.twilio/transcription')
+  const model = ENV.container.getModel(models.transcription)
 
   t.ok(model.fields, 'found model')
 

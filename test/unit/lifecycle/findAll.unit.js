@@ -1,35 +1,39 @@
 const test = require('tap').test
-const utils = require('../../utils/serverUtils')()
-const server = utils.startPlainArrow()
-const connector = server.getConnector('appc.twilio')
-const findAllMethod = require('../../../lib/methods/findAll')['findAll']
-const twilioAPI = require('../../../src/twilioAPI')(connector.config)
 const sinon = require('sinon')
 
+const findAllMethod = require('../../../lib/methods/findAll')['findAll']
+
+const ENV = {}
+const connectorUtils = require('../../utils/connectorUtils')
+const models = connectorUtils.models
+
 test('connect', (t) => {
-  connector.connect(err => {
-    connector.twilioAPI = twilioAPI
-    t.notOk(err)
+  connectorUtils.test.getConnectorDynamic(connectorUtils.connectorName, env => {
+    t.ok(env.container)
+    t.ok(env.connector)
+    ENV.container = env.container
+    ENV.connector = env.connector
+    ENV.connector.twilioAPI = require('../../../src/twilioAPI')()
     t.end()
   })
 })
 
 test('### findAll Call - Error Case ###', function (t) {
-  const Model = utils.get().call
+  const Model = ENV.container.getModel(models.call)
 
   const errorMessage = 'findAll error'
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)
 
   const twilioAPIStubError = sinon.stub(
-    twilioAPI.find,
+    ENV.connector.twilioAPI.find,
     'all',
     (Model, callback) => {
       callback(errorMessage)
     }
   )
 
-  findAllMethod.bind(connector, Model, cbErrorSpy)()
+  findAllMethod.bind(ENV.connector, Model, cbErrorSpy)()
   t.ok(twilioAPIStubError.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
   t.ok(cbErrorSpy.calledWith(errorMessage))
@@ -39,22 +43,20 @@ test('### findAll Call - Error Case ###', function (t) {
 })
 
 test('### findAll Call - Ok Case ###', function (t) {
-  connector.twilioAPI = twilioAPI
-
-  const Model = utils.get().call
+  const Model = ENV.container.getModel(models.call)
   const data = 'TestData'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
 
   const twilioAPIStubOk = sinon.stub(
-    twilioAPI.find,
+    ENV.connector.twilioAPI.find,
     'all',
     (Model, callback) => {
       callback(null, data)
     }
   )
 
-  findAllMethod.bind(connector, Model, cbOkSpy)()
+  findAllMethod.bind(ENV.connector, Model, cbOkSpy)()
   t.ok(twilioAPIStubOk.calledOnce)
   t.ok(cbOkSpy.calledOnce)
   t.ok(cbOkSpy.calledWith(null, data))

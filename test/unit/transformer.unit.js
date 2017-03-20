@@ -1,17 +1,23 @@
 const test = require('tap').test
 const transformer = require('../../src/transformer')
 const mockedData = require('../data/mockData').calls
-const arrow = require('../utils/server').startPlainArrow()
+
+const ENV = {}
+const connectorUtils = require('../utils/connectorUtils')
+const models = connectorUtils.models
 
 test('connect', (t) => {
-  arrow.connector.connect(err => {
-    t.notOk(err)
+  connectorUtils.test.getConnectorDynamic(connectorUtils.connectorName, env => {
+    t.ok(env.container)
+    t.ok(env.connector)
+    ENV.container = env.container
+    ENV.connector = env.connector
     t.end()
   })
 })
 
 test('### transformToCollection', function (t) {
-  const model = arrow.server.getModel('appc.twilio/call')
+  const model = ENV.container.getModel(models.call)
 
   const result = transformer.transformToCollection(model, mockedData)
   t.ok(result)
@@ -21,7 +27,7 @@ test('### transformToCollection', function (t) {
 })
 
 test('### transformToModel ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/call')
+  const model = ENV.container.getModel(models.call)
 
   var result = transformer.transformToModel(model, mockedData[0])
   t.ok(result)

@@ -1,13 +1,16 @@
 const test = require('tap').test
-const arrow = require('../utils/server').startPlainArrow()
+const sinon = require('sinon')
+
 const config = {
   sid: '123456789012345678901234567890112345',
   auth_token: '123456789012345678901234567890112345'
 }
-const sinon = require('sinon')
 const sdkFacade = require('../../src/sdkFacade')(config)
 const transformer = require('../../src/transformer')
-const twilioAPI = require('../../src/twilioAPI')(config, sdkFacade, transformer)
+
+const ENV = {}
+const connectorUtils = require('../utils/connectorUtils')
+const models = connectorUtils.models
 
 function cb (errorMessage, data) { }
 const cbSpy = sinon.spy(cb)
@@ -29,14 +32,18 @@ const transformToModelStub = sinon.stub(
 )
 
 test('connect', (t) => {
-  arrow.connector.connect(err => {
-    t.notOk(err)
+  connectorUtils.test.getConnectorDynamic(connectorUtils.connectorName, env => {
+    t.ok(env.container)
+    t.ok(env.connector)
+    ENV.container = env.container
+    ENV.connector = env.connector
+    ENV.connector.twilioAPI = require('../../src/twilioAPI')(config, sdkFacade, transformer)
     t.end()
   })
 })
 
 test('### createCall - Success ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/call')
+  const model = ENV.container.getModel(models.call)
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'createCall',
@@ -45,7 +52,7 @@ test('### createCall - Success ###', function (t) {
     }
   )
 
-  twilioAPI.createCall(model, {}, 'configNumber', cbSpy)
+  ENV.connector.twilioAPI.createCall(model, {}, 'configNumber', cbSpy)
 
   t.ok(twilioSDKStub.calledOnce)
   t.ok(transformToModelStub.calledOnce)
@@ -60,7 +67,7 @@ test('### createCall - Success ###', function (t) {
 })
 
 test('### createCall - Error ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/call')
+  const model = ENV.container.getModel(models.call)
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'createCall',
@@ -69,7 +76,7 @@ test('### createCall - Error ###', function (t) {
     }
   )
 
-  twilioAPI.createCall(model, 'numberTo', 'configNumber', cbSpy)
+  ENV.connector.twilioAPI.createCall(model, 'numberTo', 'configNumber', cbSpy)
 
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -81,7 +88,7 @@ test('### createCall - Error ###', function (t) {
 })
 
 test('### createMessage - Success ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/message')
+  const model = ENV.container.getModel(models.message)
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'createMessage',
@@ -94,7 +101,7 @@ test('### createMessage - Success ###', function (t) {
     body: 'trial'
   }
 
-  twilioAPI.createMessage(model, smsValues, 'configNumber', cbSpy)
+  ENV.connector.twilioAPI.createMessage(model, smsValues, 'configNumber', cbSpy)
 
   t.ok(twilioSDKStub.calledOnce)
   t.ok(transformToModelStub.calledOnce)
@@ -109,7 +116,7 @@ test('### createMessage - Success ###', function (t) {
 })
 
 test('### createMessage - Error ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/message')
+  const model = ENV.container.getModel(models.message)
   const twilioSDKStub = sinon.stub(
     sdkFacade,
     'createMessage',
@@ -122,7 +129,7 @@ test('### createMessage - Error ###', function (t) {
     body: 'trial'
   }
 
-  twilioAPI.createMessage(model, smsValues, 'configNumber', cbSpy)
+  ENV.connector.twilioAPI.createMessage(model, smsValues, 'configNumber', cbSpy)
 
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -135,7 +142,7 @@ test('### createMessage - Error ###', function (t) {
 })
 
 test('### findAll - Success ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/message')
+  const model = ENV.container.getModel(models.message)
   const twilioSDKStub = sinon.stub(
     sdkFacade.find,
     'all',
@@ -143,7 +150,7 @@ test('### findAll - Success ###', function (t) {
       callback(null, dataFromTwilio)
     }
   )
-  twilioAPI.find.all(model, cbSpy)
+  ENV.connector.twilioAPI.find.all(model, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(transformToCollectionStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -157,7 +164,7 @@ test('### findAll - Success ###', function (t) {
 })
 
 test('### findAll - Error ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/message')
+  const model = ENV.container.getModel(models.message)
 
   const twilioSDKStub = sinon.stub(
     sdkFacade.find,
@@ -166,7 +173,7 @@ test('### findAll - Error ###', function (t) {
       callback(errorMessage)
     }
   )
-  twilioAPI.find.all(model, cbSpy)
+  ENV.connector.twilioAPI.find.all(model, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(errorMessage))
@@ -178,7 +185,7 @@ test('### findAll - Error ###', function (t) {
 })
 
 test('### findByID - Success ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/message')
+  const model = ENV.container.getModel(models.message)
   const messageId = 'SMed58f4e57f0b4bafb575654d09b7cb85'
   const twilioSDKStub = sinon.stub(
     sdkFacade.find,
@@ -187,7 +194,7 @@ test('### findByID - Success ###', function (t) {
       callback(null, dataFromTwilio)
     }
   )
-  twilioAPI.find.byId(model, messageId, cbSpy)
+  ENV.connector.twilioAPI.find.byId(model, messageId, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
@@ -200,7 +207,7 @@ test('### findByID - Success ###', function (t) {
 })
 
 test('### findByID - Error ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/message')
+  const model = ENV.container.getModel(models.message)
   const messageId = 'SMed58f4e57f0b4bafb575654d09b7cb85'
   const twilioSDKStub = sinon.stub(
     sdkFacade.find,
@@ -209,7 +216,7 @@ test('### findByID - Error ###', function (t) {
       callback(errorMessage)
     }
   )
-  twilioAPI.find.byId(model, messageId, cbSpy)
+  ENV.connector.twilioAPI.find.byId(model, messageId, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(errorMessage))
@@ -221,7 +228,7 @@ test('### findByID - Error ###', function (t) {
 })
 
 test('### createAddress - Success ####', function (t) {
-  const model = arrow.server.getModel('appc.twilio/address')
+  const model = ENV.container.getModel(models.address)
   const address = {
     street: '2 Hasselhoff Lane',
     customerName: 'Joe Doe',
@@ -240,7 +247,7 @@ test('### createAddress - Success ####', function (t) {
   )
   const values = address
 
-  twilioAPI.createAddress(model, values, cbSpy)
+  ENV.connector.twilioAPI.createAddress(model, values, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(transformToModelStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -254,7 +261,7 @@ test('### createAddress - Success ####', function (t) {
 })
 
 test('### createAddress - Error ####', function (t) {
-  const model = arrow.server.getModel('appc.twilio/address')
+  const model = ENV.container.getModel(models.address)
   const address = {
     street: '2 Hasselhoff Lane',
     customerName: 'Joe Doe',
@@ -273,7 +280,7 @@ test('### createAddress - Error ####', function (t) {
   )
   const values = address
 
-  twilioAPI.createAddress(model, values, cbSpy)
+  ENV.connector.twilioAPI.createAddress(model, values, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(errorMessage))
@@ -285,7 +292,7 @@ test('### createAddress - Error ####', function (t) {
 })
 
 test('### createQueue - Success ####', function (t) {
-  const model = arrow.server.getModel('appc.twilio/queue')
+  const model = ENV.container.getModel(models.queue)
   const queue = {
     friendlyName: '2 Hasselhoff Lane',
     maxSize: 100
@@ -300,7 +307,7 @@ test('### createQueue - Success ####', function (t) {
   )
   const values = queue
 
-  twilioAPI.createQueue(model, values, cbSpy)
+  ENV.connector.twilioAPI.createQueue(model, values, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(transformToModelStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -314,7 +321,7 @@ test('### createQueue - Success ####', function (t) {
 })
 
 test('### createQueue - Error ####', function (t) {
-  const model = arrow.server.getModel('appc.twilio/queue')
+  const model = ENV.container.getModel(models.queue)
   const queue = {
     friendlyName: '2 Hasselhoff Lane',
     maxSize: 100
@@ -329,7 +336,7 @@ test('### createQueue - Error ####', function (t) {
   )
   const values = queue
 
-  twilioAPI.createQueue(model, values, cbSpy)
+  ENV.connector.twilioAPI.createQueue(model, values, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(errorMessage))
@@ -341,7 +348,7 @@ test('### createQueue - Error ####', function (t) {
 })
 
 test('### createAccount - Success ####', function (t) {
-  const model = arrow.server.getModel('appc.twilio/account')
+  const model = ENV.container.getModel(models.account)
   const account = {
     friendlyName: 'Account'
   }
@@ -355,7 +362,7 @@ test('### createAccount - Success ####', function (t) {
   )
   const values = account
 
-  twilioAPI.createAccount(model, values, cbSpy)
+  ENV.connector.twilioAPI.createAccount(model, values, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(transformToModelStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -369,7 +376,7 @@ test('### createAccount - Success ####', function (t) {
 })
 
 test('### createAccount - Error ####', function (t) {
-  const model = arrow.server.getModel('appc.twilio/account')
+  const model = ENV.container.getModel(models.account)
   const account = {
     friendlyName: 'Account'
   }
@@ -382,7 +389,7 @@ test('### createAccount - Error ####', function (t) {
     }
   )
 
-  twilioAPI.createAccount(model, account, cbSpy)
+  ENV.connector.twilioAPI.createAccount(model, account, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(errorMessage))
@@ -394,7 +401,7 @@ test('### createAccount - Error ####', function (t) {
 })
 
 test('### query - Success ####', function (t) {
-  const model = arrow.server.getModel('appc.twilio/call')
+  const model = ENV.container.getModel(models.call)
   const options = `where={"status": "completed"}`
 
   const twilioSDKStub = sinon.stub(
@@ -405,7 +412,7 @@ test('### query - Success ####', function (t) {
     }
   )
 
-  twilioAPI.query(model, options, cbSpy)
+  ENV.connector.twilioAPI.query(model, options, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(transformToCollectionStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -419,7 +426,7 @@ test('### query - Success ####', function (t) {
 })
 
 test('### query - Error ####', function (t) {
-  const model = arrow.server.getModel('appc.twilio/call')
+  const model = ENV.container.getModel(models.call)
   const options = `where={"status": "completed"}`
 
   const twilioSDKStub = sinon.stub(
@@ -430,7 +437,7 @@ test('### query - Error ####', function (t) {
     }
   )
 
-  twilioAPI.query(model, options, cbSpy)
+  ENV.connector.twilioAPI.query(model, options, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(errorMessage))
@@ -442,8 +449,7 @@ test('### query - Error ####', function (t) {
 })
 
 test('### updateAddress - Success ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/address')
-
+  const model = ENV.container.getModel(models.address)
   const doc = {
     customerName: 'Changed customer'
   }
@@ -456,7 +462,7 @@ test('### updateAddress - Success ###', function (t) {
     }
   )
 
-  twilioAPI.updateAddress(model, '', doc, cbSpy)
+  ENV.connector.twilioAPI.updateAddress(model, '', doc, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(transformToModelStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -470,7 +476,7 @@ test('### updateAddress - Success ###', function (t) {
 })
 
 test('### updateAddress - Error ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/address')
+  const model = ENV.container.getModel(models.address)
 
   const doc = {
     customerName: 'Changed customer'
@@ -484,7 +490,7 @@ test('### updateAddress - Error ###', function (t) {
     }
   )
 
-  twilioAPI.updateAddress(model, '', doc, cbSpy)
+  ENV.connector.twilioAPI.updateAddress(model, '', doc, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(errorMessage))
@@ -496,7 +502,7 @@ test('### updateAddress - Error ###', function (t) {
 })
 
 test('### updateOutgoingCallerId - Success ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/outgoingCallerId')
+  const model = ENV.container.getModel(models.outgoingCallerId)
 
   const doc = {
     customerName: 'Changed customer'
@@ -510,7 +516,7 @@ test('### updateOutgoingCallerId - Success ###', function (t) {
     }
   )
 
-  twilioAPI.updateOutgoingCallerId(model, '', doc, cbSpy)
+  ENV.connector.twilioAPI.updateOutgoingCallerId(model, '', doc, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(transformToModelStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -524,7 +530,7 @@ test('### updateOutgoingCallerId - Success ###', function (t) {
 })
 
 test('### updateOutgoingCallerId - Error ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/outgoingCallerId')
+  const model = ENV.container.getModel(models.outgoingCallerId)
 
   const doc = {
     customerName: 'Changed customer'
@@ -538,7 +544,7 @@ test('### updateOutgoingCallerId - Error ###', function (t) {
     }
   )
 
-  twilioAPI.updateOutgoingCallerId(model, '', doc, cbSpy)
+  ENV.connector.twilioAPI.updateOutgoingCallerId(model, '', doc, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(errorMessage))
@@ -550,7 +556,7 @@ test('### updateOutgoingCallerId - Error ###', function (t) {
 })
 
 test('### updateQueue - Success ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/queue')
+  const model = ENV.container.getModel(models.queue)
 
   const doc = {
     maxSize: 120
@@ -564,7 +570,7 @@ test('### updateQueue - Success ###', function (t) {
     }
   )
 
-  twilioAPI.updateQueue(model, '', doc, cbSpy)
+  ENV.connector.twilioAPI.updateQueue(model, '', doc, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(transformToModelStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -578,7 +584,7 @@ test('### updateQueue - Success ###', function (t) {
 })
 
 test('### updateQueue - Error ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/queue')
+  const model = ENV.container.getModel(models.queue)
 
   const doc = {
     maxSize: 120
@@ -592,7 +598,7 @@ test('### updateQueue - Error ###', function (t) {
     }
   )
 
-  twilioAPI.updateQueue(model, '', doc, cbSpy)
+  ENV.connector.twilioAPI.updateQueue(model, '', doc, cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(errorMessage))
@@ -604,7 +610,7 @@ test('### updateQueue - Error ###', function (t) {
 })
 
 test('### deleteById - Success ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/address')
+  const model = ENV.container.getModel(models.address)
 
   const twilioSDKStub = sinon.stub(
     sdkFacade,
@@ -614,7 +620,7 @@ test('### deleteById - Success ###', function (t) {
     }
   )
 
-  twilioAPI.deleteById(model, '', cbSpy)
+  ENV.connector.twilioAPI.deleteById(model, '', cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
@@ -626,7 +632,7 @@ test('### deleteById - Success ###', function (t) {
 })
 
 test('### deleteById - Error ###', function (t) {
-  const model = arrow.server.getModel('appc.twilio/address')
+  const model = ENV.container.getModel(models.address)
 
   const twilioSDKStub = sinon.stub(
     sdkFacade,
@@ -636,7 +642,7 @@ test('### deleteById - Error ###', function (t) {
     }
   )
 
-  twilioAPI.deleteById(model, '', cbSpy)
+  ENV.connector.twilioAPI.deleteById(model, '', cbSpy)
   t.ok(twilioSDKStub.calledOnce)
   t.ok(cbSpy.calledOnce)
   t.ok(cbSpy.calledWith(errorMessage))

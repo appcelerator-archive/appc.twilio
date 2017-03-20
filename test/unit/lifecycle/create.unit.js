@@ -1,29 +1,32 @@
 const test = require('tap').test
-const utils = require('../../utils/serverUtils')()
-const server = utils.startPlainArrow()
-const connector = server.getConnector('appc.twilio')
-const createMethod = require('../../../lib/methods/create').create
-const twilioAPI = require('../../../src/twilioAPI')(connector.config)
 const sinon = require('sinon')
 
+const createMethod = require('../../../lib/methods/create').create
+
+const ENV = {}
+const connectorUtils = require('../../utils/connectorUtils')
+const models = connectorUtils.models
+
 test('connect', (t) => {
-  connector.connect(err => {
-    connector.twilioAPI = twilioAPI
-    t.notOk(err)
+  connectorUtils.test.getConnectorDynamic(connectorUtils.connectorName, env => {
+    t.ok(env.container)
+    t.ok(env.connector)
+    ENV.container = env.container
+    ENV.connector = env.connector
+    ENV.connector.twilioAPI = require('../../../src/twilioAPI')()
     t.end()
   })
 })
 
 test('Create Call Error Case', function (t) {
-  // DATA STUFF
-  const Model = utils.get().call
+  const Model = ENV.container.getModel(models.call)
   const errorMessage = 'My error'
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)
 
   // MOCKING STUFF
   const twilioAPIStubError = sinon.stub(
-    twilioAPI,
+    ENV.connector.twilioAPI,
     'createCall',
     // The same parameters as the real function
     (Model, values, number, callback) => {
@@ -35,7 +38,7 @@ test('Create Call Error Case', function (t) {
   )
 
   // EXECUTION STUFF
-  createMethod.bind(connector, Model, {}, cbErrorSpy)()
+  createMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
   t.ok(twilioAPIStubError.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
   t.ok(cbErrorSpy.calledWith(errorMessage))
@@ -45,15 +48,13 @@ test('Create Call Error Case', function (t) {
 })
 
 test('Create Call Success Case', function (t) {
-  // DATA STUFF
-  const Model = utils.get().call
+  const Model = ENV.container.getModel(models.call)
   const data = 'MyData'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
 
-  // MOCKING STUFF
   const twilioAPIStubOk = sinon.stub(
-    twilioAPI,
+    ENV.connector.twilioAPI,
     'createCall',
     // The same parameters as the real function
     (Model, values, number, callback) => {
@@ -62,8 +63,7 @@ test('Create Call Success Case', function (t) {
     }
   )
 
-  // EXECUTION STUFF
-  createMethod.bind(connector, Model, {}, cbOkSpy)()
+  createMethod.bind(ENV.connector, Model, {}, cbOkSpy)()
   t.ok(twilioAPIStubOk.calledOnce)
   t.ok(cbOkSpy.calledOnce)
   t.ok(cbOkSpy.calledWith(null, data))
@@ -73,13 +73,13 @@ test('Create Call Success Case', function (t) {
 })
 
 test('Create Message Error Case', function (t) {
-  const Model = utils.get().message
+  const Model = ENV.container.getModel(models.message)
   const errorMessage = 'My error'
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)
 
   const twilioAPIStubError = sinon.stub(
-    twilioAPI,
+    ENV.connector.twilioAPI,
     'createMessage',
     // The same parameters as the real function
     (Model, values, number, callback) => {
@@ -87,7 +87,7 @@ test('Create Message Error Case', function (t) {
     }
   )
 
-  createMethod.bind(connector, Model, {}, cbErrorSpy)()
+  createMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
   t.ok(twilioAPIStubError.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
   t.ok(cbErrorSpy.calledWith(errorMessage))
@@ -97,13 +97,13 @@ test('Create Message Error Case', function (t) {
 })
 
 test('Create Message Success Case', function (t) {
-  const Model = utils.get().message
+  const Model = ENV.container.getModel(models.message)
   const data = 'Message'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
 
   const twilioAPIStub = sinon.stub(
-    twilioAPI,
+    ENV.connector.twilioAPI,
     'createMessage',
     // The same parameters as the real function
     (Model, values, number, callback) => {
@@ -111,7 +111,7 @@ test('Create Message Success Case', function (t) {
     }
   )
 
-  createMethod.bind(connector, Model, {}, cbOkSpy)()
+  createMethod.bind(ENV.connector, Model, {}, cbOkSpy)()
   t.ok(twilioAPIStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
   t.ok(cbOkSpy.calledWith(null, data))
@@ -121,20 +121,20 @@ test('Create Message Success Case', function (t) {
 })
 
 test('Create Address Error Case', function (t) {
-  const Model = utils.get().address
+  const Model = ENV.container.getModel(models.address)
   const errorMessage = 'Error'
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)
 
   const twilioAPICreateAddressStub = sinon.stub(
-    twilioAPI,
+    ENV.connector.twilioAPI,
     'createAddress',
     (Model, values, callback) => {
       callback(errorMessage)
     }
   )
 
-  createMethod.bind(connector, Model, {}, cbErrorSpy)()
+  createMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
   t.ok(twilioAPICreateAddressStub.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
   t.ok(cbErrorSpy.calledWith(errorMessage))
@@ -144,20 +144,20 @@ test('Create Address Error Case', function (t) {
 })
 
 test('Create Address Success Case', function (t) {
-  const Model = utils.get().address
+  const Model = ENV.container.getModel(models.address)
   const data = 'Correct Data'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
 
   const twilioAPICreateAddressStub = sinon.stub(
-    twilioAPI,
+    ENV.connector.twilioAPI,
     'createAddress',
     (Model, values, callback) => {
       callback(null, data)
     }
   )
 
-  createMethod.bind(connector, Model, {}, cbOkSpy)()
+  createMethod.bind(ENV.connector, Model, {}, cbOkSpy)()
   t.ok(twilioAPICreateAddressStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
   t.ok(cbOkSpy.calledWith(null, data))
@@ -167,20 +167,20 @@ test('Create Address Success Case', function (t) {
 })
 
 test('Create Queue Error Case', function (t) {
-  const Model = utils.get().queue
+  const Model = ENV.container.getModel(models.queue)
   const errorMessage = 'Error'
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)
 
   const twilioAPICreateQueueStub = sinon.stub(
-    twilioAPI,
+    ENV.connector.twilioAPI,
     'createQueue',
     (Model, values, number, callback) => {
       callback(errorMessage)
     }
   )
 
-  createMethod.bind(connector, Model, {}, cbErrorSpy)()
+  createMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
   t.ok(twilioAPICreateQueueStub.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
   t.ok(cbErrorSpy.calledWith(errorMessage))
@@ -190,20 +190,20 @@ test('Create Queue Error Case', function (t) {
 })
 
 test('Create Queue Success Case', function (t) {
-  const Model = utils.get().queue
+  const Model = ENV.container.getModel(models.queue)
   const data = 'Correct Data'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
 
   const twilioAPICreateQueueStub = sinon.stub(
-    twilioAPI,
+    ENV.connector.twilioAPI,
     'createQueue',
     (Model, values, number, callback) => {
       callback(null, data)
     }
   )
 
-  createMethod.bind(connector, Model, {}, cbOkSpy)()
+  createMethod.bind(ENV.connector, Model, {}, cbOkSpy)()
   t.ok(twilioAPICreateQueueStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
   t.ok(cbOkSpy.calledWith(null, data))
@@ -213,20 +213,20 @@ test('Create Queue Success Case', function (t) {
 })
 
 test('Create Account Error Case', function (t) {
-  const Model = utils.get().account
+  const Model = ENV.container.getModel(models.account)
   const errorMessage = 'Error'
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)
 
   const twilioAPICreateAccountStub = sinon.stub(
-    twilioAPI,
+    ENV.connector.twilioAPI,
     'createAccount',
     (Model, values, callback) => {
       callback(errorMessage)
     }
   )
 
-  createMethod.bind(connector, Model, {}, cbErrorSpy)()
+  createMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
   t.ok(twilioAPICreateAccountStub.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
   t.ok(cbErrorSpy.calledWith(errorMessage))
@@ -236,20 +236,20 @@ test('Create Account Error Case', function (t) {
 })
 
 test('Create Account Success Case', function (t) {
-  const Model = utils.get().account
+  const Model = ENV.container.getModel(models.account)
   const data = 'Correct Data'
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
 
   const twilioAPICreateAccountStub = sinon.stub(
-    twilioAPI,
+    ENV.connector.twilioAPI,
     'createAccount',
     (Model, values, callback) => {
       callback(null, data)
     }
   )
 
-  createMethod.bind(connector, Model, {}, cbOkSpy)()
+  createMethod.bind(ENV.connector, Model, {}, cbOkSpy)()
   t.ok(twilioAPICreateAccountStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
   t.ok(cbOkSpy.calledWith(null, data))
@@ -265,7 +265,7 @@ test('Create With Invalid Model', function (t) {
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)
 
-  createMethod.bind(connector, Model, {}, cbErrorSpy)()
+  createMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
   t.ok(cbErrorSpy.calledOnce)
   t.ok(cbErrorSpy.calledWith(errorMessage))
 
