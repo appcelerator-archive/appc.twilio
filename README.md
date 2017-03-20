@@ -2,60 +2,41 @@
 An Arrow connector for Twilio Node.js SDK v.2.11.1.
 
 ## 1. Installation
-You can use 
 ```sh 
-npm install appc.twilio
+appc install connector/appc.twilio
 ```
- or add 
-```sh 
-"appc.twilio" : "1.0.0"
-``` 
-to your **package.json** file.
 
 ## 2. Configuration
-Register the connector in your **appc.json** file : 
-```sh
-"dependencies": {
-    ...
-    "connector/appc.twilio": "1.0.0"
-    ...
-  },
-```
-Set the configuration object in your ``conf/default.js`` file :
+Set the configuration object in your ``conf/appc.twilio.default.js`` file.
+
 You need to set the following configuration properties:
 ```sh
     connectors: {
       'appc.twilio': {
-        sid: '<youtTwilioAccountSID>',
-        auth_token: '<yourTwilioAuthToken>',
-        twilio_number: '<yourTwilioPhoneNumber>',
-        modelAutogen: true,
-        twilioWelcomeVoiceURL: 'https://demo.twilio.com/welcome/voice',
+        skipModelNamespace: '<DEFAULT IS TRUE SO MODEL WILL NOT BE NAMESPACED>',
+        modelNamespace: '<OPTIONAL. THIS IS THE WAY WE CAN OVERRIDE THE DEFAULT NAMESPACE WHICH IS THE CONNECTOR NAME.>',
+        sid: '<MANDATORY. YOUR TWILLIO ACCOUNT SID>',
+        auth_token: '<MANDATORY. YOUR TWILLIO ACCOUNT TOKEN>',
+        twilio_number: '<MANDATORY. YOUR TWILLIO ACCOUNT NUMBER>',
         outgoing_caller_data: {
-          to: '<THE RECEIVING PHONE NUMBER>'
+          to: '<MANDATORY. THE RECEIVING PHONE NUMBER>'
         }
       }
     }
 ```
-- **sid** - Your Twilio account sid
-- **auth_token** - Your Twilio account auth_token
-- **twilio_number** - Your Twilio phone number
-- **twilioWelcomeVoiceURL** - Default voice message url
-- **outgoing_caller_data.to** - Receiving phone number. Needed for integration test suite only.
-
 ## 3. Development
-> This section is for individuals developing the Twilio Connector and not intended
-  for end-users.
+> This section is for individuals developing the Twilio Connector and not intended for end-users.
 
-```sh
-npm install
-node app.js
-```
-Take a look at all available options and query parameters in the API documentation section of your arrow administration. Options are available under the group appc.twilio.
+Here is the workflow:
 
-For development purposes use ``development`` branch only.
+#### Add configuration 
 
-## 4. Testing
+Configure the connector in conf/local.js
+
+#### Do code changes 
+
+Test suites could be started with:
+
 To test the connector, just run
 ```sh
 npm test
@@ -68,4 +49,12 @@ To run just the `integration` tests run
 ```sh
 npm run test:integration
 ```
-**Note** that integration tests require setting the connector configuration object in your ``conf/default.js`` or in ``conf/local.js``
+
+#### Start the connector in standalone mode 
+Use  the following commands.
+
+```sh
+npm install
+
+npm start
+```
