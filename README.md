@@ -36,8 +36,6 @@ Configure the connector in conf/local.js
 #### Do code changes 
 
 Test suites could be started with:
-
-To test the connector, just run
 ```sh
 npm test
 ```
@@ -51,7 +49,7 @@ npm run test:integration
 ```
 
 #### Start the connector in standalone mode 
-Use  the following commands.
+Use  the following commands:
 
 ```sh
 npm install
