@@ -1,5 +1,11 @@
 const twilio = require('twilio')
-const validate = require('./validator').validate
+const messages = {
+  missingId: 'Missing required parameter "id"',
+  missingModel: 'Missing required parameter "model"',
+  missingToNumber: 'Required parameters "toNumber" must be passed to make a call',
+  missingFromNumber: 'Required parameters "fromNumber" must be passed to make a call',
+  missingMessageBody: 'Required parameters "messageBody" must be passed to send message'
+}
 
 module.exports = function (config) {
   const client = new twilio.RestClient(config.sid, config.auth_token)
@@ -23,24 +29,24 @@ module.exports = function (config) {
   }
 
   function findAll (modelName, callback) {
-    validate.model(modelName, callback)
+    throwOnMissingMandatoryField(modelName, callback, messages.missingModel)
     client[modelName].list({ 'PageSize': '1000' }, throwOrRespondWithData.bind(null, modelName, callback))
   }
 
   function findByID (modelName, id, callback) {
-    validate.model(modelName, callback)
-    validate.id(id, callback)
+    throwOnMissingMandatoryField(modelName, callback, messages.missingModel)
+    throwOnMissingMandatoryField(id, callback, messages.missingId)
     client[modelName](id).get(throwOrRespondWithData.bind(null, modelName, callback))
   }
 
   function query (modelName, criteria, callback) {
-    validate.model(modelName, callback)
+    throwOnMissingMandatoryField(modelName, callback, messages.missingModel)
     client[modelName].list(criteria, throwOrRespondWithData.bind(null, modelName, callback))
   }
 
   function createCall (payload, callback) {
-    validate.numberTo(payload.to, callback)
-    validate.numberFrom(payload.from, callback)
+    throwOnMissingMandatoryField(payload.to, callback, messages.missingToNumber)
+    throwOnMissingMandatoryField(payload.from, callback, messages.missingFromNumber)
     client.makeCall(payload, throwOrRespondWithData.bind(null, null, callback))
   }
 
@@ -49,9 +55,9 @@ module.exports = function (config) {
   }
 
   function createMessage (payload, callback) {
-    validate.numberTo(payload.to, callback)
-    validate.numberFrom(payload.from, callback)
-    validate.messageBody(payload.body, callback)
+    throwOnMissingMandatoryField(payload.to, callback, messages.missingToNumber)
+    throwOnMissingMandatoryField(payload.from, callback, messages.missingFromNumber)
+    throwOnMissingMandatoryField(payload.body, callback, messages.missingMessageBody)
     client.messages.create(payload, throwOrRespondWithData.bind(null, null, callback))
   }
 
@@ -64,21 +70,23 @@ module.exports = function (config) {
   }
 
   function updateAddress (id, payload, callback) {
-    validate.id(id, callback)
+    throwOnMissingMandatoryField(id, callback, messages.missingId)
     client.addresses(id).post(payload, throwOrRespondWithData.bind(null, null, callback))
   }
 
   function updateOutgoingCallerId (id, payload, callback) {
-    validate.id(id, callback)
+    throwOnMissingMandatoryField(id, callback, messages.missingId)
     client.outgoingCallerIds(id).post(payload, throwOrRespondWithData.bind(null, null, callback))
   }
 
   function updateQueue (id, payload, callback) {
+    throwOnMissingMandatoryField(id, callback, messages.missingId)
     client.queues(id).update(payload, throwOrRespondWithData.bind(null, null, callback))
   }
 
   function deleteById (modelName, id, callback) {
-    validate.id(id, callback)
+    throwOnMissingMandatoryField(modelName, callback, messages.missingModel)
+    throwOnMissingMandatoryField(id, callback, messages.missingId)
     client[modelName](id).delete(throwOrRespondWithData.bind(null, modelName, callback))
   }
 }
@@ -92,5 +100,11 @@ function throwOrRespondWithData (modelName, callback, err, data) {
     } else {
       callback(null, data)
     }
+  }
+}
+
+function throwOnMissingMandatoryField (field, callback, errorMessage) {
+  if (!field) {
+    callback(new Error(errorMessage))
   }
 }
