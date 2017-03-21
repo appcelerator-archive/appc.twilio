@@ -1,6 +1,6 @@
 const pluralize = require('pluralize')
 
-module.exports = function (config, sdkFacade, transformer) {
+module.exports = function (config, sdkFacade, tools) {
   return {
     createCall: createCall,
     createAddress: createAddress,
@@ -82,7 +82,7 @@ module.exports = function (config, sdkFacade, transformer) {
     if (err) {
       callback(err)
     } else {
-      callback(null, transformer.transformToCollection(Model, data))
+      callback(null, tools.createCollectionFromModel(Model, data))
     }
   }
 
@@ -90,7 +90,7 @@ module.exports = function (config, sdkFacade, transformer) {
     if (err) {
       callback(err)
     } else {
-      callback(null, transformer.transformToModel(Model, data))
+      callback(null, tools.createInstanceFromModel(Model, data))
     }
   }
 

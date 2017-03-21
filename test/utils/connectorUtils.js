@@ -21,5 +21,6 @@ const models = {
 module.exports = {
   connectorName: connectorName,
   models: models,
+  tools: tools(Arrow, connectorName),
   test: tools(Arrow, connectorName).test
 }

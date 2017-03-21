@@ -6,10 +6,9 @@ const config = {
   auth_token: '123456789012345678901234567890112345'
 }
 const sdkFacade = require('../../src/sdkFacade')(config)
-const transformer = require('../../src/transformer')
-
 const ENV = {}
 const connectorUtils = require('../utils/connectorUtils')
+const tools = connectorUtils.tools
 const models = connectorUtils.models
 
 function cb (errorMessage, data) { }
@@ -17,15 +16,15 @@ const cbSpy = sinon.spy(cb)
 const errorMessage = new Error()
 const dataFromTwilio = 'DATA_FROM_TWILIO'
 const transformToCollectionStub = sinon.stub(
-  transformer,
-  'transformToCollection',
+  tools,
+  'createCollectionFromModel',
   (data) => {
     return dataFromTwilio
   }
 )
 const transformToModelStub = sinon.stub(
-  transformer,
-  'transformToModel',
+  tools,
+  'createInstanceFromModel',
   (data) => {
     return dataFromTwilio
   }
@@ -37,7 +36,7 @@ test('connect', (t) => {
     t.ok(env.connector)
     ENV.container = env.container
     ENV.connector = env.connector
-    ENV.connector.twilioAPI = require('../../src/twilioAPI')(config, sdkFacade, transformer)
+    ENV.connector.twilioAPI = require('../../src/twilioAPI')(config, sdkFacade, tools)
     t.end()
   })
 })
