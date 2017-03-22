@@ -49,8 +49,11 @@ module.exports = function (config) {
 
   function createCall (payload, callback) {
     throwOnMissingMandatoryField(payload.to, callback, messages.missingToNumber)
-    payload.from = twilioNumber
-    client.makeCall(payload, throwOrRespondWithData.bind(null, null, callback))
+    client.makeCall({
+      to: payload.to,
+      from: twilioNumber,
+      url: config.twilioWelcomeVoiceURL
+    }, throwOrRespondWithData.bind(null, null, callback))
   }
 
   function createAddress (payload, callback) {
@@ -60,8 +63,11 @@ module.exports = function (config) {
   function createMessage (payload, callback) {
     throwOnMissingMandatoryField(payload.to, callback, messages.missingToNumber)
     throwOnMissingMandatoryField(payload.body, callback, messages.missingMessageBody)
-    payload.from = twilioNumber
-    client.messages.create(payload, throwOrRespondWithData.bind(null, null, callback))
+    client.messages.create({
+      to: payload.to,
+      from: twilioNumber,
+      body: payload.body
+    }, throwOrRespondWithData.bind(null, null, callback))
   }
 
   function createQueue (payload, callback) {
