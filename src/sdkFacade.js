@@ -3,25 +3,28 @@ const messages = {
   missingId: 'Missing required parameter "id"',
   missingModel: 'Missing required parameter "model"',
   missingToNumber: 'Required parameters "toNumber" must be passed to make a call',
-  missingFromNumber: 'Required parameters "fromNumber" must be passed to make a call',
   missingMessageBody: 'Required parameters "messageBody" must be passed to send message'
 }
 
 module.exports = function (config) {
   const client = new twilio.RestClient(config.sid, config.auth_token)
-
+  const twilioNumber = validateTwilioNumber(config.twilio_number)
   return {
     client: client,
-    createCall: createCall,
-    createAddress: createAddress,
-    createMessage: createMessage,
-    createQueue: createQueue,
-    createAccount: createAccount,
-    query: query,
-    updateAddress: updateAddress,
-    updateOutgoingCallerId: updateOutgoingCallerId,
-    updateQueue: updateQueue,
     deleteById: deleteById,
+    query: query,
+    create: {
+      call: createCall,
+      address: createAddress,
+      message: createMessage,
+      queue: createQueue,
+      account: createAccount
+    },
+    update: {
+      address: updateAddress,
+      outgoingCallerId: updateOutgoingCallerId,
+      queue: updateQueue
+    },
     find: {
       all: findAll,
       byId: findByID
@@ -46,7 +49,7 @@ module.exports = function (config) {
 
   function createCall (payload, callback) {
     throwOnMissingMandatoryField(payload.to, callback, messages.missingToNumber)
-    throwOnMissingMandatoryField(payload.from, callback, messages.missingFromNumber)
+    payload.from = twilioNumber
     client.makeCall(payload, throwOrRespondWithData.bind(null, null, callback))
   }
 
@@ -56,8 +59,8 @@ module.exports = function (config) {
 
   function createMessage (payload, callback) {
     throwOnMissingMandatoryField(payload.to, callback, messages.missingToNumber)
-    throwOnMissingMandatoryField(payload.from, callback, messages.missingFromNumber)
     throwOnMissingMandatoryField(payload.body, callback, messages.missingMessageBody)
+    payload.from = twilioNumber
     client.messages.create(payload, throwOrRespondWithData.bind(null, null, callback))
   }
 
@@ -89,6 +92,14 @@ module.exports = function (config) {
     throwOnMissingMandatoryField(id, callback, messages.missingId)
     client[modelName](id).delete(throwOrRespondWithData.bind(null, modelName, callback))
   }
+}
+
+function validateTwilioNumber (number) {
+  if (!number) {
+    throw new Error(`Provided number is ${number}.
+                     Please add correct twilio number in your connector configuration`)
+  }
+  return number
 }
 
 function throwOrRespondWithData (modelName, callback, err, data) {

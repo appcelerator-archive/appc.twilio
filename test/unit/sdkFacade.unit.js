@@ -1,7 +1,8 @@
 const test = require('tap').test
 const config = {
   sid: '123456789012345678901234567890112345',
-  auth_token: '123456789012345678901234567890112345'
+  auth_token: '123456789012345678901234567890112345',
+  twilio_number: '123'
 }
 const sinon = require('sinon')
 const sdkFacade = require('../../src/sdkFacade')(config)
@@ -20,7 +21,7 @@ test('### createCall - Success ###', function (t) {
     }
   )
 
-  sdkFacade.createCall({ to: '132321', from: '242342' }, cbSpy)
+  sdkFacade.create.call({ to: '132321', from: '242342' }, cbSpy)
 
   t.ok(facadeStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -41,7 +42,7 @@ test('### createCall - Error ###', function (t) {
     }
   )
 
-  sdkFacade.createCall({ to: '132321', from: '242342' }, cbSpy)
+  sdkFacade.create.call({ to: '132321', from: '242342' }, cbSpy)
 
   t.ok(facadeStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -62,7 +63,7 @@ test('### createQueue - Success ###', function (t) {
     }
   )
 
-  sdkFacade.createQueue({ maxSize: '132321', friendlyName: '242342' }, cbSpy)
+  sdkFacade.create.queue({ maxSize: '132321', friendlyName: '242342' }, cbSpy)
 
   t.ok(facadeStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -83,7 +84,7 @@ test('### createQueue - Error ###', function (t) {
     }
   )
 
-  sdkFacade.createQueue({ maxSize: '132321', friendlyName: '242342' }, cbSpy)
+  sdkFacade.create.queue({ maxSize: '132321', friendlyName: '242342' }, cbSpy)
 
   t.ok(facadeStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -104,7 +105,7 @@ test('### createAddress - Success ###', function (t) {
     }
   )
 
-  sdkFacade.createAddress({ friendlyName: 'name' }, cbSpy)
+  sdkFacade.create.address({ friendlyName: 'name' }, cbSpy)
 
   t.ok(facadeStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -125,7 +126,7 @@ test('### createAddress - Error ###', function (t) {
     }
   )
 
-  sdkFacade.createAddress({ friendlyName: 'name' }, cbSpy)
+  sdkFacade.create.address({ friendlyName: 'name' }, cbSpy)
 
   t.ok(facadeStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -146,7 +147,7 @@ test('### createAccount - Success ###', function (t) {
     }
   )
 
-  sdkFacade.createAccount({ friendlyName: 'name' }, cbSpy)
+  sdkFacade.create.account({ friendlyName: 'name' }, cbSpy)
 
   t.ok(facadeStub.calledOnce)
   t.ok(cbSpy.calledOnce)
@@ -167,7 +168,7 @@ test('### createAccount - Error ###', function (t) {
     }
   )
 
-  sdkFacade.createAccount({ friendlyName: 'name' }, cbSpy)
+  sdkFacade.create.account({ friendlyName: 'name' }, cbSpy)
 
   t.ok(facadeStub.calledOnce)
   t.ok(cbSpy.calledOnce)

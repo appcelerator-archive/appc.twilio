@@ -13,7 +13,8 @@ test('connect', (t) => {
     t.ok(env.connector)
     ENV.container = env.container
     ENV.connector = env.connector
-    ENV.connector.twilioAPI = require('../../../src/twilioAPI')()
+    ENV.connector.sdk = require('../../../src/sdkFacade')(ENV.connector.config)
+    ENV.connector.tools = connectorUtils.tools
     t.end()
   })
 })
@@ -24,20 +25,30 @@ test('### Delete Call - Error Case ###', function (t) {
   function cbError (errorMessage) { }
   const cbErrorSpy = sinon.spy(cbError)
 
-  const twilioAPIStubError = sinon.stub(
-    ENV.connector.twilioAPI,
+  const sdkStub = sinon.stub(
+    ENV.connector.sdk,
     'deleteById',
     (Model, id, callback) => {
       callback(errorMessage)
     }
   )
 
+  const toolsGetNameStub = sinon.stub(
+    ENV.connector.tools,
+    'getRootModelName',
+    (Model) => {
+      return {nameOnly: 'call', nameOnlyPlural: 'calls'}
+    }
+  )
+
   deleteMethod.bind(ENV.connector, Model, '', cbErrorSpy)()
-  t.ok(twilioAPIStubError.calledOnce)
+  t.ok(sdkStub.calledOnce)
+  t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
   t.ok(cbErrorSpy.calledWith(errorMessage))
 
-  twilioAPIStubError.restore()
+  sdkStub.restore()
+  toolsGetNameStub.restore()
   t.end()
 })
 
@@ -47,19 +58,29 @@ test('### Delete Call - Ok Case ###', function (t) {
   function cbOk (errorMessage, data) { }
   const cbOkSpy = sinon.spy(cbOk)
 
-  const twilioAPIStubOk = sinon.stub(
-    ENV.connector.twilioAPI,
+  const sdkStub = sinon.stub(
+    ENV.connector.sdk,
     'deleteById',
     (Model, id, callback) => {
       callback(null, data)
     }
   )
 
+  const toolsGetNameStub = sinon.stub(
+    ENV.connector.tools,
+    'getRootModelName',
+    (Model) => {
+      return {nameOnly: 'call', nameOnlyPlural: 'calls'}
+    }
+  )
+
   deleteMethod.bind(ENV.connector, Model, '', cbOkSpy)()
-  t.ok(twilioAPIStubOk.calledOnce)
+  t.ok(sdkStub.calledOnce)
+  t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
   t.ok(cbOkSpy.calledWith(null, data))
 
-  twilioAPIStubOk.restore()
+  sdkStub.restore()
+  toolsGetNameStub.restore()
   t.end()
 })

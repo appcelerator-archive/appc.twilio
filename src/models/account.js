@@ -11,6 +11,9 @@ module.exports = {
     uri: { type: String, description: 'The URI for this resource' },
     subresourceUris: { type: Object, description: 'The list of subresources under this account.' }
   },
-  actions: ['create', 'read']
+  actions: ['create', 'read'],
+  metadata: {
+    primaryKey: 'sid'
+  }
 }
 

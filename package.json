@@ -18,7 +18,7 @@
     "semver": "^5.0.3",
     "twilio": "2.11.1",
     "pluralize": "^3.1.0",
-    "appc-connector-utils": "0.1.0"
+    "appc-connector-utils": "0.1.1"
   },
   "devDependencies": {
     "arrow": "*",
@@ -33,13 +33,11 @@
   "scripts": {
     "start": "appc run",
     "test": "npm run lint && npm run test:unit",
-    "test:unit": "tap test/unit/*.js test/unit/lifecycle/*.js --color --bail --cov",
+    "test:unit": "tap test/unit/*.js test/unit/lifecycle/*.js test/unit/methods/*.js --color --bail --cov",
     "test:integration": "tap test/integration/*.js test/integration/lifecycle/*.js --color --bail --cov",
     "lint": "standard | snazzy",
     "lint-fix": "standard --fix | snazzy",
-    "precommit": "npm run lint",
-    "test:unit:lifecycle": "tap test/unit/lifecycle/*.js --color --bail --cov",
-    "test:integration:lifecycle": "tap test/integration/lifecycle/*.js --color --bail --cov"
+    "precommit": "npm run lint"
   },
   "standard": {
     "ignore": [

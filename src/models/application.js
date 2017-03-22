@@ -20,5 +20,8 @@ module.exports = {
     smsStatusCallback: { type: String, description: 'The URL that Twilio will POST to when a message is sent via the /SMS/Messages endpoint if you specify the Sid of this application on an outgoing SMS request.' },
     uri: { type: String, description: 'The URI for this resource.' }
   },
-  actions: ['create', 'read']
+  actions: ['create', 'read'],
+  metadata: {
+    primaryKey: 'sid'
+  }
 }

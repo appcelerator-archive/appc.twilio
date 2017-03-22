@@ -8,6 +8,9 @@ module.exports = {
     dateCreated: { type: String, description: 'The date that this resource was created' },
     dateUpdated: { type: String, description: 'The date that this resource was updated' },
     uri: { type: String, description: 'The URI for this resource, relative to https://api.twilio.com.' }
+  },
+  metadata: {
+    primaryKey: 'sid'
   }
 }
 

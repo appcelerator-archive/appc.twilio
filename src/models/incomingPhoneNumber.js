@@ -22,6 +22,9 @@ module.exports = {
     statusCallbackMethod: { type: String, description: 'The HTTP method Twilio will use to make requests to the StatusCallback URL. Either GET or POST.' },
     apiVersion: { type: String, description: 'Version of Twilio API' },
     uri: { type: String, description: 'The URI for this resource, relative to https://api.twilio.com.' }
+  },
+  metadata: {
+    primaryKey: 'sid'
   }
 }
 

@@ -11,6 +11,9 @@ module.exports = {
     isoCountry: { type: String, description: 'The ISO country code of this phone number.' },
     capabilities: { type: Object, description: 'This is a set of boolean properties that indicate whether a phone number can receive calls or messages' },
     beta: { type: Boolean, description: 'Phone numbers new to the Twilio platform are marked as beta. Possible values are either true or false.' }
+  },
+  metadata: {
+    primaryKey: 'phoneNumber'
   }
 }
 

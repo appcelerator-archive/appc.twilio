@@ -14,6 +14,9 @@ module.exports = {
     status: { type: String, description: 'The type of call that created this recording. Possible values are RecordVerb, DialVerb, Conference, OutboundAPI, Trunking.' },
     uri: { type: String, description: 'The URI for this resource, relative to https://api.twilio.com' }
   },
-  actions: ['read']
+  actions: ['read'],
+  metadata: {
+    primaryKey: 'sid'
+  }
 }
 

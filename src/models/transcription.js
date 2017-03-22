@@ -13,6 +13,9 @@ module.exports = {
     type: { type: String, description: 'The type of the transcription' },
     url: { type: String, description: 'The URI for this resource, relative to https://api.twilio.com' }
   },
-  actions: ['read', 'delete']
+  actions: ['read', 'delete'],
+  metadata: {
+    primaryKey: 'sid'
+  }
 }
 

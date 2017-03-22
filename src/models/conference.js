@@ -8,6 +8,9 @@ module.exports = {
     status: { type: String, description: 'A string representing the status of the conference. May be in-progress or completed.' },
     subresourceUris: { type: Object, description: 'The subresource URI for this resource' },
     uri: { type: String, description: 'The URI for this resource, relative to https://api.twilio.com.' }
+  },
+  metadata: {
+    primaryKey: 'sid'
   }
 }
 
