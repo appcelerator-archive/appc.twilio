@@ -2,7 +2,7 @@
 module.exports = {
   connectors: {
     'appc.twilio': {
-      skipModelNamespace: true,
+      skipModelNamespace: false,
       modelNamespace: '',
       sid: '<YOUR TWILLIO ACCOUNT SID>',
       auth_token: '<YOUR TWILLIO ACCOUNT TOKEN>',

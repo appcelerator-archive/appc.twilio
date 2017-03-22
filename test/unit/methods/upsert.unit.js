@@ -7,6 +7,8 @@ const ENV = {}
 const connectorUtils = require('../../utils/connectorUtils')
 const models = connectorUtils.models
 const modelFromStub = 'MyModel'
+const id = 'id'
+const doc = 'doc'
 
 test('connect', (t) => {
   connectorUtils.test.getConnectorDynamic(connectorUtils.connectorName, env => {
@@ -26,10 +28,10 @@ test('### updateAddress - Error Case ###', function (t) {
   const errorMessage = 'upsert error'
   const cbErrorSpy = sinon.spy()
 
-  const sdkStubError = sinon.stub(
+  const sdkStub = sinon.stub(
     ENV.connector.sdk.update,
     'address',
-    (Model, id, doc, callback) => {
+    (id, doc, callback) => {
       callback(errorMessage)
     }
   )
@@ -50,14 +52,15 @@ test('### updateAddress - Error Case ###', function (t) {
     }
   )
 
-  upsertMethod.bind(ENV.connector, Model, '', {}, cbErrorSpy)()
-  t.ok(sdkStubError.calledOnce)
+  upsertMethod.bind(ENV.connector, Model, id, doc, cbErrorSpy)()
+  t.ok(sdkStub.calledOnce)
+  t.ok(sdkStub.calledWith(id, doc))
   t.ok(toolsCIStub.notCalled)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
   t.ok(cbErrorSpy.calledWith(errorMessage))
 
-  sdkStubError.restore()
+  sdkStub.restore()
   toolsGetNameStub.restore()
   toolsCIStub.restore()
 
@@ -72,7 +75,7 @@ test('### updateAddress - Ok Case ###', function (t) {
   const sdkStubOk = sinon.stub(
     ENV.connector.sdk.update,
     'address',
-    (Model, id, doc, callback) => {
+    (id, doc, callback) => {
       callback(null, data)
     }
   )
@@ -93,8 +96,9 @@ test('### updateAddress - Ok Case ###', function (t) {
     }
   )
 
-  upsertMethod.bind(ENV.connector, Model, '', {}, cbOkSpy)()
+  upsertMethod.bind(ENV.connector, Model, id, doc, cbOkSpy)()
   t.ok(sdkStubOk.calledOnce)
+  t.ok(sdkStubOk.calledWith(id, doc))
   t.ok(toolsCIStub.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
@@ -116,7 +120,7 @@ test('### updateOutgoingCallerId - Error Case ###', function (t) {
   const sdkStubError = sinon.stub(
     ENV.connector.sdk.update,
     'outgoingCallerId',
-    (Model, id, doc, callback) => {
+    (id, doc, callback) => {
       callback(errorMessage)
     }
   )
@@ -137,8 +141,9 @@ test('### updateOutgoingCallerId - Error Case ###', function (t) {
     }
   )
 
-  upsertMethod.bind(ENV.connector, Model, '', {}, cbErrorSpy)()
+  upsertMethod.bind(ENV.connector, Model, id, doc, cbErrorSpy)()
   t.ok(sdkStubError.calledOnce)
+  t.ok(sdkStubError.calledWith(id, doc))
   t.ok(toolsCIStub.notCalled)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
@@ -160,7 +165,7 @@ test('### updateOutgoingCallerId - Ok Case ###', function (t) {
   const sdkStubOk = sinon.stub(
     ENV.connector.sdk.update,
     'outgoingCallerId',
-    (Model, id, doc, callback) => {
+    (id, doc, callback) => {
       callback(null, data)
     }
   )
@@ -181,8 +186,9 @@ test('### updateOutgoingCallerId - Ok Case ###', function (t) {
     }
   )
 
-  upsertMethod.bind(ENV.connector, Model, '', {}, cbOkSpy)()
+  upsertMethod.bind(ENV.connector, Model, id, doc, cbOkSpy)()
   t.ok(sdkStubOk.calledOnce)
+  t.ok(sdkStubOk.calledWith(id, doc))
   t.ok(toolsCIStub.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
@@ -204,7 +210,7 @@ test('### updateQueue - Error Case ###', function (t) {
   const sdkStubError = sinon.stub(
     ENV.connector.sdk.update,
     'queue',
-    (Model, id, doc, callback) => {
+    (id, doc, callback) => {
       callback(errorMessage)
     }
   )
@@ -225,8 +231,9 @@ test('### updateQueue - Error Case ###', function (t) {
     }
   )
 
-  upsertMethod.bind(ENV.connector, Model, '', {}, cbErrorSpy)()
+  upsertMethod.bind(ENV.connector, Model, id, doc, cbErrorSpy)()
   t.ok(sdkStubError.calledOnce)
+  t.ok(sdkStubError.calledWith(id, doc))
   t.ok(toolsCIStub.notCalled)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
@@ -248,7 +255,7 @@ test('### updateQueue - Ok Case ###', function (t) {
   const sdkStubOk = sinon.stub(
     ENV.connector.sdk.update,
     'queue',
-    (Model, id, doc, callback) => {
+    (id, doc, callback) => {
       callback(null, data)
     }
   )
@@ -269,8 +276,9 @@ test('### updateQueue - Ok Case ###', function (t) {
     }
   )
 
-  upsertMethod.bind(ENV.connector, Model, '', {}, cbOkSpy)()
+  upsertMethod.bind(ENV.connector, Model, id, doc, cbOkSpy)()
   t.ok(sdkStubOk.calledOnce)
+  t.ok(sdkStubOk.calledWith(id, doc))
   t.ok(toolsCIStub.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
@@ -287,8 +295,7 @@ test('Update With Invalid Model', function (t) {
   // To invoke the default clause in upsert.js we pass an invalid model name
   const Model = {name: 'appc.twilio/invalid'}
   const errorMessage = new Error()
-  function cbError (errorMessage) { }
-  const cbErrorSpy = sinon.spy(cbError)
+  const cbErrorSpy = sinon.spy()
 
   upsertMethod.bind(ENV.connector, Model, '', {}, cbErrorSpy)()
   t.ok(cbErrorSpy.calledOnce)

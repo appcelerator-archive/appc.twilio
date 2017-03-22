@@ -7,6 +7,7 @@ const ENV = {}
 const connectorUtils = require('../../utils/connectorUtils')
 const models = connectorUtils.models
 const modelFromStub = 'MyModel'
+const values = {to: 'test'}
 
 test('connect', (t) => {
   connectorUtils.test.getConnectorDynamic(connectorUtils.connectorName, env => {
@@ -29,7 +30,7 @@ test('Create Call Error Case', function (t) {
     ENV.connector.sdk.create,
     'call',
     // The same parameters as the real function
-    (Model, values, callback) => {
+    (values, callback) => {
       // This is the body of the mocked function from twilio API
       // This is the anonymous function inside create.js
       callback(errorMessage)
@@ -52,8 +53,9 @@ test('Create Call Error Case', function (t) {
     }
   )
 
-  createMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
+  createMethod.bind(ENV.connector, Model, values, cbErrorSpy)()
   t.ok(sdkStubError.calledOnce)
+  t.ok(sdkStubError.calledWith(values))
   t.ok(toolsCIStub.notCalled)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
@@ -73,7 +75,7 @@ test('Create Call Success Case', function (t) {
   const sdkStubOk = sinon.stub(
     ENV.connector.sdk.create,
     'call',
-    (Model, values, callback) => {
+    (values, callback) => {
       callback(null, data)
     }
   )
@@ -94,8 +96,9 @@ test('Create Call Success Case', function (t) {
     }
   )
 
-  createMethod.bind(ENV.connector, Model, {}, cbOkSpy)()
+  createMethod.bind(ENV.connector, Model, values, cbOkSpy)()
   t.ok(sdkStubOk.calledOnce)
+  t.ok(sdkStubOk.calledWith(values))
   t.ok(toolsCIStub.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
@@ -115,7 +118,7 @@ test('Create Message Error Case', function (t) {
   const sdkStubError = sinon.stub(
     ENV.connector.sdk.create,
     'message',
-    (Model, values, callback) => {
+    (values, callback) => {
       callback(errorMessage)
     }
   )
@@ -136,8 +139,9 @@ test('Create Message Error Case', function (t) {
     }
   )
 
-  createMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
+  createMethod.bind(ENV.connector, Model, values, cbErrorSpy)()
   t.ok(sdkStubError.calledOnce)
+  t.ok(sdkStubError.calledWith(values))
   t.ok(toolsCIStub.notCalled)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
@@ -157,7 +161,7 @@ test('Create Message Success Case', function (t) {
   const sdkStub = sinon.stub(
     ENV.connector.sdk.create,
     'message',
-    (Model, values, callback) => {
+    (values, callback) => {
       callback(null, data)
     }
   )
@@ -178,8 +182,9 @@ test('Create Message Success Case', function (t) {
     }
   )
 
-  createMethod.bind(ENV.connector, Model, {}, cbOkSpy)()
+  createMethod.bind(ENV.connector, Model, values, cbOkSpy)()
   t.ok(sdkStub.calledOnce)
+  t.ok(sdkStub.calledWith(values))
   t.ok(toolsCIStub.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
@@ -199,7 +204,7 @@ test('Create Address Error Case', function (t) {
   const sdkStub = sinon.stub(
     ENV.connector.sdk.create,
     'address',
-    (Model, values, callback) => {
+    (values, callback) => {
       callback(errorMessage)
     }
   )
@@ -220,8 +225,9 @@ test('Create Address Error Case', function (t) {
     }
   )
 
-  createMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
+  createMethod.bind(ENV.connector, Model, values, cbErrorSpy)()
   t.ok(sdkStub.calledOnce)
+  t.ok(sdkStub.calledWith(values))
   t.ok(toolsCIStub.notCalled)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
@@ -241,7 +247,7 @@ test('Create Address Success Case', function (t) {
   const sdkStub = sinon.stub(
     ENV.connector.sdk.create,
     'address',
-    (Model, values, callback) => {
+    (values, callback) => {
       callback(null, data)
     }
   )
@@ -262,8 +268,9 @@ test('Create Address Success Case', function (t) {
     }
   )
 
-  createMethod.bind(ENV.connector, Model, {}, cbOkSpy)()
+  createMethod.bind(ENV.connector, Model, values, cbOkSpy)()
   t.ok(sdkStub.calledOnce)
+  t.ok(sdkStub.calledWith(values))
   t.ok(toolsCIStub.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
@@ -283,7 +290,7 @@ test('Create Queue Error Case', function (t) {
   const sdkStub = sinon.stub(
     ENV.connector.sdk.create,
     'queue',
-    (Model, values, callback) => {
+    (values, callback) => {
       callback(errorMessage)
     }
   )
@@ -304,8 +311,9 @@ test('Create Queue Error Case', function (t) {
     }
   )
 
-  createMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
+  createMethod.bind(ENV.connector, Model, values, cbErrorSpy)()
   t.ok(sdkStub.calledOnce)
+  t.ok(sdkStub.calledWith(values))
   t.ok(toolsCIStub.notCalled)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
@@ -325,7 +333,7 @@ test('Create Queue Success Case', function (t) {
   const sdkStub = sinon.stub(
     ENV.connector.sdk.create,
     'queue',
-    (Model, values, callback) => {
+    (values, callback) => {
       callback(null, data)
     }
   )
@@ -346,8 +354,9 @@ test('Create Queue Success Case', function (t) {
     }
   )
 
-  createMethod.bind(ENV.connector, Model, {}, cbOkSpy)()
+  createMethod.bind(ENV.connector, Model, values, cbOkSpy)()
   t.ok(sdkStub.calledOnce)
+  t.ok(sdkStub.calledWith(values))
   t.ok(toolsCIStub.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
@@ -367,7 +376,7 @@ test('Create Account Error Case', function (t) {
   const sdkStub = sinon.stub(
     ENV.connector.sdk.create,
     'account',
-    (Model, values, callback) => {
+    (values, callback) => {
       callback(errorMessage)
     }
   )
@@ -388,8 +397,9 @@ test('Create Account Error Case', function (t) {
     }
   )
 
-  createMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
+  createMethod.bind(ENV.connector, Model, values, cbErrorSpy)()
   t.ok(sdkStub.calledOnce)
+  t.ok(sdkStub.calledWith(values))
   t.ok(toolsCIStub.notCalled)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbErrorSpy.calledOnce)
@@ -409,7 +419,7 @@ test('Create Account Success Case', function (t) {
   const sdkStub = sinon.stub(
     ENV.connector.sdk.create,
     'account',
-    (Model, values, callback) => {
+    (values, callback) => {
       callback(null, data)
     }
   )
@@ -430,8 +440,9 @@ test('Create Account Success Case', function (t) {
     }
   )
 
-  createMethod.bind(ENV.connector, Model, {}, cbOkSpy)()
+  createMethod.bind(ENV.connector, Model, values, cbOkSpy)()
   t.ok(sdkStub.calledOnce)
+  t.ok(sdkStub.calledWith(values))
   t.ok(toolsCIStub.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
