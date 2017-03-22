@@ -155,8 +155,7 @@ test('### updateOutgoingCallerId - Ok Case ###', function (t) {
   const Model = ENV.container.getModel(models.outgoingCallerId)
 
   const data = 'TestData'
-  function cbOk (errorMessage, data) { }
-  const cbOkSpy = sinon.spy(cbOk)
+  const cbOkSpy = sinon.spy()
 
   const sdkStubOk = sinon.stub(
     ENV.connector.sdk.update,
