@@ -23,8 +23,7 @@ test('### findAll Call - Error Case ###', function (t) {
   const Model = ENV.container.getModel(models.call)
 
   const errorMessage = 'findAll error'
-  function cbError (errorMessage) { }
-  const cbErrorSpy = sinon.spy(cbError)
+  const cbErrorSpy = sinon.spy()
 
   const sdkStubError = sinon.stub(
     ENV.connector.sdk.find,
@@ -68,8 +67,7 @@ test('### findAll Call - Error Case ###', function (t) {
 test('### findAll Call - Ok Case ###', function (t) {
   const Model = ENV.container.getModel(models.call)
   const data = 'MyCollectionWithModels'
-  function cbOk (errorMessage, data) { }
-  const cbOkSpy = sinon.spy(cbOk)
+  const cbOkSpy = sinon.spy()
 
   const sdkStubOk = sinon.stub(
     ENV.connector.sdk.find,

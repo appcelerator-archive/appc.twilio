@@ -7,8 +7,7 @@ const config = {
 const sinon = require('sinon')
 const sdkFacade = require('../../src/sdkFacade')(config)
 const client = sdkFacade.client
-function cb (errorMessage, data) { }
-const cbSpy = sinon.spy(cb)
+const cbSpy = sinon.spy()
 const errorMessage = new Error()
 const dataFromTwilio = 'DATA_FROM_TWILIO'
 

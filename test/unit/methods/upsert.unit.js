@@ -24,8 +24,7 @@ test('### updateAddress - Error Case ###', function (t) {
   const Model = ENV.container.getModel(models.address)
 
   const errorMessage = 'upsert error'
-  function cbError (errorMessage) { }
-  const cbErrorSpy = sinon.spy(cbError)
+  const cbErrorSpy = sinon.spy()
 
   const sdkStubError = sinon.stub(
     ENV.connector.sdk.update,
@@ -68,8 +67,7 @@ test('### updateAddress - Error Case ###', function (t) {
 test('### updateAddress - Ok Case ###', function (t) {
   const Model = ENV.container.getModel(models.address)
   const data = 'TestData'
-  function cbOk (errorMessage, data) { }
-  const cbOkSpy = sinon.spy(cbOk)
+  const cbOkSpy = sinon.spy()
 
   const sdkStubOk = sinon.stub(
     ENV.connector.sdk.update,
@@ -113,8 +111,7 @@ test('### updateOutgoingCallerId - Error Case ###', function (t) {
   const Model = ENV.container.getModel(models.outgoingCallerId)
 
   const errorMessage = 'upsert error'
-  function cbError (errorMessage) { }
-  const cbErrorSpy = sinon.spy(cbError)
+  const cbErrorSpy = sinon.spy()
 
   const sdkStubError = sinon.stub(
     ENV.connector.sdk.update,
@@ -203,8 +200,7 @@ test('### updateQueue - Error Case ###', function (t) {
   const Model = ENV.container.getModel(models.queue)
 
   const errorMessage = 'upsert error'
-  function cbError (errorMessage) { }
-  const cbErrorSpy = sinon.spy(cbError)
+  const cbErrorSpy = sinon.spy()
 
   const sdkStubError = sinon.stub(
     ENV.connector.sdk.update,
@@ -248,8 +244,7 @@ test('### updateQueue - Ok Case ###', function (t) {
   const Model = ENV.container.getModel(models.queue)
 
   const data = 'TestData'
-  function cbOk (errorMessage, data) { }
-  const cbOkSpy = sinon.spy(cbOk)
+  const cbOkSpy = sinon.spy()
 
   const sdkStubOk = sinon.stub(
     ENV.connector.sdk.update,

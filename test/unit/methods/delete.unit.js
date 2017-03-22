@@ -22,8 +22,7 @@ test('connect', (t) => {
 test('### Delete Call - Error Case ###', function (t) {
   const Model = ENV.container.getModel(models.call)
   const errorMessage = 'Deletion error'
-  function cbError (errorMessage) { }
-  const cbErrorSpy = sinon.spy(cbError)
+  const cbErrorSpy = sinon.spy()
 
   const sdkStub = sinon.stub(
     ENV.connector.sdk,
@@ -55,8 +54,7 @@ test('### Delete Call - Error Case ###', function (t) {
 test('### Delete Call - Ok Case ###', function (t) {
   const Model = ENV.container.getModel(models.call)
   const data = 'TestData'
-  function cbOk (errorMessage, data) { }
-  const cbOkSpy = sinon.spy(cbOk)
+  const cbOkSpy = sinon.spy()
 
   const sdkStub = sinon.stub(
     ENV.connector.sdk,

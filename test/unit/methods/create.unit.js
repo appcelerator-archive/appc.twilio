@@ -23,8 +23,7 @@ test('connect', (t) => {
 test('Create Call Error Case', function (t) {
   const Model = ENV.container.getModel(models.call)
   const errorMessage = 'My error'
-  function cbError (errorMessage) { }
-  const cbErrorSpy = sinon.spy(cbError)
+  const cbErrorSpy = sinon.spy()
 
   const sdkStubError = sinon.stub(
     ENV.connector.sdk.create,
@@ -69,8 +68,7 @@ test('Create Call Error Case', function (t) {
 test('Create Call Success Case', function (t) {
   const Model = ENV.container.getModel(models.call)
   const data = 'MyData'
-  function cbOk (errorMessage, data) { }
-  const cbOkSpy = sinon.spy(cbOk)
+  const cbOkSpy = sinon.spy()
 
   const sdkStubOk = sinon.stub(
     ENV.connector.sdk.create,
@@ -112,8 +110,7 @@ test('Create Call Success Case', function (t) {
 test('Create Message Error Case', function (t) {
   const Model = ENV.container.getModel(models.message)
   const errorMessage = 'My error'
-  function cbError (errorMessage) { }
-  const cbErrorSpy = sinon.spy(cbError)
+  const cbErrorSpy = sinon.spy()
 
   const sdkStubError = sinon.stub(
     ENV.connector.sdk.create,
@@ -155,8 +152,7 @@ test('Create Message Error Case', function (t) {
 test('Create Message Success Case', function (t) {
   const Model = ENV.container.getModel(models.message)
   const data = 'Message'
-  function cbOk (errorMessage, data) { }
-  const cbOkSpy = sinon.spy(cbOk)
+  const cbOkSpy = sinon.spy()
 
   const sdkStub = sinon.stub(
     ENV.connector.sdk.create,
@@ -198,8 +194,7 @@ test('Create Message Success Case', function (t) {
 test('Create Address Error Case', function (t) {
   const Model = ENV.container.getModel(models.address)
   const errorMessage = 'Error'
-  function cbError (errorMessage) { }
-  const cbErrorSpy = sinon.spy(cbError)
+  const cbErrorSpy = sinon.spy()
 
   const sdkStub = sinon.stub(
     ENV.connector.sdk.create,
@@ -241,8 +236,7 @@ test('Create Address Error Case', function (t) {
 test('Create Address Success Case', function (t) {
   const Model = ENV.container.getModel(models.address)
   const data = 'Correct Data'
-  function cbOk (errorMessage, data) { }
-  const cbOkSpy = sinon.spy(cbOk)
+  const cbOkSpy = sinon.spy()
 
   const sdkStub = sinon.stub(
     ENV.connector.sdk.create,
@@ -284,8 +278,7 @@ test('Create Address Success Case', function (t) {
 test('Create Queue Error Case', function (t) {
   const Model = ENV.container.getModel(models.queue)
   const errorMessage = 'Error'
-  function cbError (errorMessage) { }
-  const cbErrorSpy = sinon.spy(cbError)
+  const cbErrorSpy = sinon.spy()
 
   const sdkStub = sinon.stub(
     ENV.connector.sdk.create,
@@ -327,8 +320,7 @@ test('Create Queue Error Case', function (t) {
 test('Create Queue Success Case', function (t) {
   const Model = ENV.container.getModel(models.queue)
   const data = 'Correct Data'
-  function cbOk (errorMessage, data) { }
-  const cbOkSpy = sinon.spy(cbOk)
+  const cbOkSpy = sinon.spy()
 
   const sdkStub = sinon.stub(
     ENV.connector.sdk.create,
@@ -370,8 +362,7 @@ test('Create Queue Success Case', function (t) {
 test('Create Account Error Case', function (t) {
   const Model = ENV.container.getModel(models.account)
   const errorMessage = 'Error'
-  function cbError (errorMessage) { }
-  const cbErrorSpy = sinon.spy(cbError)
+  const cbErrorSpy = sinon.spy()
 
   const sdkStub = sinon.stub(
     ENV.connector.sdk.create,
@@ -413,8 +404,7 @@ test('Create Account Error Case', function (t) {
 test('Create Account Success Case', function (t) {
   const Model = ENV.container.getModel(models.account)
   const data = 'Correct Data'
-  function cbOk (errorMessage, data) { }
-  const cbOkSpy = sinon.spy(cbOk)
+  const cbOkSpy = sinon.spy()
 
   const sdkStub = sinon.stub(
     ENV.connector.sdk.create,
@@ -456,8 +446,7 @@ test('Create Account Success Case', function (t) {
 test('Create With Invalid Model', function (t) {
   const Model = {name: 'appc.twilio/invalid'}
   const errorMessage = new Error()
-  function cbError (errorMessage) { }
-  const cbErrorSpy = sinon.spy(cbError)
+  const cbErrorSpy = sinon.spy()
 
   createMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
   t.ok(cbErrorSpy.calledOnce)
