@@ -28,5 +28,14 @@ module.exports = {
     duration: 86400000,
     activeDuration: 300000
   },
-  cookieSecret: 'oWlkkkrUqPlp/fsMlG9RQkNtr6LO6Rj1'
+  cookieSecret: 'oWlkkkrUqPlp/fsMlG9RQkNtr6LO6Rj1',
+  connectors: {
+    'appc.twilio': {
+      modelAutogen: true,
+      generateModelsFromSchema: true,
+      sid: '<SID>',
+      auth_token: '<TOKEN>',
+      twilio_number: '<NUMBER>'
+    }
+  }
 }

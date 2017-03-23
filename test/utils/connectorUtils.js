@@ -1,5 +1,5 @@
 const Arrow = require('arrow')
-const tools = require('appc-connector-utils')
+const toolsFactory = require('appc-connector-utils')
 const connectorName = 'appc.twilio'
 
 const models = {
@@ -18,9 +18,10 @@ const models = {
   transcription: `${connectorName}/transcription`
 }
 
+const tools = toolsFactory(Arrow, connectorName)
 module.exports = {
   connectorName: connectorName,
   models: models,
-  tools: tools(Arrow, connectorName),
-  test: tools(Arrow, connectorName).test
+  tools: tools,
+  test: tools.test
 }
