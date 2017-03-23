@@ -1,4 +1,4 @@
-![](https://github.com/appcelerator/appc.twilio/docs/twilio_logo.png)
+![](https://github.com/appcelerator/appc.twilio/blob/master/docs/twilio_logo.png)
 
 # Arrow Connector for Twilio
 
