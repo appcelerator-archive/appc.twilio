@@ -1,3 +1,8 @@
+# Purpose
+
+Marks significant changes from version to version.
+
+
 # 1.0.3
 
 * Clean up config file from test related parameters
