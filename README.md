@@ -54,8 +54,6 @@ appc run
 Then open the admin ui pannel usually at http://localhost:8080/arrow to play with the available models and exposed endpoints.
 
 # Service Compatibility
-The connector consume [Twilio REST API](https://www.twilio.com/docs/api/rest) and use [the following Twilio SDK](https://github.com/twilio/twilio-node).
-
 [Please read this for more information on connector versions, sdk versions and supported resources](./COMPATIBILITY.md)
 
 # Changelog

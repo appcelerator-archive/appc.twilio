@@ -12,6 +12,8 @@ This file shows important information regarding all of the following:
 
 Supported API version is https://api.twilio.com/2010-04-01
 
+[Please read Twilio REST API documentation here](https://www.twilio.com/docs/api/rest)
+
 ## SDK Version
 
 Used Twilio Node SDK is fixed to 2.11.1 
