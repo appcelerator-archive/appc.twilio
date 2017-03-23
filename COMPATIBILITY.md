@@ -1,19 +1,24 @@
 # Purpose 
 
-This file shows important information regarding the following:
+This file shows important information regarding all of the following:
 
-* SDK Information: <Connector Version> <-> <SDK/API/DRIVER VERSION>
-
-* Resources Information: The list with supported resources if applicable
-
+* API Version
+* SDK Information
+* Supported Resources
 
 # From 1.0.0 to Present
 
-## SDK Information
+## API Version
 
-Twilio Node SDK 2.11.1 - https://github.com/twilio/twilio-node
+Supported API version is https://api.twilio.com/2010-04-01
 
-## Resources Information
+## SDK Version
+
+Used Twilio Node SDK is fixed to 2.11.1 
+
+[Please read SDK source code and documentation here](https://github.com/twilio/twilio-node)
+
+## Supported Resources
 
 Here are the supported list of resources:
 

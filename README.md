@@ -1,6 +1,7 @@
 # Arrow Connector for Twilio
 
 An Arrow connector for [Twilio](https://www.twilio.com).
+
 Twilio service provides building blocks to add messaging, voice, and video in your web and mobile applications.
 
 # Table of Contents
@@ -15,18 +16,23 @@ Twilio service provides building blocks to add messaging, voice, and video in yo
 
 # Installation
 The connector works in the context of Arrow application.
-So first [create your Arrow application](http://docs.appcelerator.com/platform/latest/#!/guide/API_Builder_Getting_Started). In the terminal from the root of your app install the connector with:
+
+So first [create your Arrow application](http://docs.appcelerator.com/platform/latest/#!/guide/API_Builder_Getting_Started). 
+
+In the terminal from the root of your app install the connector with:
 
 ```sh 
 appc install connector/appc.twilio
 ```
 
 # Configuration
-After the connector installation configuration file will appear in the conf folder of the app - ``conf/appc.twilio.default.js``.
+After the installation you will see `conf/appc.twilio.default.js` config file.
+
 It will contain template with all configuration parameters.
+
 Some of them have default values but other must be configured appropriately.
 
-You need to set the following configuration properties:
+For this connector you need to set the following configuration properties:
 ```sh
     connectors: {
       'appc.twilio': {
@@ -77,7 +83,9 @@ There are two scenarios when you need to configure the actual service:
 * When running integration test suite 
 * When starting the connector in standalone mode
 
-The configuration should be made in conf/local.js file. The avaliable options are descibed in Configuration section of this document.
+The configuration should be made in conf/local.js file. 
+
+The avaliable options are descibed in Configuration section of this document.
 
 ### Integration Test Suite
 
@@ -95,7 +103,9 @@ One additional parameter is needed for the integration test suite, namely the re
 
 After the configuration has been made the integration test suite could be started with:
 
-> `npm run test:integration`
+```sh
+npm run test:integration
+```
 
 ### Start the connector in standalone mode 
 Run the following command to do this:
