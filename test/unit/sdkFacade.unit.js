@@ -220,3 +220,242 @@ test('### Query - Success ###', function (t) {
 
   t.end()
 })
+
+test('### UpdateAddress - Success ###', function (t) {
+  const cbSpy1 = sinon.spy((payload, callback) => {
+    callback(null, dataFromTwilio)
+  })
+  const values = { to: 'number' }
+  const facadeStub = sinon.stub(
+    client,
+    'addresses',
+    (id) => {
+      return {
+        post: cbSpy1
+      }
+    }
+  )
+
+  sdkFacade.update.address('id', values, cbSpy)
+
+  t.ok(facadeStub.calledOnce)
+  t.ok(facadeStub.calledWith('id'))
+  t.ok(cbSpy1.calledOnce)
+  t.ok(cbSpy1.calledWith(values))
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### UpdateAddress - Error ###', function (t) {
+  const values = { to: 'number' }
+  const cbSpy1 = sinon.spy((payload, callback) => {
+    callback(errorMessage)
+  })
+
+  const facadeStub = sinon.stub(
+    client,
+    'addresses',
+    (id) => {
+      return {
+        post: cbSpy1
+      }
+    }
+  )
+
+  sdkFacade.update.address('id', values, cbSpy)
+
+  t.ok(facadeStub.calledOnce)
+  t.ok(facadeStub.calledWith('id'))
+  t.ok(cbSpy1.calledOnce)
+  t.ok(cbSpy1.calledWith(values))
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### UpdateOutgoingCallerId - Success ###', function (t) {
+  const values = { to: 'number' }
+  const cbSpy1 = sinon.spy((payload, callback) => {
+    callback(null, dataFromTwilio)
+  })
+  const facadeStub = sinon.stub(
+    client,
+    'outgoingCallerIds',
+    (id) => {
+      return {
+        post: cbSpy1
+      }
+    }
+  )
+
+  sdkFacade.update.outgoingCallerId('id', values, cbSpy)
+
+  t.ok(facadeStub.calledOnce)
+  t.ok(facadeStub.calledWith('id'))
+  t.ok(cbSpy1.calledOnce)
+  t.ok(cbSpy1.calledWith(values))
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### UpdateOutgoingCallerId - Error ###', function (t) {
+  const values = { to: 'number' }
+  const cbSpy1 = sinon.spy((payload, callback) => {
+    callback(errorMessage)
+  })
+  const facadeStub = sinon.stub(
+    client,
+    'outgoingCallerIds',
+    (id) => {
+      return {
+        post: cbSpy1
+      }
+    }
+  )
+
+  sdkFacade.update.outgoingCallerId('id', values, cbSpy)
+
+  t.ok(facadeStub.calledOnce)
+  t.ok(facadeStub.calledWith('id'))
+  t.ok(cbSpy1.calledOnce)
+  t.ok(cbSpy1.calledWith(values))
+
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### UpdateQueue - Success ###', function (t) {
+  const values = { to: 'number' }
+  const cbSpy1 = sinon.spy((payload, callback) => {
+    callback(null, dataFromTwilio)
+  })
+  const facadeStub = sinon.stub(
+    client,
+    'queues',
+    (id) => {
+      return {
+        update: cbSpy1
+      }
+    }
+  )
+
+  sdkFacade.update.queue('id', values, cbSpy)
+
+  t.ok(facadeStub.calledOnce)
+  t.ok(facadeStub.calledWith('id'))
+  t.ok(cbSpy1.calledOnce)
+  t.ok(cbSpy1.calledWith(values))
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### UpdateQueue - Error ###', function (t) {
+  const values = { to: 'number' }
+  const cbSpy1 = sinon.spy((payload, callback) => {
+    callback(errorMessage)
+  })
+  const facadeStub = sinon.stub(
+    client,
+    'queues',
+    (id) => {
+      return {
+        update: cbSpy1
+      }
+    }
+  )
+
+  sdkFacade.update.queue('id', values, cbSpy)
+
+  t.ok(facadeStub.calledOnce)
+  t.ok(facadeStub.calledWith('id'))
+  t.ok(cbSpy1.calledOnce)
+  t.ok(cbSpy1.calledWith(values))
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### DeleteById - Success ###', function (t) {
+  const cbSpy1 = sinon.spy((callback) => {
+    callback(null, dataFromTwilio)
+  })
+  const facadeStub = sinon.stub(
+    client,
+    'calls',
+    (id) => {
+      return {
+        delete: cbSpy1
+      }
+    }
+  )
+
+  sdkFacade.deleteById('calls', 'id', cbSpy)
+
+  t.ok(facadeStub.calledOnce)
+  t.ok(facadeStub.calledWith('id'))
+  t.ok(cbSpy1.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### DeleteById - Error ###', function (t) {
+  const cbSpy1 = sinon.spy((callback) => {
+    callback(errorMessage)
+  })
+  const facadeStub = sinon.stub(
+    client,
+    'calls',
+    (id) => {
+      return {
+        delete: cbSpy1
+      }
+    }
+  )
+
+  sdkFacade.deleteById('calls', 'id', cbSpy)
+
+  t.ok(facadeStub.calledOnce)
+  t.ok(facadeStub.calledWith('id'))
+  t.ok(cbSpy1.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
