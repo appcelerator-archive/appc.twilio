@@ -8,6 +8,9 @@ Marks significant changes from version to version.
 * Clean up config file from test related parameters
 * Add support for reducing models
 * Add possibility to control model namespace
+* Move to appc-connector-utils
+* Code optimization
+* More tests added into unit test suite
 
 # 1.0.2
 
