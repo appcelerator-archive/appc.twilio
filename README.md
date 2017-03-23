@@ -1,12 +1,28 @@
-# Twilio Connector for Arrow
-An Arrow connector for Twilio Node.js SDK v.2.11.1.
+![](https://github.com/appcelerator/appc.twilio/docs/twilio_logo.png)
 
-## 1. Installation
+# Arrow Connector for Twilio
+
+An Arrow connector for [Twilio](https://www.twilio.com).
+Twilio service provides building blocks to add messaging, voice, and video in your web and mobile applications.
+
+# Table of Contents
+
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Service Coverage](#service-coverage)
+- [Changelog](#changelog)
+- [Development](#development)
+- [License](#license)
+
+Node.js SDK v.2.11.1.
+
+# Installation
 ```sh 
 appc install connector/appc.twilio
 ```
 
-## 2. Configuration
+# Configuration
 Set the configuration object in your ``conf/appc.twilio.default.js`` file.
 
 You need to set the following configuration properties:
@@ -24,7 +40,14 @@ You need to set the following configuration properties:
       }
     }
 ```
-## 3. Development
+
+# Usage 
+
+# Service Coverage
+
+# Changelog
+
+# Development
 > This section is for individuals developing the Twilio Connector and not intended for end-users.
 
 Here is the workflow:
@@ -56,3 +79,7 @@ npm install
 
 npm start
 ```
+
+# Legal Stuff
+
+This software is licensed under the Apache 2 Public License. However, usage of the software to access the Appcelerator Platform is governed by the Appcelerator Enterprise Software License Agreement. Copyright (c) 2014-2017 by Appcelerator, Inc. All Rights Reserved.
