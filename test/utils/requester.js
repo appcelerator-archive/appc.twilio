@@ -1,9 +1,10 @@
 const request = require('request')
 
 module.exports = (appConfig) => {
+  appConfig = appConfig || {}
   const port = appConfig.port || 8080
   const baseUrl = `http://localhost:${port}`
-  const apiPrefix = appConfig.apiPrefix
+  const apiPrefix = appConfig.apiPrefix || '/api'
   const url = `${baseUrl}${apiPrefix}`
 
   return {
