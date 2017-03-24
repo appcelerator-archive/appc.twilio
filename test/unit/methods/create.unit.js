@@ -6,8 +6,9 @@ const createMethod = require('../../../lib/methods/create').create
 const ENV = {}
 const connectorUtils = require('../../utils/connectorUtils')
 const models = connectorUtils.models
-const modelFromStub = 'MyModel'
-const values = {to: 'test'}
+const values = { to: 'test' }
+const errorMessage = 'My error'
+const data = { message: 'data' }
 
 test('connect', (t) => {
   connectorUtils.test.getConnectorDynamic(connectorUtils.connectorName, env => {
@@ -23,9 +24,7 @@ test('connect', (t) => {
 
 test('Create Call Error Case', function (t) {
   const Model = ENV.container.getModel(models.call)
-  const errorMessage = 'My error'
   const cbErrorSpy = sinon.spy()
-
   const sdkStubError = sinon.stub(
     ENV.connector.sdk.create,
     'call',
@@ -41,7 +40,7 @@ test('Create Call Error Case', function (t) {
     ENV.connector.tools,
     'getRootModelName',
     (Model) => {
-      return {nameOnly: 'call', nameOnlyPlural: 'calls'}
+      return { nameOnly: 'call', nameOnlyPlural: 'calls' }
     }
   )
 
@@ -49,7 +48,7 @@ test('Create Call Error Case', function (t) {
     ENV.connector.tools,
     'createInstanceFromModel',
     (Model, modelsData, primaryKey) => {
-      return modelFromStub
+      return data
     }
   )
 
@@ -69,7 +68,6 @@ test('Create Call Error Case', function (t) {
 
 test('Create Call Success Case', function (t) {
   const Model = ENV.container.getModel(models.call)
-  const data = 'MyData'
   const cbOkSpy = sinon.spy()
 
   const sdkStubOk = sinon.stub(
@@ -84,7 +82,7 @@ test('Create Call Success Case', function (t) {
     ENV.connector.tools,
     'getRootModelName',
     (Model) => {
-      return {nameOnly: 'call', nameOnlyPlural: 'calls'}
+      return { nameOnly: 'call', nameOnlyPlural: 'calls' }
     }
   )
 
@@ -92,7 +90,7 @@ test('Create Call Success Case', function (t) {
     ENV.connector.tools,
     'createInstanceFromModel',
     (Model, modelsData, primaryKey) => {
-      return modelFromStub
+      return data
     }
   )
 
@@ -102,7 +100,7 @@ test('Create Call Success Case', function (t) {
   t.ok(toolsCIStub.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
-  t.ok(cbOkSpy.calledWith(null, modelFromStub))
+  t.ok(cbOkSpy.calledWith(null, data))
 
   sdkStubOk.restore()
   toolsGetNameStub.restore()
@@ -127,7 +125,7 @@ test('Create Message Error Case', function (t) {
     ENV.connector.tools,
     'getRootModelName',
     (Model) => {
-      return {nameOnly: 'message', nameOnlyPlural: 'messages'}
+      return { nameOnly: 'message', nameOnlyPlural: 'messages' }
     }
   )
 
@@ -135,7 +133,7 @@ test('Create Message Error Case', function (t) {
     ENV.connector.tools,
     'createInstanceFromModel',
     (Model, modelsData, primaryKey) => {
-      return modelFromStub
+      return data
     }
   )
 
@@ -155,7 +153,7 @@ test('Create Message Error Case', function (t) {
 
 test('Create Message Success Case', function (t) {
   const Model = ENV.container.getModel(models.message)
-  const data = 'Message'
+  // const data = 'Message'
   const cbOkSpy = sinon.spy()
 
   const sdkStub = sinon.stub(
@@ -170,7 +168,7 @@ test('Create Message Success Case', function (t) {
     ENV.connector.tools,
     'getRootModelName',
     (Model) => {
-      return {nameOnly: 'message', nameOnlyPlural: 'messages'}
+      return { nameOnly: 'message', nameOnlyPlural: 'messages' }
     }
   )
 
@@ -178,7 +176,7 @@ test('Create Message Success Case', function (t) {
     ENV.connector.tools,
     'createInstanceFromModel',
     (Model, modelsData, primaryKey) => {
-      return modelFromStub
+      return data
     }
   )
 
@@ -188,7 +186,7 @@ test('Create Message Success Case', function (t) {
   t.ok(toolsCIStub.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
-  t.ok(cbOkSpy.calledWith(null, modelFromStub))
+  t.ok(cbOkSpy.calledWith(null, data))
 
   sdkStub.restore()
   toolsGetNameStub.restore()
@@ -213,7 +211,7 @@ test('Create Address Error Case', function (t) {
     ENV.connector.tools,
     'getRootModelName',
     (Model) => {
-      return {nameOnly: 'address', nameOnlyPlural: 'addresses'}
+      return { nameOnly: 'address', nameOnlyPlural: 'addresses' }
     }
   )
 
@@ -221,7 +219,7 @@ test('Create Address Error Case', function (t) {
     ENV.connector.tools,
     'createInstanceFromModel',
     (Model, modelsData, primaryKey) => {
-      return modelFromStub
+      return data
     }
   )
 
@@ -241,7 +239,7 @@ test('Create Address Error Case', function (t) {
 
 test('Create Address Success Case', function (t) {
   const Model = ENV.container.getModel(models.address)
-  const data = 'Correct Data'
+  // const data = 'Correct Data'
   const cbOkSpy = sinon.spy()
 
   const sdkStub = sinon.stub(
@@ -256,7 +254,7 @@ test('Create Address Success Case', function (t) {
     ENV.connector.tools,
     'getRootModelName',
     (Model) => {
-      return {nameOnly: 'address', nameOnlyPlural: 'addresses'}
+      return { nameOnly: 'address', nameOnlyPlural: 'addresses' }
     }
   )
 
@@ -264,7 +262,7 @@ test('Create Address Success Case', function (t) {
     ENV.connector.tools,
     'createInstanceFromModel',
     (Model, modelsData, primaryKey) => {
-      return modelFromStub
+      return data
     }
   )
 
@@ -274,7 +272,7 @@ test('Create Address Success Case', function (t) {
   t.ok(toolsCIStub.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
-  t.ok(cbOkSpy.calledWith(null, modelFromStub))
+  t.ok(cbOkSpy.calledWith(null, data))
 
   sdkStub.restore()
   toolsGetNameStub.restore()
@@ -299,7 +297,7 @@ test('Create Queue Error Case', function (t) {
     ENV.connector.tools,
     'getRootModelName',
     (Model) => {
-      return {nameOnly: 'queue', nameOnlyPlural: 'queues'}
+      return { nameOnly: 'queue', nameOnlyPlural: 'queues' }
     }
   )
 
@@ -307,7 +305,7 @@ test('Create Queue Error Case', function (t) {
     ENV.connector.tools,
     'createInstanceFromModel',
     (Model, modelsData, primaryKey) => {
-      return modelFromStub
+      return data
     }
   )
 
@@ -327,7 +325,7 @@ test('Create Queue Error Case', function (t) {
 
 test('Create Queue Success Case', function (t) {
   const Model = ENV.container.getModel(models.queue)
-  const data = 'Correct Data'
+  // const data = 'Correct Data'
   const cbOkSpy = sinon.spy()
 
   const sdkStub = sinon.stub(
@@ -342,7 +340,7 @@ test('Create Queue Success Case', function (t) {
     ENV.connector.tools,
     'getRootModelName',
     (Model) => {
-      return {nameOnly: 'queue', nameOnlyPlural: 'queues'}
+      return { nameOnly: 'queue', nameOnlyPlural: 'queues' }
     }
   )
 
@@ -350,7 +348,7 @@ test('Create Queue Success Case', function (t) {
     ENV.connector.tools,
     'createInstanceFromModel',
     (Model, modelsData, primaryKey) => {
-      return modelFromStub
+      return data
     }
   )
 
@@ -360,7 +358,7 @@ test('Create Queue Success Case', function (t) {
   t.ok(toolsCIStub.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
-  t.ok(cbOkSpy.calledWith(null, modelFromStub))
+  t.ok(cbOkSpy.calledWith(null, data))
 
   sdkStub.restore()
   toolsGetNameStub.restore()
@@ -385,7 +383,7 @@ test('Create Account Error Case', function (t) {
     ENV.connector.tools,
     'getRootModelName',
     (Model) => {
-      return {nameOnly: 'account', nameOnlyPlural: 'accounts'}
+      return { nameOnly: 'account', nameOnlyPlural: 'accounts' }
     }
   )
 
@@ -393,7 +391,7 @@ test('Create Account Error Case', function (t) {
     ENV.connector.tools,
     'createInstanceFromModel',
     (Model, modelsData, primaryKey) => {
-      return modelFromStub
+      return data
     }
   )
 
@@ -413,7 +411,7 @@ test('Create Account Error Case', function (t) {
 
 test('Create Account Success Case', function (t) {
   const Model = ENV.container.getModel(models.account)
-  const data = 'Correct Data'
+  // const data = 'Correct Data'
   const cbOkSpy = sinon.spy()
 
   const sdkStub = sinon.stub(
@@ -428,7 +426,7 @@ test('Create Account Success Case', function (t) {
     ENV.connector.tools,
     'getRootModelName',
     (Model) => {
-      return {nameOnly: 'account', nameOnlyPlural: 'accounts'}
+      return { nameOnly: 'account', nameOnlyPlural: 'accounts' }
     }
   )
 
@@ -436,7 +434,7 @@ test('Create Account Success Case', function (t) {
     ENV.connector.tools,
     'createInstanceFromModel',
     (Model, modelsData, primaryKey) => {
-      return modelFromStub
+      return data
     }
   )
 
@@ -446,7 +444,7 @@ test('Create Account Success Case', function (t) {
   t.ok(toolsCIStub.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
   t.ok(cbOkSpy.calledOnce)
-  t.ok(cbOkSpy.calledWith(null, modelFromStub))
+  t.ok(cbOkSpy.calledWith(null, data))
 
   sdkStub.restore()
   toolsGetNameStub.restore()
@@ -455,7 +453,7 @@ test('Create Account Success Case', function (t) {
 })
 
 test('Create With Invalid Model', function (t) {
-  const Model = {name: 'appc.twilio/invalid'}
+  const Model = { name: 'appc.twilio/invalid' }
   const errorMessage = new Error()
   const cbErrorSpy = sinon.spy()
 
