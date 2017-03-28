@@ -22,6 +22,7 @@ module.exports = {
     subresourceUris: { type: Object, description: 'The URIs for any subresources associate with this resource, relative to https://api.twilio.com' }
   },
   actions: ['create', 'read', 'delete'],
+  disabledActions: ['distinct', 'count'],
   metadata: {
     primaryKey: 'sid'
   }

@@ -10,6 +10,7 @@ const client = sdkFacade.client
 const cbSpy = sinon.spy()
 const errorMessage = new Error()
 const dataFromTwilio = 'DATA_FROM_TWILIO'
+const id = 1
 
 test('### createCall - Success ###', function (t) {
   const facadeStub = sinon.stub(
@@ -179,6 +180,134 @@ test('### createAccount - Error ###', function (t) {
   t.end()
 })
 
+test('### findAll - Error ###', function (t) {
+  const facadeStub = sinon.stub(
+    client.messages,
+    'list',
+    (options, callback) => {
+      callback(errorMessage)
+    }
+  )
+
+  sdkFacade.find.all('messages', cbSpy)
+  t.ok(facadeStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### findAll - Success ###', function (t) {
+  const facadeStub = sinon.stub(
+    client.messages,
+    'list',
+    (options, callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+
+  sdkFacade.find.all('messages', cbSpy)
+  t.ok(facadeStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### findById - Error ###', function (t) {
+  const facadeStub = sinon.stub(
+    client,
+    'messages',
+    (id) => {
+      return {
+        get: (callback) => {
+          callback(errorMessage)
+        }
+      }
+    }
+  )
+
+  sdkFacade.find.byId('messages', id, cbSpy)
+  t.ok(facadeStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### findById - Success ###', function (t) {
+  const facadeStub = sinon.stub(
+    client,
+    'messages',
+    (id) => {
+      return {
+        get: (callback) => {
+          callback(null, dataFromTwilio)
+        }
+      }
+    }
+  )
+
+  sdkFacade.find.byId('messages', id, cbSpy)
+  t.ok(facadeStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### createMessage - Error ###', function (t) {
+  const facadeStub = sinon.stub(
+    client.messages,
+    'create',
+    (payload, callback) => {
+      callback(errorMessage)
+    }
+  )
+
+  sdkFacade.create.message({}, cbSpy)
+  t.ok(facadeStub.calledOnce)
+  t.ok(cbSpy.called)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### createMessage - Success ###', function (t) {
+  const facadeStub = sinon.stub(
+    client.messages,
+    'create',
+    (payload, callback) => {
+      callback(null, dataFromTwilio)
+    }
+  )
+
+  sdkFacade.create.message({}, cbSpy)
+  t.ok(facadeStub.calledOnce)
+  t.ok(cbSpy.called)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
 test('### Query - Error ###', function (t) {
   const facadeStub = sinon.stub(
     client.calls,
@@ -210,6 +339,60 @@ test('### Query - Success ###', function (t) {
   )
 
   sdkFacade.query('calls', { friendlyName: 'name' }, cbSpy)
+
+  t.ok(facadeStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(null, dataFromTwilio))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### QueryAvailablePhoneNumbers - Error ###', function (t) {
+  const facadeStub = sinon.stub(
+    client,
+    'availablePhoneNumbers',
+    (id) => {
+      return {
+        local: {
+          list: (callback) => {
+            callback(errorMessage)
+          }
+        }
+      }
+    }
+  )
+
+  sdkFacade.queryAvailablePhoneNumbers('availablePhoneNumbers', 'US', cbSpy)
+
+  t.ok(facadeStub.calledOnce)
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errorMessage))
+
+  facadeStub.restore()
+  cbSpy.reset()
+
+  t.end()
+})
+
+test('### QueryAvailablePhoneNumbers - Success ###', function (t) {
+  const facadeStub = sinon.stub(
+    client,
+    'availablePhoneNumbers',
+    (id) => {
+      return {
+        local: {
+          list: (callback) => {
+            callback(null, dataFromTwilio)
+          }
+        }
+      }
+    }
+  )
+
+  sdkFacade.queryAvailablePhoneNumbers('availablePhoneNumbers', 'US', cbSpy)
 
   t.ok(facadeStub.calledOnce)
   t.ok(cbSpy.calledOnce)

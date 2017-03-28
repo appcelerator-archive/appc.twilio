@@ -5,6 +5,8 @@ module.exports = {
     friendlyName: { type: String, description: 'A descriptive string for this resource, chosen by your application, up to 64 characters long.' },
     sid: { type: String, description: 'A 34 character string that uniquely identifies this API Key. You will use this as the basic-auth user when authenticating to the API.' }
   },
+  actions: ['create', 'read'],
+  disabledActions: ['distinct', 'count'],
   metadata: {
     primaryKey: 'sid'
   }

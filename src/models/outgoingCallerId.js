@@ -8,7 +8,8 @@ module.exports = {
     dateUpdated: { type: String, description: 'The date that this resource was last updated, given in RFC 2822 format.' },
     uri: { type: String, description: 'The URI for this resource, relative to https://api.twilio.com.' }
   },
-  actions: ['read', 'create', 'update', 'delete'],
+  actions: ['read', 'update', 'delete'],
+  disabledActions: ['distinct', 'count', 'query'],
   metadata: {
     primaryKey: 'sid'
   }

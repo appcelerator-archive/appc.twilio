@@ -21,6 +21,7 @@ module.exports = {
     uri: { type: String, description: 'The URI for this resource.' }
   },
   actions: ['create', 'read'],
+  disabledActions: ['count', 'distinct'],
   metadata: {
     primaryKey: 'sid'
   }

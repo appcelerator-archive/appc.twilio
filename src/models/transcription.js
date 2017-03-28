@@ -14,6 +14,7 @@ module.exports = {
     url: { type: String, description: 'The URI for this resource, relative to https://api.twilio.com' }
   },
   actions: ['read', 'delete'],
+  disabledActions: ['count', 'distinct', 'query'],
   metadata: {
     primaryKey: 'sid'
   }

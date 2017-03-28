@@ -24,6 +24,7 @@ module.exports = {
     subresourceUris: { type: Object, description: 'The subresource URI for this resource' }
   },
   actions: ['create', 'read', 'delete'],
+  disabledActions: ['count', 'distinct'],
   metadata: {
     primaryKey: 'sid'
   }
