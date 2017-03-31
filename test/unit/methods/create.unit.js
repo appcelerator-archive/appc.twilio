@@ -153,7 +153,6 @@ test('Create Message Error Case', function (t) {
 
 test('Create Message Success Case', function (t) {
   const Model = ENV.container.getModel(models.message)
-  // const data = 'Message'
   const cbOkSpy = sinon.spy()
 
   const sdkStub = sinon.stub(
