@@ -2,6 +2,12 @@
 
 Marks significant changes from version to version.
 
+# 1.0.4
+
+* Fix the awkward info in Admin UI after successful creation of Model
+* Operations that are not relevant for particular Models are removed
+* Fix for the missing information in Arrow Admin Data tab
+* Namespace is applied not only on endpoints but also on models
 
 # 1.0.3
 
