@@ -18,7 +18,7 @@
     "semver": "^5.0.3",
     "twilio": "2.11.1",
     "pluralize": "^3.1.0",
-    "appc-connector-utils": "0.1.1"
+    "appc-connector-utils": "0.1.2"
   },
   "devDependencies": {
     "arrow": "*",
