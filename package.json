@@ -32,6 +32,9 @@
   },
   "scripts": {
     "start": "appc run",
+    "check-deps": "retire || true",
+    "clean": "rimraf ./tmp",
+    "checks": "npm run check-deps && npm run check-security",
     "test": "npm run lint && npm run test:unit",
     "test:unit": "tap test/unit/*.js test/unit/lifecycle/*.js test/unit/methods/*.js --color --bail --cov",
     "test:integration": "tap test/integration/*.js test/integration/lifecycle/*.js --color --bail --cov",
