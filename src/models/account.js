@@ -12,6 +12,7 @@ module.exports = {
     subresourceUris: { type: Object, description: 'The list of subresources under this account.' }
   },
   actions: ['create', 'read'],
+  disabledActions: ['count'],
   metadata: {
     primaryKey: 'sid'
   }

@@ -13,6 +13,7 @@ module.exports = function (config) {
     client: client,
     deleteById: deleteById,
     query: query,
+    queryAvailablePhoneNumbers: queryAvailablePhoneNumbers,
     create: {
       call: createCall,
       address: createAddress,
@@ -44,7 +45,12 @@ module.exports = function (config) {
 
   function query (modelName, criteria, callback) {
     throwOnMissingMandatoryField(modelName, callback, messages.missingModel)
-    client[modelName].list(criteria, throwOrRespondWithData.bind(null, modelName, callback))
+    client[modelName].list(criteria.where, throwOrRespondWithData.bind(null, modelName, callback))
+  }
+
+  function queryAvailablePhoneNumbers (modelName, criteria, callback) {
+    throwOnMissingMandatoryField(modelName, callback, messages.missingModel)
+    client[modelName](criteria.where).local.list(throwOrRespondWithData.bind(null, modelName, callback))
   }
 
   function createCall (payload, callback) {

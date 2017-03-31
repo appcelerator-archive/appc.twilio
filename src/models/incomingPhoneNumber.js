@@ -23,6 +23,8 @@ module.exports = {
     apiVersion: { type: String, description: 'Version of Twilio API' },
     uri: { type: String, description: 'The URI for this resource, relative to https://api.twilio.com.' }
   },
+  actions: ['create', 'read', 'update'],
+  disabledActions: ['count', 'distinct'],
   metadata: {
     primaryKey: 'sid'
   }

@@ -9,6 +9,8 @@ module.exports = {
     subresourceUris: { type: Object, description: 'The subresource URI for this resource' },
     uri: { type: String, description: 'The URI for this resource, relative to https://api.twilio.com.' }
   },
+  actions: ['read'],
+  disabledActions: ['distinct', 'count'],
   metadata: {
     primaryKey: 'sid'
   }

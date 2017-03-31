@@ -12,6 +12,8 @@ module.exports = {
     capabilities: { type: Object, description: 'This is a set of boolean properties that indicate whether a phone number can receive calls or messages' },
     beta: { type: Boolean, description: 'Phone numbers new to the Twilio platform are marked as beta. Possible values are either true or false.' }
   },
+  actions: ['read'],
+  disabledActions: ['findAll', 'findByID', 'count', 'distinct'],
   metadata: {
     primaryKey: 'phoneNumber'
   }

@@ -10,6 +10,8 @@ module.exports = {
     postalCode: { type: String, description: 'The postal code in which you or your customer is located.' },
     isoCountry: { type: String, required: true, description: 'The ISO country code of your or your customers address.' }
   },
+  actions: ['create', 'read', 'update'],
+  disabledActions: ['count', 'distinct'],
   metadata: {
     primaryKey: 'sid'
   }
