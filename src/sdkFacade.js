@@ -50,7 +50,7 @@ module.exports = function (config) {
 
   function queryAvailablePhoneNumbers (modelName, criteria, callback) {
     throwOnMissingMandatoryField(modelName, callback, messages.missingModel)
-    client[modelName](criteria.where).local.list(throwOrRespondWithData.bind(null, modelName, callback))
+    client[modelName](criteria).local.list(throwOrRespondWithData.bind(null, modelName, callback))
   }
 
   function createCall (payload, callback) {
