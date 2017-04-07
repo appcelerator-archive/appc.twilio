@@ -40,3 +40,6 @@ jspm_packages
 .DS_Store
 .vscode
 local.js
+
+# Security files
+scan-retire.txt
