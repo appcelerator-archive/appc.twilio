@@ -1,7 +1,7 @@
 {
   "name": "appc.twilio",
   "description": "Connector to Twilio API",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": "Axway R&D",
   "license": "Apache 2.0",
   "framework": "none",
