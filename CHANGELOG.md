@@ -2,6 +2,11 @@
 
 Marks significant changes from version to version.
 
+# 1.0.5
+
+* generateModels config parameter that allows generating only subset of whole set of models.
+* npm security related modules
+
 # 1.0.4
 
 * Fix the awkward info in Admin UI after successful creation of Model

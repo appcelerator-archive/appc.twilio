@@ -37,10 +37,11 @@ For this connector you need to set the following configuration properties:
     connectors: {
       'appc.twilio': {
         skipModelNamespace: '<MANDATORY WITH DEFAULT VALUE = FALSE. MODEL WILL BE NAMESPACED WITH THE CONNECTOR NAME>',
-        modelNamespace: '<OPTIONAL. OVERRIDES THE DEFAULT NAMESPACE VALUE WHICH IS SET TO THE NAME OF THE CONNECTOR.>',
         sid: '<MANDATORY. YOUR TWILLIO ACCOUNT SID>',
         auth_token: '<MANDATORY. YOUR TWILLIO ACCOUNT TOKEN>',
-        twilio_number: '<MANDATORY. YOUR TWILLIO ACCOUNT NUMBER>'
+        twilio_number: '<MANDATORY. YOUR TWILLIO ACCOUNT NUMBER>',
+        generateModels: '<OPTIONAL. ARRAY OF MODEL NAMES THAT WILL BE GENERATED. GENERATES ALL IF SKIPPED.>',
+        modelNamespace: '<OPTIONAL. OVERRIDES THE DEFAULT NAMESPACE VALUE WHICH IS SET TO THE NAME OF THE CONNECTOR.>'
       }
     }
 ```
