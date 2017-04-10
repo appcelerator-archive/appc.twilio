@@ -54,6 +54,26 @@ appc run
 
 Then open the admin ui pannel usually at http://localhost:8080/arrow to play with the available models and exposed endpoints.
 
+## Query
+
+To query for available phone numbers you should specify it in the where clase of the UI. You should pass JSON structure, such as:
+
+```sh
+{"isoCountry":"US"}
+```
+
+or
+
+```sh
+{"region":"TX"}
+```
+
+To query for any other of the models, you can just select the field and the value you want to query for. For example (calls query):
+
+```sh
+{"status":"busy"}
+```
+
 # Service Compatibility
 [Please read this for more information on connector versions, sdk versions and supported resources](./COMPATIBILITY.md)
 

@@ -110,6 +110,7 @@ test('### query availablePhoneNumbers - Error Case ###', function (t) {
 
   const errorMessage = 'query error'
   const cbErrorSpy = sinon.spy()
+  const query = {where: {region: 'us'}}
 
   const sdkStubError = sinon.stub(
     ENV.connector.sdk,
@@ -135,7 +136,7 @@ test('### query availablePhoneNumbers - Error Case ###', function (t) {
     }
   )
 
-  queryMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
+  queryMethod.bind(ENV.connector, Model, query, cbErrorSpy)()
   t.ok(sdkStubError.calledOnce)
   t.ok(toolsStubError.notCalled)
   t.ok(toolsGetNameStub.calledOnce)
@@ -153,6 +154,7 @@ test('### query availablePhoneNumbers - Ok Case ###', function (t) {
   const Model = ENV.container.getModel(models.availablePhoneNumber)
   const data = 'TestData'
   const cbOkSpy = sinon.spy()
+  const query = {where: {region: 'us'}}
 
   const sdkStubOk = sinon.stub(
     ENV.connector.sdk,
@@ -178,7 +180,7 @@ test('### query availablePhoneNumbers - Ok Case ###', function (t) {
     }
   )
 
-  queryMethod.bind(ENV.connector, Model, {}, cbOkSpy)()
+  queryMethod.bind(ENV.connector, Model, query, cbOkSpy)()
   t.ok(sdkStubOk.calledOnce)
   t.ok(toolsStubOk.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
@@ -187,6 +189,27 @@ test('### query availablePhoneNumbers - Ok Case ###', function (t) {
 
   sdkStubOk.restore()
   toolsStubOk.restore()
+  toolsGetNameStub.restore()
+  t.end()
+})
+
+test('### query availablePhoneNumbers - Invalid Query Case ###', function (t) {
+  const Model = ENV.container.getModel(models.availablePhoneNumber)
+  const cbOkSpy = sinon.spy()
+  const query = {where: {region: 1}}
+
+  const toolsGetNameStub = sinon.stub(
+    ENV.connector.tools,
+    'getRootModelName',
+    (Model) => {
+      return {nameOnly: 'availablePhoneNumber', nameOnlyPlural: 'availablePhoneNumbers'}
+    }
+  )
+
+  queryMethod.bind(ENV.connector, Model, query, cbOkSpy)()
+  t.ok(toolsGetNameStub.calledOnce)
+  t.ok(cbOkSpy.calledOnce)
+
   toolsGetNameStub.restore()
   t.end()
 })
