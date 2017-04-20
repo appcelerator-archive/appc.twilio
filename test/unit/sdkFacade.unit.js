@@ -357,7 +357,7 @@ test('### QueryAvailablePhoneNumbers - Error ###', function (t) {
     (id) => {
       return {
         local: {
-          list: (callback) => {
+          list: (options, callback) => {
             callback(errorMessage)
           }
         }
@@ -384,7 +384,7 @@ test('### QueryAvailablePhoneNumbers - Success ###', function (t) {
     (id) => {
       return {
         local: {
-          list: (callback) => {
+          list: (options, callback) => {
             callback(null, dataFromTwilio)
           }
         }

@@ -24,6 +24,9 @@ test('### query Call - Error Case ###', function (t) {
 
   const errorMessage = 'query error'
   const cbErrorSpy = sinon.spy()
+  const options = {
+    limit: 1
+  }
 
   const sdkStubError = sinon.stub(
     ENV.connector.sdk,
