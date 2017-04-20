@@ -6,6 +6,12 @@ const queryMethod = require('../../../lib/methods/query')['query']
 const ENV = {}
 const connectorUtils = require('../../utils/connectorUtils')
 const models = connectorUtils.models
+const options = {
+  limit: 1,
+  where: {
+    region: 'US'
+  }
+}
 
 test('connect', (t) => {
   connectorUtils.test.getConnectorDynamic(connectorUtils.connectorName, env => {
@@ -24,9 +30,6 @@ test('### query Call - Error Case ###', function (t) {
 
   const errorMessage = 'query error'
   const cbErrorSpy = sinon.spy()
-  const options = {
-    limit: 1
-  }
 
   const sdkStubError = sinon.stub(
     ENV.connector.sdk,
@@ -48,11 +51,11 @@ test('### query Call - Error Case ###', function (t) {
     ENV.connector.tools,
     'getRootModelName',
     (Model) => {
-      return {nameOnly: 'call', nameOnlyPlural: 'calls'}
+      return { nameOnly: 'call', nameOnlyPlural: 'calls' }
     }
   )
 
-  queryMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
+  queryMethod.bind(ENV.connector, Model, options, cbErrorSpy)()
   t.ok(sdkStubError.calledOnce)
   t.ok(toolsStubError.notCalled)
   t.ok(toolsGetNameStub.calledOnce)
@@ -91,11 +94,11 @@ test('### query Call - Ok Case ###', function (t) {
     ENV.connector.tools,
     'getRootModelName',
     (Model) => {
-      return {nameOnly: 'call', nameOnlyPlural: 'calls'}
+      return { nameOnly: 'call', nameOnlyPlural: 'calls' }
     }
   )
 
-  queryMethod.bind(ENV.connector, Model, {}, cbOkSpy)()
+  queryMethod.bind(ENV.connector, Model, options, cbOkSpy)()
   t.ok(sdkStubOk.calledOnce)
   t.ok(toolsStubOk.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
@@ -134,11 +137,11 @@ test('### query availablePhoneNumbers - Error Case ###', function (t) {
     ENV.connector.tools,
     'getRootModelName',
     (Model) => {
-      return {nameOnly: 'availablePhoneNumber', nameOnlyPlural: 'availablePhoneNumbers'}
+      return { nameOnly: 'availablePhoneNumber', nameOnlyPlural: 'availablePhoneNumbers' }
     }
   )
 
-  queryMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
+  queryMethod.bind(ENV.connector, Model, options, cbErrorSpy)()
   t.ok(sdkStubError.calledOnce)
   t.ok(toolsStubError.notCalled)
   t.ok(toolsGetNameStub.calledOnce)
@@ -177,11 +180,11 @@ test('### query availablePhoneNumbers - Ok Case ###', function (t) {
     ENV.connector.tools,
     'getRootModelName',
     (Model) => {
-      return {nameOnly: 'availablePhoneNumber', nameOnlyPlural: 'availablePhoneNumbers'}
+      return { nameOnly: 'availablePhoneNumber', nameOnlyPlural: 'availablePhoneNumbers' }
     }
   )
 
-  queryMethod.bind(ENV.connector, Model, {}, cbOkSpy)()
+  queryMethod.bind(ENV.connector, Model, options, cbOkSpy)()
   t.ok(sdkStubOk.calledOnce)
   t.ok(toolsStubOk.calledOnce)
   t.ok(toolsGetNameStub.calledOnce)
@@ -190,6 +193,27 @@ test('### query availablePhoneNumbers - Ok Case ###', function (t) {
 
   sdkStubOk.restore()
   toolsStubOk.restore()
+  toolsGetNameStub.restore()
+  t.end()
+})
+
+test('### query availablePhoneNumbers - Invalid Query Case ###', function (t) {
+  const Model = ENV.container.getModel(models.availablePhoneNumber)
+  const cbOkSpy = sinon.spy()
+  options.where = {}
+
+  const toolsGetNameStub = sinon.stub(
+    ENV.connector.tools,
+    'getRootModelName',
+    (Model) => {
+      return { nameOnly: 'availablePhoneNumber', nameOnlyPlural: 'availablePhoneNumbers' }
+    }
+  )
+
+  queryMethod.bind(ENV.connector, Model, options, cbOkSpy)()
+  t.ok(toolsGetNameStub.calledOnce)
+  t.ok(cbOkSpy.calledOnce)
+
   toolsGetNameStub.restore()
   t.end()
 })
