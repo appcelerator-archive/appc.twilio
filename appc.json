@@ -5,5 +5,11 @@
 	"assets": {
 		"small_logo": "docs/twilio_logo.png"
 	},
-	"dependencies": {}
+	"dependencies": {},
+	"owners": [
+			"ptodorov@axway.com",
+			"mvasilev@axway.com",
+			"vchobanov@axway.com",
+			"tpopov@axway.com"
+	]	
 }
