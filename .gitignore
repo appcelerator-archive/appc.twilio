@@ -41,5 +41,9 @@ jspm_packages
 .vscode
 local.js
 
-# Security files
-scan-retire.txt
+# retire and nsp files
+scan-nsp.json
+scan-retire.json
+
+# Others
+dist
