@@ -19,4 +19,3 @@ module.exports = {
     primaryKey: 'sid'
   }
 }
-
