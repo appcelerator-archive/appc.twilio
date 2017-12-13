@@ -1,7 +1,7 @@
 {
   "name": "appc.twilio",
   "description": "Connector to Twilio API",
-  "version": "1.0.7-7",
+  "version": "1.0.7-8",
   "author": {
     "email": "support@axway.com",
     "name": "Axway R&D",
