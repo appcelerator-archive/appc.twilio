@@ -42,7 +42,7 @@ jspm_packages
 local.js
 
 # retire and nsp files
-scan-nsp.json
+scan-audit.json
 scan-retire.json
 
 # Others
