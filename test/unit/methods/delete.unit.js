@@ -22,63 +22,46 @@ test('connect', (t) => {
 test('### Delete Call - Error Case ###', function (t) {
   const Model = ENV.container.getModel(models.call)
   const errorMessage = 'Deletion error'
-  const cbErrorSpy = sinon.spy()
 
-  const sdkStub = sinon.stub(
-    ENV.connector.sdk,
-    'deleteById',
-    (Model, id, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const sdkStub = sinon.stub(ENV.connector.sdk, 'deleteById').callsFake((Model, id, callback) => {
+    callback(errorMessage)
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return {nameOnly: 'call', nameOnlyPlural: 'calls'}
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'call', nameOnlyPlural: 'calls' }
+  })
 
-  deleteMethod.bind(ENV.connector, Model, '', cbErrorSpy)()
-  t.ok(sdkStub.calledOnce)
-  t.ok(toolsGetNameStub.calledOnce)
-  t.ok(cbErrorSpy.calledOnce)
-  t.ok(cbErrorSpy.calledWith(errorMessage))
+  deleteMethod.call(ENV.connector, Model, '', (err) => {
+    t.ok(sdkStub.calledOnce)
+    t.ok(toolsGetNameStub.calledOnce)
+    t.equals(err, errorMessage)
 
-  sdkStub.restore()
-  toolsGetNameStub.restore()
-  t.end()
+    sdkStub.restore()
+    toolsGetNameStub.restore()
+    t.end()
+  })
 })
 
 test('### Delete Call - Ok Case ###', function (t) {
   const Model = ENV.container.getModel(models.call)
   const data = 'TestData'
-  const cbOkSpy = sinon.spy()
 
-  const sdkStub = sinon.stub(
-    ENV.connector.sdk,
-    'deleteById',
-    (Model, id, callback) => {
-      callback(null, data)
-    }
-  )
+  const sdkStub = sinon.stub(ENV.connector.sdk, 'deleteById').callsFake((Model, id, callback) => {
+    callback(null, data)
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return {nameOnly: 'call', nameOnlyPlural: 'calls'}
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'call', nameOnlyPlural: 'calls' }
+  })
 
-  deleteMethod.bind(ENV.connector, Model, '', cbOkSpy)()
-  t.ok(sdkStub.calledOnce)
-  t.ok(toolsGetNameStub.calledOnce)
-  t.ok(cbOkSpy.calledOnce)
-  t.ok(cbOkSpy.calledWith(null, data))
+  deleteMethod.call(ENV.connector, Model, '', (err, arg) => {
+    t.ok(sdkStub.calledOnce)
+    t.ok(toolsGetNameStub.calledOnce)
+    t.equals(err, null)
+    t.equals(arg, data)
 
-  sdkStub.restore()
-  toolsGetNameStub.restore()
-  t.end()
+    sdkStub.restore()
+    toolsGetNameStub.restore()
+    t.end()
+  })
 })

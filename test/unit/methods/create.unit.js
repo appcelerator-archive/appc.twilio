@@ -25,32 +25,19 @@ test('connect', (t) => {
 test('Create Call Error Case', function (t) {
   const Model = ENV.container.getModel(models.call)
   const cbErrorSpy = sinon.spy()
-  const sdkStubError = sinon.stub(
-    ENV.connector.sdk.create,
-    'call',
-    // The same parameters as the real function
-    (values, callback) => {
-      // This is the body of the mocked function from twilio API
-      // This is the anonymous function inside create.js
-      callback(errorMessage)
-    }
-  )
+  const sdkStubError = sinon.stub(ENV.connector.sdk.create, 'call').callsFake((values, callback) => {
+    // This is the body of the mocked function from twilio API
+    // This is the anonymous function inside create.js
+    callback(errorMessage)
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'call', nameOnlyPlural: 'calls' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'call', nameOnlyPlural: 'calls' }
+  })
 
-  const toolsCIStub = sinon.stub(
-    ENV.connector.tools,
-    'createInstanceFromModel',
-    (Model, modelsData, primaryKey) => {
-      return data
-    }
-  )
+  const toolsCIStub = sinon.stub(ENV.connector.tools, 'createInstanceFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return data
+  })
 
   createMethod.bind(ENV.connector, Model, values, cbErrorSpy)()
   t.ok(sdkStubError.calledOnce)
@@ -70,29 +57,17 @@ test('Create Call Success Case', function (t) {
   const Model = ENV.container.getModel(models.call)
   const cbOkSpy = sinon.spy()
 
-  const sdkStubOk = sinon.stub(
-    ENV.connector.sdk.create,
-    'call',
-    (values, callback) => {
-      callback(null, data)
-    }
-  )
+  const sdkStubOk = sinon.stub(ENV.connector.sdk.create, 'call').callsFake((values, callback) => {
+    callback(null, data)
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'call', nameOnlyPlural: 'calls' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'call', nameOnlyPlural: 'calls' }
+  })
 
-  const toolsCIStub = sinon.stub(
-    ENV.connector.tools,
-    'createInstanceFromModel',
-    (Model, modelsData, primaryKey) => {
-      return data
-    }
-  )
+  const toolsCIStub = sinon.stub(ENV.connector.tools, 'createInstanceFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return data
+  })
 
   createMethod.bind(ENV.connector, Model, values, cbOkSpy)()
   t.ok(sdkStubOk.calledOnce)
@@ -113,29 +88,17 @@ test('Create Message Error Case', function (t) {
   const errorMessage = 'My error'
   const cbErrorSpy = sinon.spy()
 
-  const sdkStubError = sinon.stub(
-    ENV.connector.sdk.create,
-    'message',
-    (values, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const sdkStubError = sinon.stub(ENV.connector.sdk.create, 'message').callsFake((values, callback) => {
+    callback(errorMessage)
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'message', nameOnlyPlural: 'messages' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'message', nameOnlyPlural: 'messages' }
+  })
 
-  const toolsCIStub = sinon.stub(
-    ENV.connector.tools,
-    'createInstanceFromModel',
-    (Model, modelsData, primaryKey) => {
-      return data
-    }
-  )
+  const toolsCIStub = sinon.stub(ENV.connector.tools, 'createInstanceFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return data
+  })
 
   createMethod.bind(ENV.connector, Model, values, cbErrorSpy)()
   t.ok(sdkStubError.calledOnce)
@@ -155,29 +118,17 @@ test('Create Message Success Case', function (t) {
   const Model = ENV.container.getModel(models.message)
   const cbOkSpy = sinon.spy()
 
-  const sdkStub = sinon.stub(
-    ENV.connector.sdk.create,
-    'message',
-    (values, callback) => {
-      callback(null, data)
-    }
-  )
+  const sdkStub = sinon.stub(ENV.connector.sdk.create, 'message').callsFake((values, callback) => {
+    callback(null, data)
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'message', nameOnlyPlural: 'messages' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'message', nameOnlyPlural: 'messages' }
+  })
 
-  const toolsCIStub = sinon.stub(
-    ENV.connector.tools,
-    'createInstanceFromModel',
-    (Model, modelsData, primaryKey) => {
-      return data
-    }
-  )
+  const toolsCIStub = sinon.stub(ENV.connector.tools, 'createInstanceFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return data
+  })
 
   createMethod.bind(ENV.connector, Model, values, cbOkSpy)()
   t.ok(sdkStub.calledOnce)
@@ -198,29 +149,17 @@ test('Create Address Error Case', function (t) {
   const errorMessage = 'Error'
   const cbErrorSpy = sinon.spy()
 
-  const sdkStub = sinon.stub(
-    ENV.connector.sdk.create,
-    'address',
-    (values, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const sdkStub = sinon.stub(ENV.connector.sdk.create, 'address').callsFake((values, callback) => {
+    callback(errorMessage)
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'address', nameOnlyPlural: 'addresses' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'address', nameOnlyPlural: 'addresses' }
+  })
 
-  const toolsCIStub = sinon.stub(
-    ENV.connector.tools,
-    'createInstanceFromModel',
-    (Model, modelsData, primaryKey) => {
-      return data
-    }
-  )
+  const toolsCIStub = sinon.stub(ENV.connector.tools, 'createInstanceFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return data
+  })
 
   createMethod.bind(ENV.connector, Model, values, cbErrorSpy)()
   t.ok(sdkStub.calledOnce)
@@ -241,29 +180,17 @@ test('Create Address Success Case', function (t) {
   // const data = 'Correct Data'
   const cbOkSpy = sinon.spy()
 
-  const sdkStub = sinon.stub(
-    ENV.connector.sdk.create,
-    'address',
-    (values, callback) => {
-      callback(null, data)
-    }
-  )
+  const sdkStub = sinon.stub(ENV.connector.sdk.create, 'address').callsFake((values, callback) => {
+    callback(null, data)
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'address', nameOnlyPlural: 'addresses' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'address', nameOnlyPlural: 'addresses' }
+  })
 
-  const toolsCIStub = sinon.stub(
-    ENV.connector.tools,
-    'createInstanceFromModel',
-    (Model, modelsData, primaryKey) => {
-      return data
-    }
-  )
+  const toolsCIStub = sinon.stub(ENV.connector.tools, 'createInstanceFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return data
+  })
 
   createMethod.bind(ENV.connector, Model, values, cbOkSpy)()
   t.ok(sdkStub.calledOnce)
@@ -284,29 +211,17 @@ test('Create Queue Error Case', function (t) {
   const errorMessage = 'Error'
   const cbErrorSpy = sinon.spy()
 
-  const sdkStub = sinon.stub(
-    ENV.connector.sdk.create,
-    'queue',
-    (values, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const sdkStub = sinon.stub(ENV.connector.sdk.create, 'queue').callsFake((values, callback) => {
+    callback(errorMessage)
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'queue', nameOnlyPlural: 'queues' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'queue', nameOnlyPlural: 'queues' }
+  })
 
-  const toolsCIStub = sinon.stub(
-    ENV.connector.tools,
-    'createInstanceFromModel',
-    (Model, modelsData, primaryKey) => {
-      return data
-    }
-  )
+  const toolsCIStub = sinon.stub(ENV.connector.tools, 'createInstanceFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return data
+  })
 
   createMethod.bind(ENV.connector, Model, values, cbErrorSpy)()
   t.ok(sdkStub.calledOnce)
@@ -327,29 +242,17 @@ test('Create Queue Success Case', function (t) {
   // const data = 'Correct Data'
   const cbOkSpy = sinon.spy()
 
-  const sdkStub = sinon.stub(
-    ENV.connector.sdk.create,
-    'queue',
-    (values, callback) => {
-      callback(null, data)
-    }
-  )
+  const sdkStub = sinon.stub(ENV.connector.sdk.create, 'queue').callsFake((values, callback) => {
+    callback(null, data)
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'queue', nameOnlyPlural: 'queues' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'queue', nameOnlyPlural: 'queues' }
+  })
 
-  const toolsCIStub = sinon.stub(
-    ENV.connector.tools,
-    'createInstanceFromModel',
-    (Model, modelsData, primaryKey) => {
-      return data
-    }
-  )
+  const toolsCIStub = sinon.stub(ENV.connector.tools, 'createInstanceFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return data
+  })
 
   createMethod.bind(ENV.connector, Model, values, cbOkSpy)()
   t.ok(sdkStub.calledOnce)
@@ -370,29 +273,17 @@ test('Create Account Error Case', function (t) {
   const errorMessage = 'Error'
   const cbErrorSpy = sinon.spy()
 
-  const sdkStub = sinon.stub(
-    ENV.connector.sdk.create,
-    'account',
-    (values, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const sdkStub = sinon.stub(ENV.connector.sdk.create, 'account').callsFake((values, callback) => {
+    callback(errorMessage)
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'account', nameOnlyPlural: 'accounts' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'account', nameOnlyPlural: 'accounts' }
+  })
 
-  const toolsCIStub = sinon.stub(
-    ENV.connector.tools,
-    'createInstanceFromModel',
-    (Model, modelsData, primaryKey) => {
-      return data
-    }
-  )
+  const toolsCIStub = sinon.stub(ENV.connector.tools, 'createInstanceFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return data
+  })
 
   createMethod.bind(ENV.connector, Model, values, cbErrorSpy)()
   t.ok(sdkStub.calledOnce)
@@ -413,29 +304,17 @@ test('Create Account Success Case', function (t) {
   // const data = 'Correct Data'
   const cbOkSpy = sinon.spy()
 
-  const sdkStub = sinon.stub(
-    ENV.connector.sdk.create,
-    'account',
-    (values, callback) => {
-      callback(null, data)
-    }
-  )
+  const sdkStub = sinon.stub(ENV.connector.sdk.create, 'account').callsFake((values, callback) => {
+    callback(null, data)
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'account', nameOnlyPlural: 'accounts' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'account', nameOnlyPlural: 'accounts' }
+  })
 
-  const toolsCIStub = sinon.stub(
-    ENV.connector.tools,
-    'createInstanceFromModel',
-    (Model, modelsData, primaryKey) => {
-      return data
-    }
-  )
+  const toolsCIStub = sinon.stub(ENV.connector.tools, 'createInstanceFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return data
+  })
 
   createMethod.bind(ENV.connector, Model, values, cbOkSpy)()
   t.ok(sdkStub.calledOnce)
@@ -454,11 +333,10 @@ test('Create Account Success Case', function (t) {
 test('Create With Invalid Model', function (t) {
   const Model = { name: 'appc.twilio/invalid' }
   const errorMessage = new Error()
-  const cbErrorSpy = sinon.spy()
 
-  createMethod.bind(ENV.connector, Model, {}, cbErrorSpy)()
-  t.ok(cbErrorSpy.calledOnce)
-  t.ok(cbErrorSpy.calledWith(errorMessage))
+  createMethod.call(ENV.connector, Model, {}, (err) => {
+    t.deepEquals(err, errorMessage)
 
-  t.end()
+    t.end()
+  })
 })

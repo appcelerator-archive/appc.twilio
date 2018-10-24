@@ -8,6 +8,6 @@ test('disconnect', function (t) {
   const cbSpy = sinon.spy(cb)
   disconnect(cbSpy)
   t.ok(cbSpy.calledOnce)
-  cbSpy.reset()
+  cbSpy.resetHistory()
   t.end()
 })

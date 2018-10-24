@@ -13,13 +13,9 @@ const dataFromTwilio = 'DATA_FROM_TWILIO'
 const id = 1
 
 test('### createCall - Success ###', function (t) {
-  const facadeStub = sinon.stub(
-    client,
-    'makeCall',
-    (options, callback) => {
-      callback(null, dataFromTwilio)
-    }
-  )
+  const facadeStub = sinon.stub(client, 'makeCall').callsFake((options, callback) => {
+    callback(null, dataFromTwilio)
+  })
 
   sdkFacade.create.call({ to: '132321', from: '242342' }, cbSpy)
 
@@ -28,19 +24,15 @@ test('### createCall - Success ###', function (t) {
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### createCall - Error ###', function (t) {
-  const facadeStub = sinon.stub(
-    client,
-    'makeCall',
-    (options, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const facadeStub = sinon.stub(client, 'makeCall').callsFake((options, callback) => {
+    callback(errorMessage)
+  })
 
   sdkFacade.create.call({ to: '132321', from: '242342' }, cbSpy)
 
@@ -49,19 +41,15 @@ test('### createCall - Error ###', function (t) {
   t.ok(cbSpy.calledWith(errorMessage))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### createQueue - Success ###', function (t) {
-  const facadeStub = sinon.stub(
-    client.queues,
-    'create',
-    (options, callback) => {
-      callback(null, dataFromTwilio)
-    }
-  )
+  const facadeStub = sinon.stub(client.queues, 'create').callsFake((options, callback) => {
+    callback(null, dataFromTwilio)
+  })
 
   sdkFacade.create.queue({ maxSize: '132321', friendlyName: '242342' }, cbSpy)
 
@@ -70,19 +58,15 @@ test('### createQueue - Success ###', function (t) {
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### createQueue - Error ###', function (t) {
-  const facadeStub = sinon.stub(
-    client.queues,
-    'create',
-    (options, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const facadeStub = sinon.stub(client.queues, 'create').callsFake((options, callback) => {
+    callback(errorMessage)
+  })
 
   sdkFacade.create.queue({ maxSize: '132321', friendlyName: '242342' }, cbSpy)
 
@@ -91,19 +75,15 @@ test('### createQueue - Error ###', function (t) {
   t.ok(cbSpy.calledWith(errorMessage))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### createAddress - Success ###', function (t) {
-  const facadeStub = sinon.stub(
-    client.addresses,
-    'create',
-    (options, callback) => {
-      callback(null, dataFromTwilio)
-    }
-  )
+  const facadeStub = sinon.stub(client.addresses, 'create').callsFake((options, callback) => {
+    callback(null, dataFromTwilio)
+  })
 
   sdkFacade.create.address({ friendlyName: 'name' }, cbSpy)
 
@@ -112,19 +92,15 @@ test('### createAddress - Success ###', function (t) {
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### createAddress - Error ###', function (t) {
-  const facadeStub = sinon.stub(
-    client.addresses,
-    'create',
-    (options, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const facadeStub = sinon.stub(client.addresses, 'create').callsFake((options, callback) => {
+    callback(errorMessage)
+  })
 
   sdkFacade.create.address({ friendlyName: 'name' }, cbSpy)
 
@@ -133,19 +109,15 @@ test('### createAddress - Error ###', function (t) {
   t.ok(cbSpy.calledWith(errorMessage))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### createAccount - Success ###', function (t) {
-  const facadeStub = sinon.stub(
-    client.accounts,
-    'create',
-    (options, callback) => {
-      callback(null, dataFromTwilio)
-    }
-  )
+  const facadeStub = sinon.stub(client.accounts, 'create').callsFake((options, callback) => {
+    callback(null, dataFromTwilio)
+  })
 
   sdkFacade.create.account({ friendlyName: 'name' }, cbSpy)
 
@@ -154,19 +126,15 @@ test('### createAccount - Success ###', function (t) {
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### createAccount - Error ###', function (t) {
-  const facadeStub = sinon.stub(
-    client.accounts,
-    'create',
-    (options, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const facadeStub = sinon.stub(client.accounts, 'create').callsFake((options, callback) => {
+    callback(errorMessage)
+  })
 
   sdkFacade.create.account({ friendlyName: 'name' }, cbSpy)
 
@@ -175,19 +143,15 @@ test('### createAccount - Error ###', function (t) {
   t.ok(cbSpy.calledWith(errorMessage))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### findAll - Error ###', function (t) {
-  const facadeStub = sinon.stub(
-    client.messages,
-    'list',
-    (options, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const facadeStub = sinon.stub(client.messages, 'list').callsFake((options, callback) => {
+    callback(errorMessage)
+  })
 
   sdkFacade.find.all('messages', cbSpy)
   t.ok(facadeStub.calledOnce)
@@ -195,19 +159,15 @@ test('### findAll - Error ###', function (t) {
   t.ok(cbSpy.calledWith(errorMessage))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### findAll - Success ###', function (t) {
-  const facadeStub = sinon.stub(
-    client.messages,
-    'list',
-    (options, callback) => {
-      callback(null, dataFromTwilio)
-    }
-  )
+  const facadeStub = sinon.stub(client.messages, 'list').callsFake((options, callback) => {
+    callback(null, dataFromTwilio)
+  })
 
   sdkFacade.find.all('messages', cbSpy)
   t.ok(facadeStub.calledOnce)
@@ -215,23 +175,19 @@ test('### findAll - Success ###', function (t) {
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### findById - Error ###', function (t) {
-  const facadeStub = sinon.stub(
-    client,
-    'messages',
-    (id) => {
-      return {
-        get: (callback) => {
-          callback(errorMessage)
-        }
+  const facadeStub = sinon.stub(client, 'messages').callsFake((id) => {
+    return {
+      get: (callback) => {
+        callback(errorMessage)
       }
     }
-  )
+  })
 
   sdkFacade.find.byId('messages', id, cbSpy)
   t.ok(facadeStub.calledOnce)
@@ -239,23 +195,19 @@ test('### findById - Error ###', function (t) {
   t.ok(cbSpy.calledWith(errorMessage))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### findById - Success ###', function (t) {
-  const facadeStub = sinon.stub(
-    client,
-    'messages',
-    (id) => {
-      return {
-        get: (callback) => {
-          callback(null, dataFromTwilio)
-        }
+  const facadeStub = sinon.stub(client, 'messages').callsFake((id) => {
+    return {
+      get: (callback) => {
+        callback(null, dataFromTwilio)
       }
     }
-  )
+  })
 
   sdkFacade.find.byId('messages', id, cbSpy)
   t.ok(facadeStub.calledOnce)
@@ -263,19 +215,15 @@ test('### findById - Success ###', function (t) {
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### createMessage - Error ###', function (t) {
-  const facadeStub = sinon.stub(
-    client.messages,
-    'create',
-    (payload, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const facadeStub = sinon.stub(client.messages, 'create').callsFake((payload, callback) => {
+    callback(errorMessage)
+  })
 
   sdkFacade.create.message({}, cbSpy)
   t.ok(facadeStub.calledOnce)
@@ -283,19 +231,15 @@ test('### createMessage - Error ###', function (t) {
   t.ok(cbSpy.calledWith(errorMessage))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### createMessage - Success ###', function (t) {
-  const facadeStub = sinon.stub(
-    client.messages,
-    'create',
-    (payload, callback) => {
-      callback(null, dataFromTwilio)
-    }
-  )
+  const facadeStub = sinon.stub(client.messages, 'create').callsFake((payload, callback) => {
+    callback(null, dataFromTwilio)
+  })
 
   sdkFacade.create.message({}, cbSpy)
   t.ok(facadeStub.calledOnce)
@@ -303,19 +247,15 @@ test('### createMessage - Success ###', function (t) {
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### Query - Error ###', function (t) {
-  const facadeStub = sinon.stub(
-    client.calls,
-    'list',
-    (criteria, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const facadeStub = sinon.stub(client.calls, 'list').callsFake((criteria, callback) => {
+    callback(errorMessage)
+  })
 
   sdkFacade.query('calls', { friendlyName: 'name' }, cbSpy)
 
@@ -324,19 +264,15 @@ test('### Query - Error ###', function (t) {
   t.ok(cbSpy.calledWith(errorMessage))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### Query - Success ###', function (t) {
-  const facadeStub = sinon.stub(
-    client.calls,
-    'list',
-    (criteria, callback) => {
-      callback(null, dataFromTwilio)
-    }
-  )
+  const facadeStub = sinon.stub(client.calls, 'list').callsFake((criteria, callback) => {
+    callback(null, dataFromTwilio)
+  })
 
   sdkFacade.query('calls', { friendlyName: 'name' }, cbSpy)
 
@@ -345,25 +281,21 @@ test('### Query - Success ###', function (t) {
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### QueryAvailablePhoneNumbers - Error ###', function (t) {
-  const facadeStub = sinon.stub(
-    client,
-    'availablePhoneNumbers',
-    (id) => {
-      return {
-        local: {
-          list: (options, callback) => {
-            callback(errorMessage)
-          }
+  const facadeStub = sinon.stub(client, 'availablePhoneNumbers').callsFake((id) => {
+    return {
+      local: {
+        list: (options, callback) => {
+          callback(errorMessage)
         }
       }
     }
-  )
+  })
 
   sdkFacade.queryAvailablePhoneNumbers('availablePhoneNumbers', 'US', cbSpy)
 
@@ -372,25 +304,21 @@ test('### QueryAvailablePhoneNumbers - Error ###', function (t) {
   t.ok(cbSpy.calledWith(errorMessage))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
 
 test('### QueryAvailablePhoneNumbers - Success ###', function (t) {
-  const facadeStub = sinon.stub(
-    client,
-    'availablePhoneNumbers',
-    (id) => {
-      return {
-        local: {
-          list: (options, callback) => {
-            callback(null, dataFromTwilio)
-          }
+  const facadeStub = sinon.stub(client, 'availablePhoneNumbers').callsFake((id) => {
+    return {
+      local: {
+        list: (options, callback) => {
+          callback(null, dataFromTwilio)
         }
       }
     }
-  )
+  })
 
   sdkFacade.queryAvailablePhoneNumbers('availablePhoneNumbers', 'US', cbSpy)
 
@@ -399,7 +327,7 @@ test('### QueryAvailablePhoneNumbers - Success ###', function (t) {
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
@@ -409,15 +337,11 @@ test('### UpdateAddress - Success ###', function (t) {
     callback(null, dataFromTwilio)
   })
   const values = { to: 'number' }
-  const facadeStub = sinon.stub(
-    client,
-    'addresses',
-    (id) => {
-      return {
-        post: cbSpy1
-      }
+  const facadeStub = sinon.stub(client, 'addresses').callsFake((id) => {
+    return {
+      post: cbSpy1
     }
-  )
+  })
 
   sdkFacade.update.address('id', values, cbSpy)
 
@@ -429,7 +353,7 @@ test('### UpdateAddress - Success ###', function (t) {
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
@@ -440,15 +364,11 @@ test('### UpdateAddress - Error ###', function (t) {
     callback(errorMessage)
   })
 
-  const facadeStub = sinon.stub(
-    client,
-    'addresses',
-    (id) => {
-      return {
-        post: cbSpy1
-      }
+  const facadeStub = sinon.stub(client, 'addresses').callsFake((id) => {
+    return {
+      post: cbSpy1
     }
-  )
+  })
 
   sdkFacade.update.address('id', values, cbSpy)
 
@@ -460,7 +380,7 @@ test('### UpdateAddress - Error ###', function (t) {
   t.ok(cbSpy.calledWith(errorMessage))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
@@ -470,15 +390,11 @@ test('### UpdateOutgoingCallerId - Success ###', function (t) {
   const cbSpy1 = sinon.spy((payload, callback) => {
     callback(null, dataFromTwilio)
   })
-  const facadeStub = sinon.stub(
-    client,
-    'outgoingCallerIds',
-    (id) => {
-      return {
-        post: cbSpy1
-      }
+  const facadeStub = sinon.stub(client, 'outgoingCallerIds').callsFake((id) => {
+    return {
+      post: cbSpy1
     }
-  )
+  })
 
   sdkFacade.update.outgoingCallerId('id', values, cbSpy)
 
@@ -490,7 +406,7 @@ test('### UpdateOutgoingCallerId - Success ###', function (t) {
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
@@ -500,15 +416,11 @@ test('### UpdateOutgoingCallerId - Error ###', function (t) {
   const cbSpy1 = sinon.spy((payload, callback) => {
     callback(errorMessage)
   })
-  const facadeStub = sinon.stub(
-    client,
-    'outgoingCallerIds',
-    (id) => {
-      return {
-        post: cbSpy1
-      }
+  const facadeStub = sinon.stub(client, 'outgoingCallerIds').callsFake((id) => {
+    return {
+      post: cbSpy1
     }
-  )
+  })
 
   sdkFacade.update.outgoingCallerId('id', values, cbSpy)
 
@@ -521,7 +433,7 @@ test('### UpdateOutgoingCallerId - Error ###', function (t) {
   t.ok(cbSpy.calledWith(errorMessage))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
@@ -531,15 +443,11 @@ test('### UpdateQueue - Success ###', function (t) {
   const cbSpy1 = sinon.spy((payload, callback) => {
     callback(null, dataFromTwilio)
   })
-  const facadeStub = sinon.stub(
-    client,
-    'queues',
-    (id) => {
-      return {
-        update: cbSpy1
-      }
+  const facadeStub = sinon.stub(client, 'queues').callsFake((id) => {
+    return {
+      update: cbSpy1
     }
-  )
+  })
 
   sdkFacade.update.queue('id', values, cbSpy)
 
@@ -551,7 +459,7 @@ test('### UpdateQueue - Success ###', function (t) {
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
@@ -561,15 +469,11 @@ test('### UpdateQueue - Error ###', function (t) {
   const cbSpy1 = sinon.spy((payload, callback) => {
     callback(errorMessage)
   })
-  const facadeStub = sinon.stub(
-    client,
-    'queues',
-    (id) => {
-      return {
-        update: cbSpy1
-      }
+  const facadeStub = sinon.stub(client, 'queues').callsFake((id) => {
+    return {
+      update: cbSpy1
     }
-  )
+  })
 
   sdkFacade.update.queue('id', values, cbSpy)
 
@@ -581,7 +485,7 @@ test('### UpdateQueue - Error ###', function (t) {
   t.ok(cbSpy.calledWith(errorMessage))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
@@ -590,15 +494,11 @@ test('### DeleteById - Success ###', function (t) {
   const cbSpy1 = sinon.spy((callback) => {
     callback(null, dataFromTwilio)
   })
-  const facadeStub = sinon.stub(
-    client,
-    'calls',
-    (id) => {
-      return {
-        delete: cbSpy1
-      }
+  const facadeStub = sinon.stub(client, 'calls').callsFake((id) => {
+    return {
+      delete: cbSpy1
     }
-  )
+  })
 
   sdkFacade.deleteById('calls', 'id', cbSpy)
 
@@ -609,7 +509,7 @@ test('### DeleteById - Success ###', function (t) {
   t.ok(cbSpy.calledWith(null, dataFromTwilio))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })
@@ -618,15 +518,11 @@ test('### DeleteById - Error ###', function (t) {
   const cbSpy1 = sinon.spy((callback) => {
     callback(errorMessage)
   })
-  const facadeStub = sinon.stub(
-    client,
-    'calls',
-    (id) => {
-      return {
-        delete: cbSpy1
-      }
+  const facadeStub = sinon.stub(client, 'calls').callsFake((id) => {
+    return {
+      delete: cbSpy1
     }
-  )
+  })
 
   sdkFacade.deleteById('calls', 'id', cbSpy)
 
@@ -637,7 +533,7 @@ test('### DeleteById - Error ###', function (t) {
   t.ok(cbSpy.calledWith(errorMessage))
 
   facadeStub.restore()
-  cbSpy.reset()
+  cbSpy.resetHistory()
 
   t.end()
 })

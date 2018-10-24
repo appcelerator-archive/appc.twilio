@@ -23,83 +23,58 @@ test('### findById Call - Error Case ###', function (t) {
   const Model = ENV.container.getModel(models.call)
 
   const errorMessage = 'findById error'
-  const cbErrorSpy = sinon.spy()
 
-  const sdkStubError = sinon.stub(
-    ENV.connector.sdk.find,
-    'byId',
-    (Model, id, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const sdkStubError = sinon.stub(ENV.connector.sdk.find, 'byId').callsFake((Model, id, callback) => {
+    callback(errorMessage)
+  })
 
-  const toolsStubError = sinon.stub(
-    ENV.connector.tools,
-    'createInstanceFromModel',
-    (Model, modelsData, primaryKey) => {
-      return {}
-    }
-  )
+  const toolsStubError = sinon.stub(ENV.connector.tools, 'createInstanceFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return {}
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return {nameOnly: 'call', nameOnlyPlural: 'calls'}
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'call', nameOnlyPlural: 'calls' }
+  })
 
-  findByIdMethod.bind(ENV.connector, Model, '', cbErrorSpy)()
-  t.ok(sdkStubError.calledOnce)
-  t.ok(toolsStubError.notCalled)
-  t.ok(toolsGetNameStub.calledOnce)
-  t.ok(cbErrorSpy.calledOnce)
-  t.ok(cbErrorSpy.calledWith(errorMessage))
+  findByIdMethod.call(ENV.connector, Model, '', (err) => {
+    t.ok(sdkStubError.calledOnce)
+    t.ok(toolsStubError.notCalled)
+    t.ok(toolsGetNameStub.calledOnce)
+    t.equals(err, errorMessage)
 
-  sdkStubError.restore()
-  toolsStubError.restore()
-  toolsGetNameStub.restore()
-  t.end()
+    sdkStubError.restore()
+    toolsStubError.restore()
+    toolsGetNameStub.restore()
+    t.end()
+  })
 })
 
 test('### findById Call - Ok Case ###', function (t) {
   const Model = ENV.container.getModel(models.call)
   const data = 'MyModelInstance'
-  const cbOkSpy = sinon.spy()
 
-  const sdkStubOk = sinon.stub(
-    ENV.connector.sdk.find,
-    'byId',
-    (Model, id, callback) => {
-      callback(null, {})
-    }
-  )
+  const sdkStubOk = sinon.stub(ENV.connector.sdk.find, 'byId').callsFake((Model, id, callback) => {
+    callback(null, {})
+  })
 
-  const toolsStubOk = sinon.stub(
-    ENV.connector.tools,
-    'createInstanceFromModel',
-    (Model, modelsData, primaryKey) => {
-      return data
-    }
-  )
+  const toolsStubOk = sinon.stub(ENV.connector.tools, 'createInstanceFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return data
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return {nameOnly: 'call', nameOnlyPlural: 'calls'}
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'call', nameOnlyPlural: 'calls' }
+  })
 
-  findByIdMethod.bind(ENV.connector, Model, '', cbOkSpy)()
-  t.ok(sdkStubOk.calledOnce)
-  t.ok(toolsStubOk.calledOnce)
-  t.ok(toolsGetNameStub.calledOnce)
-  t.ok(cbOkSpy.calledOnce)
-  t.ok(cbOkSpy.calledWith(null, data))
+  findByIdMethod.call(ENV.connector, Model, '', (err, arg) => {
+    t.ok(sdkStubOk.calledOnce)
+    t.ok(toolsStubOk.calledOnce)
+    t.ok(toolsGetNameStub.calledOnce)
+    t.equals(arg, data)
+    t.equals(err, null)
 
-  sdkStubOk.restore()
-  toolsStubOk.restore()
-  toolsGetNameStub.restore()
-  t.end()
+    sdkStubOk.restore()
+    toolsStubOk.restore()
+    toolsGetNameStub.restore()
+    t.end()
+  })
 })

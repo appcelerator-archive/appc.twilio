@@ -13,6 +13,6 @@ test('connect', function (t) {
   connectInContext(cbSpy)
   t.ok(ENV.connector.sdk)
   t.ok(ENV.connector.tools)
-  cbSpy.reset()
+  cbSpy.resetHistory()
   t.end()
 })

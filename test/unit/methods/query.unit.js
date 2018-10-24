@@ -29,191 +29,136 @@ test('### query Call - Error Case ###', function (t) {
   const Model = ENV.container.getModel(models.call)
 
   const errorMessage = 'query error'
-  const cbErrorSpy = sinon.spy()
 
-  const sdkStubError = sinon.stub(
-    ENV.connector.sdk,
-    'query',
-    (Model, id, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const sdkStubError = sinon.stub(ENV.connector.sdk, 'query').callsFake((Model, id, callback) => {
+    callback(errorMessage)
+  })
 
-  const toolsStubError = sinon.stub(
-    ENV.connector.tools,
-    'createCollectionFromModel',
-    (Model, modelsData, primaryKey) => {
-      return []
-    }
-  )
+  const toolsStubError = sinon.stub(ENV.connector.tools, 'createCollectionFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return []
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'call', nameOnlyPlural: 'calls' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'call', nameOnlyPlural: 'calls' }
+  })
 
-  queryMethod.bind(ENV.connector, Model, options, cbErrorSpy)()
-  t.ok(sdkStubError.calledOnce)
-  t.ok(toolsStubError.notCalled)
-  t.ok(toolsGetNameStub.calledOnce)
-  t.ok(cbErrorSpy.calledOnce)
-  t.ok(cbErrorSpy.calledWith(errorMessage))
+  queryMethod.call(ENV.connector, Model, options, (err) => {
+    t.ok(sdkStubError.calledOnce)
+    t.ok(toolsStubError.notCalled)
+    t.ok(toolsGetNameStub.calledOnce)
+    t.equals(err, errorMessage)
 
-  sdkStubError.restore()
-  toolsStubError.restore()
-  toolsGetNameStub.restore()
+    sdkStubError.restore()
+    toolsStubError.restore()
+    toolsGetNameStub.restore()
 
-  t.end()
+    t.end()
+  })
 })
 
 test('### query Call - Ok Case ###', function (t) {
   const Model = ENV.container.getModel(models.call)
   const data = 'TestData'
-  const cbOkSpy = sinon.spy()
 
-  const sdkStubOk = sinon.stub(
-    ENV.connector.sdk,
-    'query',
-    (Model, options, callback) => {
-      callback(null, data)
-    }
-  )
+  const sdkStubOk = sinon.stub(ENV.connector.sdk, 'query').callsFake((Model, options, callback) => {
+    callback(null, data)
+  })
 
-  const toolsStubOk = sinon.stub(
-    ENV.connector.tools,
-    'createCollectionFromModel',
-    (Model, modelsData, primaryKey) => {
-      return data
-    }
-  )
+  const toolsStubOk = sinon.stub(ENV.connector.tools, 'createCollectionFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return data
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'call', nameOnlyPlural: 'calls' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'call', nameOnlyPlural: 'calls' }
+  })
 
-  queryMethod.bind(ENV.connector, Model, options, cbOkSpy)()
-  t.ok(sdkStubOk.calledOnce)
-  t.ok(toolsStubOk.calledOnce)
-  t.ok(toolsGetNameStub.calledOnce)
-  t.ok(cbOkSpy.calledOnce)
-  t.ok(cbOkSpy.calledWith(null, data))
+  queryMethod.call(ENV.connector, Model, options, (err, arg) => {
+    t.ok(sdkStubOk.calledOnce)
+    t.ok(toolsStubOk.calledOnce)
+    t.ok(toolsGetNameStub.calledOnce)
+    t.equals(arg, data)
+    t.equals(err, null)
 
-  sdkStubOk.restore()
-  toolsStubOk.restore()
-  toolsGetNameStub.restore()
-  t.end()
+    sdkStubOk.restore()
+    toolsStubOk.restore()
+    toolsGetNameStub.restore()
+    t.end()
+  })
 })
 
 test('### query availablePhoneNumbers - Error Case ###', function (t) {
   const Model = ENV.container.getModel(models.availablePhoneNumber)
 
   const errorMessage = 'query error'
-  const cbErrorSpy = sinon.spy()
 
-  const sdkStubError = sinon.stub(
-    ENV.connector.sdk,
-    'queryAvailablePhoneNumbers',
-    (Model, id, callback) => {
-      callback(errorMessage)
-    }
-  )
+  const sdkStubError = sinon.stub(ENV.connector.sdk, 'queryAvailablePhoneNumbers').callsFake((Model, id, callback) => {
+    callback(errorMessage)
+  })
 
-  const toolsStubError = sinon.stub(
-    ENV.connector.tools,
-    'createCollectionFromModel',
-    (Model, modelsData, primaryKey) => {
-      return []
-    }
-  )
+  const toolsStubError = sinon.stub(ENV.connector.tools, 'createCollectionFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return []
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'availablePhoneNumber', nameOnlyPlural: 'availablePhoneNumbers' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'availablePhoneNumber', nameOnlyPlural: 'availablePhoneNumbers' }
+  })
 
-  queryMethod.bind(ENV.connector, Model, options, cbErrorSpy)()
-  t.ok(sdkStubError.calledOnce)
-  t.ok(toolsStubError.notCalled)
-  t.ok(toolsGetNameStub.calledOnce)
-  t.ok(cbErrorSpy.calledOnce)
-  t.ok(cbErrorSpy.calledWith(errorMessage))
+  queryMethod.call(ENV.connector, Model, options, (err) => {
+    t.ok(sdkStubError.calledOnce)
+    t.ok(toolsStubError.notCalled)
+    t.ok(toolsGetNameStub.calledOnce)
+    t.equals(err, errorMessage)
 
-  sdkStubError.restore()
-  toolsStubError.restore()
-  toolsGetNameStub.restore()
+    sdkStubError.restore()
+    toolsStubError.restore()
+    toolsGetNameStub.restore()
 
-  t.end()
+    t.end()
+  })
 })
 
 test('### query availablePhoneNumbers - Ok Case ###', function (t) {
   const Model = ENV.container.getModel(models.availablePhoneNumber)
   const data = 'TestData'
-  const cbOkSpy = sinon.spy()
 
-  const sdkStubOk = sinon.stub(
-    ENV.connector.sdk,
-    'queryAvailablePhoneNumbers',
-    (Model, options, callback) => {
-      callback(null, data)
-    }
-  )
+  const sdkStubOk = sinon.stub(ENV.connector.sdk, 'queryAvailablePhoneNumbers').callsFake((Model, options, callback) => {
+    callback(null, data)
+  })
 
-  const toolsStubOk = sinon.stub(
-    ENV.connector.tools,
-    'createCollectionFromModel',
-    (Model, modelsData, primaryKey) => {
-      return data
-    }
-  )
+  const toolsStubOk = sinon.stub(ENV.connector.tools, 'createCollectionFromModel').callsFake((Model, modelsData, primaryKey) => {
+    return data
+  })
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'availablePhoneNumber', nameOnlyPlural: 'availablePhoneNumbers' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'availablePhoneNumber', nameOnlyPlural: 'availablePhoneNumbers' }
+  })
 
-  queryMethod.bind(ENV.connector, Model, options, cbOkSpy)()
-  t.ok(sdkStubOk.calledOnce)
-  t.ok(toolsStubOk.calledOnce)
-  t.ok(toolsGetNameStub.calledOnce)
-  t.ok(cbOkSpy.calledOnce)
-  t.ok(cbOkSpy.calledWith(null, data))
+  queryMethod.call(ENV.connector, Model, options, (err, arg) => {
+    t.ok(sdkStubOk.calledOnce)
+    t.ok(toolsStubOk.calledOnce)
+    t.ok(toolsGetNameStub.calledOnce)
+    t.equals(err, null)
+    t.equals(arg, data)
 
-  sdkStubOk.restore()
-  toolsStubOk.restore()
-  toolsGetNameStub.restore()
-  t.end()
+    sdkStubOk.restore()
+    toolsStubOk.restore()
+    toolsGetNameStub.restore()
+    t.end()
+  })
 })
 
 test('### query availablePhoneNumbers - Invalid Query Case ###', function (t) {
   const Model = ENV.container.getModel(models.availablePhoneNumber)
-  const cbOkSpy = sinon.spy()
   options.where = {}
 
-  const toolsGetNameStub = sinon.stub(
-    ENV.connector.tools,
-    'getRootModelName',
-    (Model) => {
-      return { nameOnly: 'availablePhoneNumber', nameOnlyPlural: 'availablePhoneNumbers' }
-    }
-  )
+  const toolsGetNameStub = sinon.stub(ENV.connector.tools, 'getRootModelName').callsFake((Model) => {
+    return { nameOnly: 'availablePhoneNumber', nameOnlyPlural: 'availablePhoneNumbers' }
+  })
 
-  queryMethod.bind(ENV.connector, Model, options, cbOkSpy)()
-  t.ok(toolsGetNameStub.calledOnce)
-  t.ok(cbOkSpy.calledOnce)
+  queryMethod.call(ENV.connector, Model, options, () => {
+    t.ok(toolsGetNameStub.calledOnce)
 
-  toolsGetNameStub.restore()
-  t.end()
+    toolsGetNameStub.restore()
+    t.end()
+  })
 })
